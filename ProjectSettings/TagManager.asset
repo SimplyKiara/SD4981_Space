@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - TrackingObject
+  - Iron ore
+  - Lunar rocks
+  - Pots
+  - Water
+  - Seed
+  - Mud
+  - Pipette
+  - Veggies
+  - Cutters
   layers:
   - Default
   - TransparentFX
@@ -40,4 +50,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Collidable
+    uniqueID: 2558909805
     locked: 0
