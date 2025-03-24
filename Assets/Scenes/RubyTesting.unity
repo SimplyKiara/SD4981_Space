@@ -4191,10 +4191,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5dd0fbe26cdfdf448204e8bae7cc545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputField: {fileID: 0}
-  messageText: {fileID: 0}
-  postBtn: {fileID: 0}
-  getBtn: {fileID: 0}
+  messageText: {fileID: 1426475086}
+  taskPostBtn: {fileID: 1497093569}
 --- !u!114 &740202608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4262,10 +4260,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5dd0fbe26cdfdf448204e8bae7cc545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputField: {fileID: 0}
   messageText: {fileID: 0}
-  postBtn: {fileID: 0}
-  getBtn: {fileID: 0}
+  taskPostBtn: {fileID: 0}
 --- !u!4 &742406903
 Transform:
   m_ObjectHideFlags: 0
@@ -8459,10 +8455,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5dd0fbe26cdfdf448204e8bae7cc545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputField: {fileID: 1948465563}
   messageText: {fileID: 1450153061}
-  postBtn: {fileID: 424539102}
-  getBtn: {fileID: 1804603436}
+  taskPostBtn: {fileID: 0}
 --- !u!1 &1613531736
 GameObject:
   m_ObjectHideFlags: 0
