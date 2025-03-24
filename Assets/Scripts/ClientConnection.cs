@@ -64,15 +64,15 @@ public class ClientConnection : MonoBehaviour
                     TaskResponse taskResponse = JsonUtility.FromJson<TaskResponse>(jsonString);
 
                     // Check and use the taskName
-                    if (!string.IsNullOrEmpty(taskResponse.taskName))
+                    if (!string.IsNullOrEmpty(taskResponse.title))
                     {
-                        Debug.Log($"Task Name: {taskResponse.taskName}");
+                        Debug.Log($"Task Name: {taskResponse.title}");
 
                         // Pass taskName to ClientManager
                         ClientManager clientManager = FindObjectOfType<ClientManager>();
                         if (clientManager != null)
                         {
-                            clientManager.ActivateButton(taskResponse.taskName);
+                            clientManager.ActivateButton(taskResponse.title);
                         }
                         else
                         {
