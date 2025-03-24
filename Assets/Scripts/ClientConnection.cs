@@ -8,7 +8,7 @@ public class ClientConnection : MonoBehaviour
     // public TMP_Text messageText;
     // public Button taskPostBtn;
     public Button getTaskBtn;
-    private string baseUrl = "http://10.11.36.4:3000";
+    private string baseUrl = "http://localhost:3000"; // "http://10.11.36.4:3000";
     [System.Serializable]
     public class Task
     {

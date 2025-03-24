@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Harvest.unity
     guid: 3c7c9fdd370f85b40aec48b99eaed815
+  - enabled: 1
+    path: Assets/Scenes/RubyTesting.unity
+    guid: b901ca7dc96780c4196c0cad24b36665
   m_configObjects: {}
