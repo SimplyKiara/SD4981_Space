@@ -534,6 +534,108 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b3f7b07b94990a489fe787e16049623, type: 3}
+--- !u!1 &117690671
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 117690672}
+  - component: {fileID: 117690675}
+  - component: {fileID: 117690674}
+  - component: {fileID: 117690673}
+  m_Layer: 0
+  m_Name: NetworkCanvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &117690672
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117690671}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1511004880}
+  m_Father: {fileID: 1633613408}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!114 &117690673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117690671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &117690674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117690671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!223 &117690675
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117690671}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1001 &136356766
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3918,7 +4020,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &742406902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3931,6 +4033,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5dd0fbe26cdfdf448204e8bae7cc545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputField: {fileID: 0}
+  messageText: {fileID: 0}
+  postBtn: {fileID: 0}
+  getBtn: {fileID: 0}
 --- !u!4 &742406903
 Transform:
   m_ObjectHideFlags: 0
@@ -7788,6 +7894,7 @@ GameObject:
   - component: {fileID: 1511004880}
   - component: {fileID: 1511004882}
   - component: {fileID: 1511004881}
+  - component: {fileID: 1511004883}
   m_Layer: 5
   m_Name: TaskPanel
   m_TagString: Untagged
@@ -7811,7 +7918,7 @@ RectTransform:
   - {fileID: 1948465562}
   - {fileID: 424539101}
   - {fileID: 1804603435}
-  m_Father: {fileID: 1838913892388076415}
+  m_Father: {fileID: 117690672}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -7856,6 +7963,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1511004879}
   m_CullTransparentMesh: 1
+--- !u!114 &1511004883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1511004879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5dd0fbe26cdfdf448204e8bae7cc545, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 1948465563}
+  messageText: {fileID: 1450153061}
+  postBtn: {fileID: 424539102}
+  getBtn: {fileID: 1804603436}
 --- !u!1 &1613531736
 GameObject:
   m_ObjectHideFlags: 0
@@ -7933,6 +8056,7 @@ Transform:
   - {fileID: 175255109}
   - {fileID: 970339216}
   - {fileID: 928096323}
+  - {fileID: 117690672}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1656706473
@@ -10030,6 +10154,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InfoCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3555473083655205965, guid: 1131d3a6830216a40baf9c453fe1bdb1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3850208531131614812, guid: 1131d3a6830216a40baf9c453fe1bdb1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -10098,9 +10226,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1332753998026175497, guid: 1131d3a6830216a40baf9c453fe1bdb1, type: 3}
       insertIndex: 2
       addedObject: {fileID: 2989907420646078706}
-    - targetCorrespondingSourceObject: {fileID: 1332753998026175497, guid: 1131d3a6830216a40baf9c453fe1bdb1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1511004880}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1131d3a6830216a40baf9c453fe1bdb1, type: 3}
 --- !u!224 &1838913892388076415 stripped

@@ -2,12 +2,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
+using UnityEngine.UI;
 
 public class ServerConnection : MonoBehaviour
 {
     public TMP_InputField inputField;
     public TMP_Text messageText;
-    private string baseUrl = "http://localhost:3000";
+    public Button postBtn;
+    public Button getBtn;
+    private string baseUrl = "http://10.11.36.4:3000";
     [System.Serializable]
     public class Message
     {
@@ -16,6 +19,9 @@ public class ServerConnection : MonoBehaviour
 
     public void Start()
     {
+        postBtn.onClick.AddListener(OnPostBtnClicked);
+        getBtn.onClick.AddListener(OnGetBtnClicked);
+
         StartCoroutine(GetRequest(baseUrl));
     }
     public void OnGetBtnClicked()
