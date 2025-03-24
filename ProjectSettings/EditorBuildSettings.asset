@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/ClientMenu.unity
+    guid: 1801c24926e4ff84b9512315c55dd5c6
+  - enabled: 1
+    path: Assets/Scenes/IceMining_P1.unity
+    guid: 70781201b2fd69f46a8bdd88ecc847f8
+  - enabled: 1
     path: Assets/Scenes/IceMining_P2.unity
     guid: 7e26e59de5c659d43a7746f0b91d14df
+  - enabled: 1
+    path: Assets/Scenes/Planting.unity
+    guid: c720ad2afdb9c314885d64245cd999da
+  - enabled: 1
+    path: Assets/Scenes/Harvest.unity
+    guid: 3c7c9fdd370f85b40aec48b99eaed815
   m_configObjects: {}

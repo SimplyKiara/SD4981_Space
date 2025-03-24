@@ -1,19 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EndPanelController : MonoBehaviour
 {
     public Button myButton;
-    
-    void Start()
-    {
-        myButton.onClick.AddListener(TaskOnClick);
-    }
+    public Text description;
 
-    void TaskOnClick()
+    bool returning = false;
+
+    public void TaskOnClick()
     {
         Debug.Log("Item called");
+        description.text = "Returning to menu...";
+        StartCoroutine(WaitCoroutine());
+        SceneManager.LoadScene("ClientMenu");
+        myButton.enabled = false;
+    }
+
+    IEnumerator WaitCoroutine()
+    {
+        yield return new WaitForSeconds(4);
     }
 }

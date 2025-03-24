@@ -37,13 +37,17 @@ public class RoverController : MonoBehaviour
 
     private void Update()
     {
-        currentPosX = transform.position.x * 010;
+        currentPosX = transform.position.x * 100;
         currentPosY = transform.position.y * 100;
 
         if (!atGoal && Input.GetMouseButtonDown(0))
         {
             lastClickedPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             moving = true;
+
+            direction = (lastClickedPos - (Vector2)transform.position).normalized;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // Get angle in degrees
+            transform.rotation = Quaternion.Euler(0, 0, angle - 90); // Adjust for object facing
         }
 
         if (moving && (Vector2)transform.position != lastClickedPos)
@@ -53,20 +57,8 @@ public class RoverController : MonoBehaviour
         }
 
         posText.text = $"Your position:\nx = {currentPosX:F0}, y = {currentPosY:F0}";
-
-        
-        if (Time.timeScale != 0)
-        {
-            direction = spot - transform.position;
-            rotation = Quaternion.LookRotation(direction, Vector3.forward);
-            rotation2.x = 0;
-            rotation2.y = 0;
-            rotation2.z = rotation.z;
-            rotation2.w = rotation.w;
-            transform.rotation = rotation2;
-        }
-        
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -93,6 +85,6 @@ public class RoverController : MonoBehaviour
 
     IEnumerator WaitCoroutine()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
     }
 }
