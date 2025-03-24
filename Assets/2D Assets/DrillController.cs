@@ -10,6 +10,7 @@ public class DrillController : MonoBehaviour
 {
     public Button myButton;
     public Text iceText;
+    public GameObject popUpPanel;
 
     private Animator animator;
     private Rigidbody2D rb;
@@ -35,35 +36,34 @@ public class DrillController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         
         myButton.onClick.AddListener(TaskOnClick);
-        startPos = transform.position;
 
+        startPos = transform.position;
         GameObject[] gos = GameObject.FindGameObjectsWithTag("2D Goal");
         totalIce = gos.Length;
     }
 
     public void Update()
     {
-        if (!atGoal)
+        if (!atGoal && !moving) // Disable input when moving
         {
             if (Input.GetMouseButton(0))
             {
                 spot = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 spot.z = 0;
             }
-            
+
             if (Input.GetMouseButtonUp(0) && suitableAngle)
             {
                 Debug.Log("Mouse released");
                 Vector3 mouseReleasePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mouseReleasePos.z = 0; // Ensure it's in 2D space
 
-                // Calculate the movement direction
                 moveDirection = (mouseReleasePos - transform.position).normalized; // Normalized vector
                 moving = true;
             }
         }
 
-        if (Time.timeScale != 0)
+        if (Time.timeScale != 0 && !moving) // Allow rotation adjustment only when not moving
         {
             direction = spot - transform.position;
             rotation = Quaternion.LookRotation(direction, Vector3.forward);
@@ -87,13 +87,16 @@ public class DrillController : MonoBehaviour
         {
             float step = speed * Time.deltaTime;
             transform.position = Vector2.MoveTowards(transform.position, spot, step);
-        }
-        else
-        {
-            transform.position = startPos;
+
+            // Stop moving when the drill reaches its target spot
+            if (Vector2.Distance(transform.position, spot) < 0.01f)
+            {
+                moving = false; // Reset moving state
+                transform.position = startPos; // Optionally reset the position
+            }
         }
 
-        iceText.text = $"Ice collected: {collectedIce}{totalIce}/";
+        iceText.text = $"Ice collected: {collectedIce}/{totalIce}";
     }
 
     void TaskOnClick()
@@ -105,7 +108,8 @@ public class DrillController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collided with danger");
+        Debug.Log("Collided with " + collision.gameObject.name);
+
         if (collision.gameObject.tag == "2D Danger")
         {
             if (!Status)
@@ -126,9 +130,11 @@ public class DrillController : MonoBehaviour
                 Destroy(collision.gameObject);
                 Debug.Log("Collected ice");
                 collectedIce += 1;
-                if (collectedIce == 3)
+
+                if (collectedIce == totalIce)
                 {
                     atGoal = true;
+                    CallPanel();
                 }
             }
             else
@@ -137,10 +143,21 @@ public class DrillController : MonoBehaviour
             }
         }
 
-        rb.velocity = Vector2.zero;
-        rotation2.z = 0;
+        if (collision.gameObject.tag == "Border")
+        {
+            Debug.Log("Collided with border");
+        }
+
+        transform.position = startPos; // Reposition
+        rb.velocity = Vector2.zero; // Stop movement
+        rotation2.z = 0; // Reset rotation
         rotation2.w = 0;
         transform.rotation = rotation2;
-        moving = false;
+        moving = false; 
+    }
+
+    public void CallPanel()
+    {
+        popUpPanel.SetActive(true);
     }
 }

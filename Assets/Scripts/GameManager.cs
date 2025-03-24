@@ -10,10 +10,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public Text ironOreText;
     public Text rocksText;
+    public Text waterText;
     public GameData gameData;
 
     private int ironOre;
     private int rocks;
+    private float water;
+    private float waterCap;
 
     private void Awake()
     {
@@ -49,6 +52,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         ironOre = data.ironOre;
         rocks = data.rocks;
+        water = data.water;
+        waterCap = data.maxWater;
         UpdateUI();
     }
 
@@ -56,6 +61,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         data.ironOre = ironOre;
         data.rocks = rocks;
+        data.water = water;
+        data.maxWater = waterCap;
     }
 
     private void BuildSolarPanels()
@@ -118,9 +125,20 @@ public class GameManager : MonoBehaviour, IDataPersistence
         UpdateUI();
     }
 
+    public void ChangeCollectedWater(float value)
+    {
+        if ((water + value) < waterCap)
+        {
+            water += value;
+        }
+        //Debug.Log("Water volume changed by" + value);
+        UpdateUI();
+    }
+
     private void UpdateUI()
     {
         ironOreText.text = "Iron ore: " + ironOre;
         rocksText.text = "Lunar rocks: " + rocks;
+        waterText.text = $"Water: {water}/{waterCap}";
     }
 }

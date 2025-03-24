@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
@@ -26,12 +27,12 @@ public class RoverController : MonoBehaviour
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
+
         currentPosX = transform.position.x * 100;
         currentPosY = transform.position.y * 100;
         startPos = transform.position;
         atGoal = false;
-
-        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
@@ -53,7 +54,7 @@ public class RoverController : MonoBehaviour
 
         posText.text = $"Your position:\nx = {currentPosX:F0}, y = {currentPosY:F0}";
 
-        /*
+        
         if (Time.timeScale != 0)
         {
             direction = spot - transform.position;
@@ -64,7 +65,7 @@ public class RoverController : MonoBehaviour
             rotation2.w = rotation.w;
             transform.rotation = rotation2;
         }
-        */
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -85,6 +86,13 @@ public class RoverController : MonoBehaviour
             Debug.Log("Reached goal");
             atGoal = true;
             posText.text = "Goal reached!";
+            StartCoroutine(WaitCoroutine());
+            SceneManager.LoadScene("IceMining_P2");
         }
+    }
+
+    IEnumerator WaitCoroutine()
+    {
+        yield return new WaitForSeconds(2);
     }
 }

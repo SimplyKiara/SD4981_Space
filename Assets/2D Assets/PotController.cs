@@ -11,18 +11,18 @@ public class PotController : MonoBehaviour
     private bool haveSeed = false;
     private bool watered = false;
 
-    public Text ProgressText;
+    public bool HaveMud => haveMud;    // Expose haveMud
+    public bool HaveSeed => haveSeed; // Expose haveSeed
+    public bool Watered => watered;
 
-    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        UpdateProgressText();
+        
     }
 
     void PotAction()
@@ -77,24 +77,5 @@ public class PotController : MonoBehaviour
                 Debug.Log("Unknown action type");
             }
         }
-    }
-
-    void UpdateProgressText()
-    {
-        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("Pots");
-
-        int totalCount = objectsWithTag.Length;
-        int completedCount = 0;
-
-        foreach (GameObject obj in objectsWithTag)
-        {
-            PotController potController = obj.GetComponent<PotController>();
-            if (potController != null && potController.haveMud && potController.haveSeed && potController.watered)
-            {
-                completedCount++;
-            }
-        }
-
-        ProgressText.text = "Pots to be filled: " + (totalCount - completedCount);
     }
 }

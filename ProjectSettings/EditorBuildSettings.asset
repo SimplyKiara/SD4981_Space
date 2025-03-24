@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/IceMining_P2.unity
+    guid: 7e26e59de5c659d43a7746f0b91d14df
   m_configObjects: {}
