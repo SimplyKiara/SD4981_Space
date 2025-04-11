@@ -45,14 +45,17 @@ public class OreMining : MonoBehaviour
     {
         if (growing)
         {
-            growingTime += Time.unscaledDeltaTime;
-            rnd.material.color = Color.Lerp(Color.white, Color.red, growingTime);
+            // Ensure growingTime increases consistently over time
+            growingTime += Time.deltaTime;
+            float lerpValue = Mathf.Clamp01(growingTime / 2f); // Adjust timing as needed
+            rnd.material.color = Color.Lerp(Color.white, Color.red, lerpValue);
         }
     }
 
     private void startGrowing()
     {
         growing = true;
+        growingTime = 0; // Reset when long press starts
     }
 
     private void stopGrowing()
@@ -68,8 +71,7 @@ public class OreMining : MonoBehaviour
         if (isPressed) return;
         isPressed = true;
         Invoke("ResetPress", 0.1f);
-
-        startGrowing();
+        
         // if the rocks are small (aka spawned ones)
         if (transform.localScale.x < 0.4f)
         {
@@ -99,6 +101,7 @@ public class OreMining : MonoBehaviour
     {
         if (e.State == Gesture.GestureState.Recognized)
         {
+            startGrowing();
             if (transform.localScale.x > 0.5f)
             {
                 for (int i = 0; i < 4; i++)

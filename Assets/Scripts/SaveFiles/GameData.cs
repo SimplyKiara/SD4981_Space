@@ -15,7 +15,7 @@ public class GameData
     public float currentResources;
     public float resourcePercentage;
 
-    public float maxWater = 20f;
+    public float maxWater = 50f;
     public float maxResources = 100f;
 
     // structuer of saved data
