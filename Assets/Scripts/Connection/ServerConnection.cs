@@ -21,6 +21,7 @@ public class ServerConnection : MonoBehaviour
     public class Task
     {
         public string title;
+        public string group;
     }
 
     public void Start()
@@ -32,7 +33,7 @@ public class ServerConnection : MonoBehaviour
     {
         TaskGenerator taskSelector = new TaskGenerator();
         string randomTask = taskSelector.GetRandomTask();
-        StartCoroutine(PostTaskRequest(baseUrl + "/tasks", randomTask));
+        StartCoroutine(PostTaskRequest(baseUrl + "/tasks", randomTask, "testingGroup"));
     }
     /* public void OnGetBtnClicked()
     {
@@ -76,9 +77,9 @@ public class ServerConnection : MonoBehaviour
             }
         }
     }
-    IEnumerator PostTaskRequest(string uri, string title)
+    IEnumerator PostTaskRequest(string uri, string title, string group)
     {
-        Task task = new Task { title = title };
+        Task task = new Task { title = title, group = group };
         string jsonData = JsonUtility.ToJson(task);
 
         Debug.Log("JSON Data: " + jsonData); // Debug log to check JSON data
