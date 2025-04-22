@@ -3,11 +3,21 @@ using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
 
+
+[System.Serializable]
+public class CollisionData
+{
+    public string TaskID;
+    public string object1;
+    public string object2;
+    public string timestamp;
+}
+
 public class SavingRocketData : MonoBehaviour
 {
     public TMP_InputField inputField;
     public TMP_Text messageText;
-    private string baseUrl = "http://10.11.36.4:3000";
+    private string baseUrl = "http://localhost:3000";
     [System.Serializable]
     public class Message
     {
@@ -38,7 +48,7 @@ public class SavingRocketData : MonoBehaviour
             }
             else
             {
-                messageText.text = request.downloadHandler.text;
+                //messageText.text = request.downloadHandler.text;
                 Debug.Log("Response: " + request.downloadHandler.text);
             }
         }
@@ -55,7 +65,7 @@ public class SavingRocketData : MonoBehaviour
             }
             else    
             {
-                messageText.text = request.downloadHandler.text;
+                //messageText.text = request.downloadHandler.text;
                 Debug.Log("Response: " + request.downloadHandler.text);
             }
         }
@@ -90,10 +100,42 @@ public class SavingRocketData : MonoBehaviour
     void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.tag == "LandingPadWorst") {
-            var collisionData = new {
+            CollisionData collisionData = new CollisionData {
                 TaskID = "Rocket Landing task",
                 object1 = gameObject.name,
-                object2 = col.gameObject.name,
+                object2 = col.gameObject.tag,
+                timestamp = System.DateTime.Now.ToString()
+            };
+
+            string json = JsonUtility.ToJson(collisionData);
+
+            StartCoroutine(PostCollisionDataRequest(baseUrl + "/messages", json));
+
+            Debug.Log("Rocket landing data is saved! " + json);
+
+        }
+        
+        if (col.gameObject.tag == "LandingPadMid") {
+            CollisionData collisionData = new CollisionData {
+                TaskID = "Rocket Landing task",
+                object1 = gameObject.name,
+                object2 = col.gameObject.tag,
+                timestamp = System.DateTime.Now.ToString()
+            };
+
+            string json = JsonUtility.ToJson(collisionData);
+
+            StartCoroutine(PostCollisionDataRequest(baseUrl + "/messages", json));
+
+            Debug.Log("Rocket landing data is saved! " + json);
+
+        }
+
+        if (col.gameObject.tag == "LandingPadBest") {
+            CollisionData collisionData = new CollisionData {
+                TaskID = "Rocket Landing task",
+                object1 = gameObject.name,
+                object2 = col.gameObject.tag,
                 timestamp = System.DateTime.Now.ToString()
             };
 

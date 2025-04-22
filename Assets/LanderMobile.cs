@@ -10,16 +10,14 @@ public class LanderMobile : MonoBehaviour
     public Button UpButton;
     public Button DownButton;
     public Button ThrustButton;
-    public float moveSpeed = 10f;
-    public float rotationSpeed = 10f;
+    public float drag = 0.98f;  
     private Rigidbody rb;
-    //private TaskManager taskManager;
-
+    public float thrustForce = 40f;
     public float jumpForce = 0.000000001f;
     public bool surfaceTouched = false;
-
     public Camera camera1;
     public Camera camera2;
+    public GameObject EndPanel;
 
     private void Start()
     {   
@@ -46,28 +44,37 @@ public class LanderMobile : MonoBehaviour
             UpButton.enabled = false;
             DownButton.enabled = false;
         }   
+
+    }
+
+    void FixedUpdate()
+    {
+        ApplyDrag();
     }
 
     public void MoveLeft()
     {
-        transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
-        //transform.Rotate(Vector3.up, -rotationSpeed * Time.deltaTime);
+        Vector3 force = -transform.right * thrustForce; 
+        rb.AddForce(force, ForceMode.Acceleration);
+
     }
 
     public void MoveRight()
     {
-        transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
-        //transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        Vector3 force = transform.right * thrustForce; 
+        rb.AddForce(force, ForceMode.Acceleration);
     }
 
     public void MoveUp() 
     {
-        transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
+        Vector3 force = -transform.up * thrustForce; 
+        rb.AddForce(force, ForceMode.Acceleration);
     }
 
     public void MoveDown() 
     {
-        transform.Translate(Vector3.up * moveSpeed * Time.deltaTime);
+        Vector3 force = transform.up * thrustForce; 
+        rb.AddForce(force, ForceMode.Acceleration);
     }
 
     public void Thrust() {
@@ -75,11 +82,19 @@ public class LanderMobile : MonoBehaviour
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
+    private void ApplyDrag()
+    {
+        // Reduce the velocity gradually to simulate resistance
+        rb.velocity *= drag;
+    }
+
+
     void OnCollisionEnter(Collision col) {
         if (col.gameObject.tag == "floor" | col.gameObject.tag == "LandingPadWorst" | col.gameObject.tag == "LandingPadMid" | col.gameObject.tag == "LandingPadBest") 
         {
             surfaceTouched = true;
             Debug.Log("floor or landing pad touched");
+            EndPanel.SetActive(true);
         }
     }
 
