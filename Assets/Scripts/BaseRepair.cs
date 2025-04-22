@@ -22,6 +22,9 @@ public class BaseRepair : MonoBehaviour
     void Start()
     {
         warning.SetActive(false);
+        if (!gameObject.activeInHierarchy) {
+            return;
+        }
         GetComponent<Renderer>().material = oldMaterial;
         StartNewCoroutine();
     }
@@ -44,6 +47,7 @@ public class BaseRepair : MonoBehaviour
 
     private void OnDisable()
     {
+        // Disable gestures
         longPressGesture.StateChanged -= longPressedHandler;
         pressGesture.Pressed -= pressedHandler;
     }
@@ -81,47 +85,63 @@ public class BaseRepair : MonoBehaviour
         Invoke("ResetPress", 0.1f);
 	}
 
-IEnumerator CheckRustMaterialRoutine()
-{
-    Debug.Log("CheckRustMaterialRoutine started!");
-    
-    //float totalTime = 0f;
-
-    while (GetComponent<Renderer>().material = rustMaterial)
+    IEnumerator CheckRustMaterialRoutine()
     {
-        yield return new WaitForSeconds(5f); // Wait for 5 seconds before each deduction
-        //totalTime += 5f;
+        Debug.Log("CheckRustMaterialRoutine started!");
 
-        //Debug.Log("Checking material after " + totalTime + " seconds...");
-        
-        // If the material is repaired, stop the coroutine
-        if (GetComponent<Renderer>().material.name.Contains(oldMaterial.name))
+        while (true)
         {
-            Debug.Log("Material was repaired! Stopping resource deductions.");
-            yield break;
-        }
+            yield return new WaitForSeconds(5f);
+
+            // If GameObject is inactive, stop deductions
+            if (!gameObject.activeInHierarchy)
+            {
+                Debug.Log("Base structure is inactive, stopping rust check!");
+                yield break;
+            }
+
+            // If the material is repaired, stop deductions
+            if (GetComponent<Renderer>().material.name.Contains(oldMaterial.name))
+            {
+              Debug.Log("Material was repaired! Stopping resource deductions.");
+              yield break;
+            }
 
         // Deduct resources every 5 seconds
-        Debug.Log("Rust material is still active. Deducting resources...");
-        GameManager.instance.ChangeCollectedWater(-5);
-        GameManager.instance.AddCollectedIron(-5);
-        GameManager.instance.AddCollectedRocks(-5);
+            Debug.Log("Rust material is still active. Deducting resources...");
+            GameManager.instance.ChangeCollectedWater(-5);
+            GameManager.instance.AddCollectedIron(-5);
+            GameManager.instance.AddCollectedRocks(-5);
+        }
     }
-    
-    Debug.Log("Rust material remained for full duration. Resources deducted 3 times!");
-}
 
-    IEnumerator ChangeMaterialRoutine() {
-        while (true) {
+    IEnumerator ChangeMaterialRoutine()
+    {
+        while (true)
+        {
             float randomTime = Random.Range(10f, 15f);
             yield return new WaitForSeconds(randomTime);
-            GetComponent<Renderer>().material = rustMaterial;
-            warning.SetActive(true);
-            if (checkRustCoroutine != null) {
-                StopCoroutine(checkRustCoroutine);
-            } else {
-                Debug.Log("It is null");
+
+            // **Check if GameObject is still active before applying rust**
+            if (!gameObject.activeInHierarchy)
+            {
+                Debug.Log("Base structure became inactive! Not applying rust.");
+                yield break;
             }
+
+            GetComponent<Renderer>().material = rustMaterial;
+            if (gameObject.activeInHierarchy) {
+                warning.SetActive(true);
+            }
+
+            Debug.Log("Rust material applied, starting countdown...");
+
+            // Stop previous rust check
+            if (checkRustCoroutine != null)
+            {
+                StopCoroutine(checkRustCoroutine);
+            }
+
             checkRustCoroutine = StartCoroutine(CheckRustMaterialRoutine());
             Debug.Log("Check rust coroutine has started!");
         }
