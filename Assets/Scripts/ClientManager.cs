@@ -12,6 +12,7 @@ public class ClientManager : MonoBehaviour
 
     private bool[] active;
 
+    // Deactivate all buttons first
     private void Start()
     {
         foreach (var button in buttonList)
@@ -43,6 +44,7 @@ public class ClientManager : MonoBehaviour
             }
         }
 
+        // Change text accordingly
         if (activeTasks >= 0)
         {
             statusText.text = "Task(s) available:";
@@ -54,6 +56,7 @@ public class ClientManager : MonoBehaviour
         
     }
 
+    // Change scenes when clicking button
     public void OnClick(GameObject clickedButton)
     {
         int index = System.Array.IndexOf(buttonList, clickedButton);

@@ -65,14 +65,14 @@ public class OreMining : MonoBehaviour
         rnd.material.color = Color.white;
     }
 
-    // short press to collect materials
+    // Short press to collect materials
     private void pressedHandler(object sender, EventArgs e)
     {
         if (isPressed) return;
         isPressed = true;
         Invoke("ResetPress", 0.1f);
         
-        // if the rocks are small (aka spawned ones)
+        // Collect if the rocks are small (aka spawned ones)
         if (transform.localScale.x < 0.4f)
         {
             if (gameObject.tag == "Iron ore")
@@ -96,7 +96,7 @@ public class OreMining : MonoBehaviour
         isPressed = false;
     }
 
-    // long press and spawn smaller materials for collection
+    // Long press for spawning smaller materials
     private void longPressedHandler(object sender, GestureStateChangeEventArgs e)
     {
         if (e.State == Gesture.GestureState.Recognized)

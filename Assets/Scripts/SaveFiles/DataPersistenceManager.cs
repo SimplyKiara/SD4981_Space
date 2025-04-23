@@ -39,6 +39,7 @@ public class DataPersistenceManager : MonoBehaviour
     {
         this.gameData = dataHandler.Load();
 
+        // New game if no data found
         if (this.gameData == null)
         {
             Debug.Log("No data found. Initializing data.");

@@ -55,6 +55,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Mask
+    uniqueID: 227863721
+    locked: 0
   - name: Collidable
     uniqueID: 2558909805
     locked: 0

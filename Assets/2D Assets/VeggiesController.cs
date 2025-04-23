@@ -10,10 +10,8 @@ public class VeggiesController : MonoBehaviour
     public Text VeggieText;
 
     private Animator animator;
-
     private static int collectedVeggies = 0;
 
-    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -38,7 +36,6 @@ public class VeggiesController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         VeggieText.text = "Vegatables collected: " + collectedVeggies;

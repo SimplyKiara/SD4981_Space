@@ -6,13 +6,14 @@ using System.IO;
 
 public class FileDataHandler
 {
-    // Filepath: C:\Users\xxxx\AppData\LocalLow\DefaultCompany\My project (1)
+    // Filepath: C:\Users\{YourUsername}\AppData\LocalLow\DefaultCompany\My project (1)
     private string dataDirPath = "";
     private string dataFileName = "";
 
     private bool useEncryption = false;
     private readonly string encryptCodeWord = "space";
 
+    // Marks file path, file name and encryption
     public FileDataHandler(string dataDirPath, string dataFileName, bool useEncryption)
     {
         this.dataDirPath = dataDirPath;
@@ -20,6 +21,7 @@ public class FileDataHandler
         this.useEncryption = useEncryption;
     }
 
+    // Load data
     public GameData Load()
     {
         string fullPath = Path.Combine(dataDirPath, dataFileName);
@@ -52,6 +54,7 @@ public class FileDataHandler
         return loadedData;
     }
 
+    // Save data
     public void Save(GameData data)
     {
         string fullPath = Path.Combine(dataDirPath, dataFileName);

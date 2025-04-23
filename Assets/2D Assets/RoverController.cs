@@ -37,9 +37,11 @@ public class RoverController : MonoBehaviour
 
     private void Update()
     {
+        // Displayed coordinates
         currentPosX = transform.position.x * 100;
         currentPosY = transform.position.y * 100;
 
+        // Moving direction and angle
         if (!atGoal && Input.GetMouseButtonDown(0))
         {
             lastClickedPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -50,6 +52,7 @@ public class RoverController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, angle - 90); // Adjust for object facing
         }
 
+        // Stop at last touched position
         if (moving && (Vector2)transform.position != lastClickedPos)
         {
             float step = speed * Time.deltaTime;
@@ -58,7 +61,6 @@ public class RoverController : MonoBehaviour
 
         posText.text = $"Your position:\nx = {currentPosX:F0}, y = {currentPosY:F0}";
     }
-
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

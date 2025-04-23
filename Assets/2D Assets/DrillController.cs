@@ -29,7 +29,12 @@ public class DrillController : MonoBehaviour
     bool atGoal = false;
     bool moving;
     int totalIce;
-    
+
+    bool IsTouchOrClick()
+    {
+        return Input.GetMouseButton(0) || Input.touchCount > 0;
+    }
+
     public void Start()
     {
         animator = GetComponent<Animator>();
@@ -46,13 +51,13 @@ public class DrillController : MonoBehaviour
     {
         if (!atGoal && !moving) // Disable input when moving
         {
-            if (Input.GetMouseButton(0))
+            if (IsTouchOrClick())
             {
                 spot = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 spot.z = 0;
             }
 
-            if (Input.GetMouseButtonUp(0) && suitableAngle)
+            if (IsTouchOrClick() && suitableAngle)
             {
                 Debug.Log("Mouse released");
                 Vector3 mouseReleasePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

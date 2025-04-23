@@ -6,7 +6,6 @@ public class PipeController : MonoBehaviour
 {
     private Animator animator;
 
-    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -14,7 +13,6 @@ public class PipeController : MonoBehaviour
         animator.SetBool("Filled", false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,10 +16,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public Text waterText;
     public GameData gameData;
 
-    private int ironOre;
-    private int rocks;
-    private float water;
-    private float waterCap;
+    [NonSerialized] public int ironOre;
+    [NonSerialized] public int rocks;
+    [NonSerialized] public float water;
+    [NonSerialized] public float waterCap;
 
     private void Awake()
     {
@@ -41,11 +42,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Debug.Log("Q pressed");
             BuildSolarPanels();
         }
+        */
     }
 
     public void LoadData(GameData data)
@@ -55,7 +58,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         ironOre = data.ironOre;
         rocks = data.rocks;
         water = data.water;
-        waterCap = data.maxWater;
+        waterCap = GameData.maxWater;
         UpdateUI();
     }
 
@@ -64,7 +67,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         data.ironOre = ironOre;
         data.rocks = rocks;
         data.water = water;
-        data.maxWater = waterCap;
     }
 
     public void BuildSolarPanels()
@@ -167,6 +169,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
         rocks += value;
         //Debug.Log("No. of Rocks changed by" + value);
         UpdateUI();
+    }
+
+    public float GetCollectedWater()
+    {
+        return gameData.water;
     }
 
     public void ChangeCollectedWater(float value)

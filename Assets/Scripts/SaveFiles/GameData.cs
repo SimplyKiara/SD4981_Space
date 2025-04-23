@@ -15,10 +15,10 @@ public class GameData
     public float currentResources;
     public float resourcePercentage;
 
-    public float maxWater = 50f;
-    public float maxResources = 100f;
+    public static float maxWater = 30f;
+    public static float maxResources = 80f;
 
-    // structuer of saved data
+    // Structure of saved data
     public GameData()
     {
         this.ironOre = 0;
