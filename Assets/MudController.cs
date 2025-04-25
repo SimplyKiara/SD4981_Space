@@ -2,23 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PipeController : MonoBehaviour
+public class MudController : MonoBehaviour
 {
     private bool moving;
     private float startPosX;
     private float startPosY;
     private Vector3 resetPosition;
+
     private float moveTimeout = 1.0f; // Timeout duration in seconds
     private Coroutine moveCoroutine;
 
-    private Animator animator;
-
     void Start()
     {
-        animator = GetComponent<Animator>();
-        gameObject.tag = "Pipette";
-        animator.SetBool("Filled", false);
-
         resetPosition = this.transform.localPosition;
     }
 
@@ -55,42 +50,8 @@ public class PipeController : MonoBehaviour
             mousePos = Camera.main.ScreenToWorldPoint(mousePos);
             transform.localPosition = new Vector3(mousePos.x - startPosX, mousePos.y - startPosY, transform.localPosition.z);
         }
-    }
 
-    void PipeHandler()
-    {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1.0f);
-        Debug.Log("Detected colliders count: " + colliders.Length);
-        foreach (Collider2D collider in colliders)
-        {
-            Debug.Log("Detected collider: " + collider.name + " with tag: " + collider.tag);
-            if (collider.CompareTag("Water"))
-            {
-                animator.SetBool("Filled", true);
-                gameObject.tag = "WaterPipette";
-                break;
-            }
-            else if (collider.CompareTag("Veggies"))
-            {
-                if (gameObject.tag == "WaterPipette" && animator.GetBool("Filled"))
-                {
-                    animator.SetBool("Filled", false);
-                    gameObject.tag = "Pipette";
-                    Debug.Log("Watered!");
-                    break;
-                }
-                else
-                {
-                    Debug.Log("Cannot water!");
-                    break;
-                }
-            }
-            else
-            {
-                Debug.Log($"Action not identified: {gameObject.tag} to {collider.tag}");
-                break;
-            }
-        }
+
     }
 
     private void OnMouseDown()
@@ -120,24 +81,16 @@ public class PipeController : MonoBehaviour
 
         foreach (Collider2D collider in colliders)
         {
-            Debug.Log("Collided with: " + collider.name + " - Tag: " + collider.tag);
-
-            if ((gameObject.tag == "WaterPipette") && collider.CompareTag("Veggies"))
+            if (collider.CompareTag("Pots"))
             {
-                collider.gameObject.SendMessage("VeggiesAction");
+                collider.gameObject.SendMessage("PotAction");
                 break;
             }
-            else if (gameObject.tag == "Pipette" && collider.CompareTag("Water"))
+            else
             {
-                PipeHandler();
+                Debug.Log("MoveSystem cannot identify action");
                 break;
             }
-            else if (gameObject.tag == "WaterPipette" && collider.CompareTag("Water"))
-            {
-                Debug.Log("Pipette already filled!");
-                break;
-            }
-            Debug.Log("MoveSystem cannot identify action");
         }
     }
 

@@ -1,21 +1,77 @@
+using SocketIOClient;
 using System.Collections;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class ClientConnection : MonoBehaviour
 {
-    // public TMP_Text messageText;
-    // public Button taskPostBtn;
     public Button getTaskBtn;
-    private string baseUrl = "http://localhost:3000"; // "http://10.11.36.4:3000";
+    private SocketIOUnity socket;
+
+    [System.Serializable]
+    public class GroupUpdate
+    {
+        public string events;
+        public GroupData data;
+    }
+
+    [System.Serializable]
+    public class GroupData
+    {
+        public string groupName;
+        public string session;
+    }
+
     [System.Serializable]
     public class Task
     {
         public string title;
     }
 
-    public void Start()
+    private string baseUrl = "http://localhost:3000"; // "http://10.11.36.4:3000";
+
+    async void Start()
+    {
+        var uri = new System.Uri("http://localhost:3000");
+        socket = new SocketIOUnity(uri, new SocketIOOptions
+        {
+            Query = new System.Collections.Generic.Dictionary<string, string>
+            {
+                { "token", "UNITY" }
+            },
+            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
+        });
+
+        socket.OnConnected += (sender, e) =>
+        {
+            Debug.Log("Connection open!");
+        };
+
+        socket.OnError += (sender, e) =>
+        {
+            Debug.LogError("Error! " + e);
+        };
+
+        socket.OnDisconnected += (sender, e) =>
+        {
+            Debug.Log("Connection closed!");
+        };
+
+        socket.On("groupUpdated", response =>
+        {
+            var message = response.ToString();
+            Debug.Log("OnMessage! " + message);
+
+            GroupUpdate groupUpdate = JsonUtility.FromJson<GroupUpdate>(message);
+            Debug.Log("Group updated: " + groupUpdate.data.groupName + ", Session: " + groupUpdate.data.session);
+        });
+
+        await socket.ConnectAsync();
+    }
+
+    public void Awake()
     {
         StartCoroutine(GetRequest(baseUrl));
     }

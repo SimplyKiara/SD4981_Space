@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
@@ -10,7 +12,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public List<SolarPanel> solarPanels;
     public GameObject GreenHouse;
     public GameObject UpgradedBase;
-
     public Text ironOreText;
     public Text rocksText;
     public Text waterText;
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [NonSerialized] public int rocks;
     [NonSerialized] public float water;
     [NonSerialized] public float waterCap;
+    public string GpName;
 
     private void Awake()
     {
@@ -38,17 +40,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     private void Start()
     {
         UpdateUI();
-    }
-
-    private void Update()
-    {
-        /*
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Debug.Log("Q pressed");
-            BuildSolarPanels();
-        }
-        */
     }
 
     public void LoadData(GameData data)

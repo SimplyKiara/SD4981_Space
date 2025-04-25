@@ -67,16 +67,22 @@ public class ClientManager : MonoBehaviour
             switch (index)
             {
                 case 1:
-                    SceneManager.LoadScene("Planting");
+                    SceneManager.LoadScene("TabletScene");
                     break;
                 case 2:
-                    SceneManager.LoadScene("Harvest");
-                    break;
-                case 3:
                     SceneManager.LoadScene("IceMining_P1");
                     break;
+                case 3:
+                    SceneManager.LoadScene("Planting");
+                    break;
+                case 4:
+                    SceneManager.LoadScene("Harvest");
+                    break;
+                case 5:
+                    SceneManager.LoadScene("IceMining_P2");
+                    break;
                 default:
-                    Debug.Log("No scene provided yet"); 
+                    Debug.Log("Scene(s) not provided yet"); 
                     break;
             }
         }

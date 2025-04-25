@@ -7,7 +7,6 @@ public class VeggiesController : MonoBehaviour
 {
     public bool collected = false;
     public bool watered = false;
-    public Text VeggieText;
 
     private Animator animator;
     private static int collectedVeggies = 0;
@@ -36,14 +35,9 @@ public class VeggiesController : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        VeggieText.text = "Vegatables collected: " + collectedVeggies;
-    }
-
     void VeggiesAction()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.5f);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1.0f);
         foreach (Collider2D collider in colliders)
         {
             if (collider.gameObject.CompareTag("Cutters")) 

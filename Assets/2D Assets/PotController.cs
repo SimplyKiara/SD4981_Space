@@ -20,11 +20,6 @@ public class PotController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    void Update()
-    {
-        
-    }
-
     void PotAction()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.5f);

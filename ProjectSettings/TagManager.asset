@@ -8,7 +8,6 @@ TagManager:
   - Iron ore
   - Lunar rocks
   - Pots
-  - Water
   - Seed
   - Mud
   - Pipette
@@ -18,14 +17,15 @@ TagManager:
   - 2D Goal
   - Border
   - WaterPipette
+  - Water
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Camera
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 

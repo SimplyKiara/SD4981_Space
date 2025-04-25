@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6413320602858886146}
   - component: {fileID: 1830754245009156113}
   - component: {fileID: 3287905121434042569}
-  - component: {fileID: 8285744194148592161}
   - component: {fileID: 881970951856373647}
   m_Layer: 0
   m_Name: Pipette
@@ -74,9 +73,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -2067283043
-  m_SortingLayer: 2
-  m_SortingOrder: 5
+  m_SortingLayerID: 518526927
+  m_SortingLayer: 3
+  m_SortingOrder: 2
   m_Sprite: {fileID: -1519811936, guid: 5ef3f0cc3131f4c4093467218791e781, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -154,18 +153,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.75278056, y: 2.6704323}
   m_EdgeRadius: 0
---- !u!114 &8285744194148592161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6535300566447151675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69bedbab76e005e4daa028b499e31f1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &881970951856373647
 MonoBehaviour:
   m_ObjectHideFlags: 0

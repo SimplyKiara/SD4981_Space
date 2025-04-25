@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1650685538532257170}
   - component: {fileID: 6421646041074197569}
   m_Layer: 5
-  m_Name: Title (1)
+  m_Name: Water
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -572,6 +572,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e82989314795140bf7270628c3c6ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ResourcesText: {fileID: 6421646041074197569}
+  AnnounceText: {fileID: 8419004296825855439}
+  groupId: 0
 --- !u!114 &1871647911876632402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1610,7 +1613,7 @@ GameObject:
   - component: {fileID: 6668445718750452689}
   - component: {fileID: 8419004296825855439}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Announce
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

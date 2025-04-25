@@ -3,7 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using SocketIOClient;
+using System.Threading.Tasks;
 using UnityEngine.UI;
+using System.Net.Sockets;
+using static SocketIOManager;
 
 public class PlantingController : MonoBehaviour
 {
@@ -13,26 +17,65 @@ public class PlantingController : MonoBehaviour
 
     private string baseUrl = "http://";
     private bool called = false;
-    private string[] groups = new string[] { "Group1", "Group2", "Group3" };
 
+    private SocketIOUnity socket;
 
-    // Structure of json data
-    public class Message
+    [System.Serializable]
+    public class GroupUpdate
     {
-        public string title = "Planting Crops";
-        public string group;
-
-        public Message(string group)
-        {
-            this.group = group;
-        }
+        public string events;
+        public GroupData data;
     }
 
-    public void Start()
+    [System.Serializable]
+    public class GroupData
     {
-        Message message = new Message(groups[groupId]);
-        string json = JsonUtility.ToJson(message);
-        StartCoroutine(PostRequest(baseUrl, json));
+        public string groupName;
+        public string session;
+    }
+
+    async void Start()
+    {
+        var uri = new System.Uri("http://localhost:3000");
+        socket = new SocketIOUnity(uri, new SocketIOOptions
+        {
+            Query = new System.Collections.Generic.Dictionary<string, string>
+            {
+                { "token", "UNITY" }
+            },
+            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
+        });
+
+        socket.OnConnected += (sender, e) =>
+        {
+            Debug.Log("Connection open!");
+        };
+
+        socket.OnError += (sender, e) =>
+        {
+            Debug.LogError("Error! " + e);
+        };
+
+        socket.OnDisconnected += (sender, e) =>
+        {
+            Debug.Log("Connection closed!");
+        };
+
+        socket.On("groupUpdated", response =>
+        {
+            var message = response.ToString();
+            Debug.Log("OnMessage! " + message);
+
+            GroupUpdate groupUpdate = JsonUtility.FromJson<GroupUpdate>(message);
+            Debug.Log("Group updated: " + groupUpdate.data.groupName + ", Session: " + groupUpdate.data.session);
+        });
+
+        await socket.ConnectAsync();
+    }
+
+    private void Awake()
+    {
+        
     }
 
     void Update()
@@ -48,32 +91,22 @@ public class PlantingController : MonoBehaviour
         if (!called)
         {
             AnnounceText.text = "Action called! Check your tablet.";
-
+            //SendMessageToServer();
         }
     }
 
-    IEnumerator PostRequest(string url, string jsonData)
+    private async void SendMessageToServer(string message)
     {
-        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        if (socket.Connected)
         {
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            Debug.Log("Sending planting data to server...");
-
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError("Error sending planting data: " + request.error);
-            }
-            else
-            {
-                Debug.Log("Server Response: " + request.downloadHandler.text);
-            }
+            await socket.EmitAsync("message", message);
+            Debug.Log("Message sent: " + message);
         }
+    }
+
+    private async void OnApplicationQuit()
+    {
+        await socket.DisconnectAsync();
     }
 }
 
