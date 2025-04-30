@@ -22,8 +22,9 @@ public class PotController : MonoBehaviour
 
     void PotAction()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.5f);
-        foreach (Collider2D collider in colliders)
+        Collider2D collider = Physics2D.OverlapPoint(transform.position);
+
+        if (collider != null && collider.gameObject != gameObject)
         {
             if (collider.gameObject.CompareTag("Mud"))
             {
@@ -37,7 +38,6 @@ public class PotController : MonoBehaviour
                 {
                     Debug.Log("Already have mud!");
                 }
-                break;
             }
             else if (collider.gameObject.CompareTag("Seed"))
             {
@@ -50,7 +50,6 @@ public class PotController : MonoBehaviour
                 {
                     Debug.Log("Can't plant seed!");
                 }
-                break;
             }
             else if (collider.gameObject.CompareTag("WaterPipette"))
             {
@@ -65,7 +64,6 @@ public class PotController : MonoBehaviour
                 {
                     Debug.Log("Cannot water!");
                 }
-                break;
             }
             else
             {

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7841114826109507409}
   - component: {fileID: 2835143794906778183}
   - component: {fileID: 8025751297405282401}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cutters
   m_TagString: Cutters
   m_Icon: {fileID: 0}

@@ -59,38 +59,48 @@ public class PipeController : MonoBehaviour
 
     void PipeHandler()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1.0f);
-        Debug.Log("Detected colliders count: " + colliders.Length);
-        foreach (Collider2D collider in colliders)
+        int layerMask = ~LayerMask.GetMask("Tools");
+        Collider2D collider = Physics2D.OverlapPoint(transform.position, layerMask);
+
+        if (collider != null && collider.gameObject != gameObject)
         {
             Debug.Log("Detected collider: " + collider.name + " with tag: " + collider.tag);
             if (collider.CompareTag("Water"))
             {
-                animator.SetBool("Filled", true);
-                gameObject.tag = "WaterPipette";
-                break;
+                ChangeTag();
             }
             else if (collider.CompareTag("Veggies"))
             {
-                if (gameObject.tag == "WaterPipette" && animator.GetBool("Filled"))
+                if (gameObject.tag == "WaterPipette")
                 {
-                    animator.SetBool("Filled", false);
-                    gameObject.tag = "Pipette";
+                    ChangeTag();
                     Debug.Log("Watered!");
-                    break;
                 }
                 else
                 {
                     Debug.Log("Cannot water!");
-                    break;
                 }
             }
             else
             {
                 Debug.Log($"Action not identified: {gameObject.tag} to {collider.tag}");
-                break;
             }
         }
+    }
+
+    void ChangeTag()
+    {
+        if (gameObject.tag == "WaterPipette")
+        {
+            animator.SetBool("Filled", false);
+            gameObject.tag = "Pipette";
+        }
+        else if (gameObject.tag == "Pipette")
+        {
+            animator.SetBool("Filled", true);
+            gameObject.tag = "WaterPipette";
+        }
+        animator.Update(0);
     }
 
     private void OnMouseDown()
@@ -116,28 +126,31 @@ public class PipeController : MonoBehaviour
 
     private void CheckCollisions()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1.0f);
+        int layerMask = ~LayerMask.GetMask("Tools");
+        Collider2D collider = Physics2D.OverlapPoint(transform.position, layerMask);
 
-        foreach (Collider2D collider in colliders)
+        if (collider != null && collider.gameObject != gameObject)
         {
-            Debug.Log("Collided with: " + collider.name + " - Tag: " + collider.tag);
-
             if ((gameObject.tag == "WaterPipette") && collider.CompareTag("Veggies"))
             {
                 collider.gameObject.SendMessage("VeggiesAction");
-                break;
             }
             else if (gameObject.tag == "Pipette" && collider.CompareTag("Water"))
             {
                 PipeHandler();
-                break;
             }
-            else if (gameObject.tag == "WaterPipette" && collider.CompareTag("Water"))
+            else if (gameObject.tag == "WaterPipette" && collider.CompareTag("Pots"))
             {
-                Debug.Log("Pipette already filled!");
-                break;
+                collider.gameObject.SendMessage("PotAction");
             }
-            Debug.Log("MoveSystem cannot identify action");
+            else
+            {
+                Debug.Log("MoveSystem cannot identify action, tag = " + collider.tag);
+            }
+        }
+        else
+        {
+            Debug.Log("MoveSystem cannot identify collision");
         }
     }
 

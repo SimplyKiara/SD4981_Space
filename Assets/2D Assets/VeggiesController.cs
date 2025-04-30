@@ -37,8 +37,9 @@ public class VeggiesController : MonoBehaviour
 
     void VeggiesAction()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1.0f);
-        foreach (Collider2D collider in colliders)
+        Collider2D collider = Physics2D.OverlapPoint(transform.position);
+
+        if (collider != null && collider.gameObject != gameObject)
         {
             if (collider.gameObject.CompareTag("Cutters")) 
             {
@@ -54,7 +55,6 @@ public class VeggiesController : MonoBehaviour
                 {
                     Debug.Log("Cannot collect veggie!");
                 }
-                break;
             }
             else if (collider.gameObject.CompareTag("WaterPipette"))
             {
@@ -75,7 +75,6 @@ public class VeggiesController : MonoBehaviour
                 {
                     Debug.Log("Already watered veggie!");
                 }
-                break;
             }
         }
     }

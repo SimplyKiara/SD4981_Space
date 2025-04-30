@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8506435952230182051}
   - component: {fileID: 5565397929339815540}
   - component: {fileID: 7619247087303052666}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Mud
   m_TagString: Mud
   m_Icon: {fileID: 0}
@@ -72,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -2067283043
-  m_SortingLayer: 0
+  m_SortingLayerID: 518526927
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 6efe315aae715ee4a85de79087db40fc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -18,6 +18,11 @@ TagManager:
   - Border
   - WaterPipette
   - Water
+  - floor
+  - Enemy
+  - LandingPadMid
+  - LandingPadBest
+  - LandingPadWorst
   layers:
   - Default
   - TransparentFX
@@ -26,7 +31,7 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
+  - Tools
   - 
   - 
   - 

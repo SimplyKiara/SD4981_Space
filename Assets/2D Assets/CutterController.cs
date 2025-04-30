@@ -75,19 +75,18 @@ public class CutterController : MonoBehaviour
 
     private void CheckCollisions()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1.0f);
+        int layerMask = ~LayerMask.GetMask("Tools");
+        Collider2D collider = Physics2D.OverlapPoint(transform.position, layerMask);
 
-        foreach (Collider2D collider in colliders)
+        if (collider != null && collider.gameObject != gameObject)
         {
             if (collider.CompareTag("Veggies"))
             {
                 collider.gameObject.SendMessage("VeggiesAction");
-                break;
             }
             else
             {
-                Debug.Log("MoveSystem cannot identify action");
-                break;
+                Debug.Log("MoveSystem cannot identify action, tag = " + collider.tag);
             }
         }
     }

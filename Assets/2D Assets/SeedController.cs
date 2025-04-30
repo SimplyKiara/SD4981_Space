@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MudController : MonoBehaviour
+public class SeedController : MonoBehaviour
 {
     private bool moving;
     private float startPosX;
@@ -50,8 +50,6 @@ public class MudController : MonoBehaviour
             mousePos = Camera.main.ScreenToWorldPoint(mousePos);
             transform.localPosition = new Vector3(mousePos.x - startPosX, mousePos.y - startPosY, transform.localPosition.z);
         }
-
-
     }
 
     private void OnMouseDown()
@@ -77,20 +75,23 @@ public class MudController : MonoBehaviour
 
     private void CheckCollisions()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1.0f);
+        int layerMask = ~LayerMask.GetMask("Tools");
+        Collider2D collider = Physics2D.OverlapPoint(transform.position, layerMask);
 
-        foreach (Collider2D collider in colliders)
+        if (collider != null && collider.gameObject != gameObject)
         {
             if (collider.CompareTag("Pots"))
             {
                 collider.gameObject.SendMessage("PotAction");
-                break;
             }
             else
             {
-                Debug.Log("MoveSystem cannot identify action");
-                break;
+                Debug.Log("MoveSystem cannot identify action, tag = " + collider.tag);
             }
+        }
+        else
+        {
+            Debug.Log("MoveSystem cannot identify collision");
         }
     }
 
