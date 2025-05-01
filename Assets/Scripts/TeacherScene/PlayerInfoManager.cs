@@ -69,6 +69,19 @@ public class PlayerInfoManager : MonoBehaviour
         await socket.ConnectAsync();
     }
 
+    void Update()
+    {
+        if (playerUpdated)
+        {
+            Refresh();
+            playerUpdated = false;
+        }
+        if (players != null && players.Count == 3)
+        {
+            startBtn.SetActive(true);
+        }
+    }
+
     public void Refresh()
     {
         Debug.Log("Refresh called");
@@ -101,23 +114,26 @@ public class PlayerInfoManager : MonoBehaviour
             {
                 string jsonString = request.downloadHandler.text;
                 Debug.Log("Response: " + jsonString);
-                try
+                if (jsonString != "[]")
                 {
-                    List<string> jsonObjects = jsonString.Split(new string[] { "},{" }, System.StringSplitOptions.None).Select(p => p.Trim('[', ']')).ToList();
-                    foreach (string jsonObject in jsonObjects)
+                    try
                     {
-                        string formattedJson = "{" + jsonObject.Trim('{', '}') + "}";
-                        Debug.Log(formattedJson);
-                        PlayerData player = JsonUtility.FromJson<PlayerData>(formattedJson);
-                        players.Add(player);
-                        Debug.Log($"[json] {player.groupName} {player.progress}");
-                        AddPlayerInfoCard(player);
-                    }
+                        List<string> jsonObjects = jsonString.Split(new string[] { "},{" }, System.StringSplitOptions.None).Select(p => p.Trim('[', ']')).ToList();
+                        foreach (string jsonObject in jsonObjects)
+                        {
+                            string formattedJson = "{" + jsonObject.Trim('{', '}') + "}";
+                            Debug.Log(formattedJson);
+                            PlayerData player = JsonUtility.FromJson<PlayerData>(formattedJson);
+                            players.Add(player);
+                            Debug.Log($"[json] {player.groupName} {player.progress}");
+                            AddPlayerInfoCard(player);
+                        }
 
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError("JSON Parsing Error: " + e.Message);
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError("JSON Parsing Error: " + e.Message);
+                    }
                 }
             }
         }
@@ -133,16 +149,38 @@ public class PlayerInfoManager : MonoBehaviour
         Debug.Log($"[progress: ] {newCard.transform.Find("AvatarArea").transform.Find("Progress").GetComponent<TMP_Text>().text}");
     }
 
-    void Update()
+    void OnApplicationQuit()
     {
-        if (playerUpdated)
+        StartCoroutine(DeleteGroupData());
+    }
+
+    IEnumerator DeleteGroupData()
+    {
+        using (UnityWebRequest request = UnityWebRequest.Delete(serverUrl + "/group"))
         {
-            Refresh();
-            playerUpdated = false;
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error deleting group data: " + request.error);
+            }
+            else
+            {
+                Debug.Log("Group data deleted successfully");
+            }
         }
-        if (players != null && players.Count == 3)
+    }
+
+    public void StartGame()
+    {
+        if (socket.Connected)
         {
-            startBtn.SetActive(true);
+            socket.Emit("start game");
+            Debug.Log("Start game message emitted");
+        }
+        else
+        {
+            Debug.LogError("Socket not connected");
         }
     }
 }
