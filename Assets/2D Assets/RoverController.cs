@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
-using static UnityEngine.RuleTile.TilingRuleOutput;
+// using static UnityEditor.Timeline.TimelinePlaybackControls;
+// using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class RoverController : MonoBehaviour
 {
@@ -124,16 +124,17 @@ public class RoverController : MonoBehaviour
 
 
     private void OnTriggerEnter2D(Collider2D collision)
-    { 
-        if (collision.gameObject.tag == "2D Danger") { 
-            Debug.Log("Collided with danger"); 
-            rb.velocity = Vector2.zero; transform.position = startPos; 
-            transform.rotation = Quaternion.identity; 
-        } 
-        
-        if (collision.gameObject.tag == "2D Goal") 
-        { 
-            Debug.Log("Reached a site"); 
+    {
+        if (collision.gameObject.tag == "2D Danger")
+        {
+            Debug.Log("Collided with danger");
+            rb.velocity = Vector2.zero; transform.position = startPos;
+            transform.rotation = Quaternion.identity;
+        }
+
+        if (collision.gameObject.tag == "2D Goal")
+        {
+            Debug.Log("Reached a site");
         }
     }
 

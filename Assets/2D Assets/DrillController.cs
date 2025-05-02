@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
+// using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class DrillController : MonoBehaviour
 {
@@ -39,7 +39,7 @@ public class DrillController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        
+
         myButton.onClick.AddListener(TaskOnClick);
 
         startPos = transform.position;
@@ -158,7 +158,7 @@ public class DrillController : MonoBehaviour
         rotation2.z = 0; // Reset rotation
         rotation2.w = 0;
         transform.rotation = rotation2;
-        moving = false; 
+        moving = false;
     }
 
     public void CallPanel()

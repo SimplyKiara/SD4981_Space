@@ -12,8 +12,10 @@ public class PlayerInfoManager : MonoBehaviour
     public GameObject playerInfoCardPrefab; // Reference to the Player Info Card prefab
     public Transform playerInfoGrid; // Reference to the Grid Layout Group parent
     public GameObject startBtn;
+    public GameObject endBtn;
     private string serverUrl = "http://localhost:3000"; // Replace with your server URL
     private SocketIOUnity socket;
+    private bool isGameStarted = false;
 
     [System.Serializable]
     public class PlayerData
@@ -76,9 +78,13 @@ public class PlayerInfoManager : MonoBehaviour
             Refresh();
             playerUpdated = false;
         }
-        if (players != null && players.Count == 3)
+        if (players != null && players.Count == 3 && !isGameStarted)
         {
             startBtn.SetActive(true);
+        }
+        else if (isGameStarted)
+        {
+            endBtn.SetActive(true);
         }
     }
 
@@ -177,6 +183,23 @@ public class PlayerInfoManager : MonoBehaviour
         {
             socket.Emit("start game");
             Debug.Log("Start game message emitted");
+            startBtn.SetActive(false);
+            isGameStarted = true;
+        }
+        else
+        {
+            Debug.LogError("Socket not connected");
+        }
+    }
+    public void EndGame()
+    {
+        if (socket.Connected)
+        {
+            socket.Emit("end game");
+            Debug.Log("End game message emitted");
+            StartCoroutine(DeleteGroupData());
+            endBtn.SetActive(false);
+            isGameStarted = false;
         }
         else
         {

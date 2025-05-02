@@ -1,40 +1,59 @@
 using SocketIOClient;
 using System.Collections;
-using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using UnityEditor.IMGUI.Controls;
+using System.Linq;
 
 public class ClientConnection : MonoBehaviour
 {
-    public Button getTaskBtn;
+
+    public Button connectBtn;
+    public GameObject menuPanel;
+    public GameObject gamePanel;
+    public string groupName;
+    public string progress = "0";
     private SocketIOUnity socket;
+    List<PlayerData> groupList = new List<PlayerData>();
+    bool isConnected = false;
 
     [System.Serializable]
-    public class GroupUpdate
-    {
-        public string events;
-        public GroupData data;
-    }
-
-    [System.Serializable]
-    public class GroupData
+    public class PlayerData
     {
         public string groupName;
-        public string session;
+        public string progress;
     }
 
     [System.Serializable]
-    public class Task
+    public class GroupList
+    {
+        public PlayerData[] groups;
+    }
+
+    [System.Serializable]
+    public class avaliableTask
     {
         public string title;
     }
 
     private string baseUrl = "http://localhost:3000"; // "http://10.11.36.4:3000";
 
-    async void Start()
+
+    void Start()
     {
-        var uri = new System.Uri("http://localhost:3000");
+        menuPanel.SetActive(true);
+        gamePanel.SetActive(false);
+        connectBtn.onClick.AddListener(OnConnectClicked);
+    }
+
+    private async void OnConnectClicked()
+    {
+        menuPanel.SetActive(false);
+        gamePanel.SetActive(true);
+
+        var uri = new System.Uri(baseUrl);
         socket = new SocketIOUnity(uri, new SocketIOOptions
         {
             Query = new System.Collections.Generic.Dictionary<string, string>
@@ -44,9 +63,10 @@ public class ClientConnection : MonoBehaviour
             Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
         });
 
-        socket.OnConnected += (sender, e) =>
+        socket.OnConnected += async (sender, e) =>
         {
             Debug.Log("Connection open!");
+            isConnected = true;
         };
 
         socket.OnError += (sender, e) =>
@@ -59,13 +79,18 @@ public class ClientConnection : MonoBehaviour
             Debug.Log("Connection closed!");
         };
 
-        socket.On("groupUpdated", response =>
+        /* socket.On("groupUpdated", response =>
         {
             var message = response.ToString();
             Debug.Log("OnMessage! " + message);
+            string json = message.Trim('[', ']');
+            PlayerData groupUpdate = JsonUtility.FromJson<PlayerData>(json);
+            Debug.Log("Group updated: " + groupUpdate.groupName + ", Session: " + groupUpdate.progress);
+        }); */
 
-            GroupUpdate groupUpdate = JsonUtility.FromJson<GroupUpdate>(message);
-            Debug.Log("Group updated: " + groupUpdate.data.groupName + ", Session: " + groupUpdate.data.session);
+        socket.On("gameStarted", response =>
+        {
+            Debug.Log("start game");
         });
 
         await socket.ConnectAsync();
@@ -74,6 +99,21 @@ public class ClientConnection : MonoBehaviour
     public void Awake()
     {
         StartCoroutine(GetRequest(baseUrl));
+        StartCoroutine(GetGroupData());
+    }
+    public void Update()
+    {
+        if (isConnected && groupName == "")
+        {
+            // Fetch current groups and generate new group name
+            groupName = GenGroupName();
+            StartCoroutine(PostGroupData(groupName, progress));
+        }
+    }
+
+    string GenGroupName()
+    {
+        return $"Group {groupList.Count + 1}";
     }
 
     public void OnGetTaskClicked()
@@ -148,14 +188,52 @@ public class ClientConnection : MonoBehaviour
         }
     }
 
-    IEnumerator PostTaskRequest(string uri, string title)
+    IEnumerator GetGroupData()
     {
-        Task task = new Task { title = title };
-        string jsonData = JsonUtility.ToJson(task);
+        Debug.Log("GetPlayerData");
+        using (UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/group"))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError(request.error);
+            }
+            else
+            {
+                string jsonString = request.downloadHandler.text;
+                Debug.Log("Response: " + jsonString);
+                if (jsonString != "[]")
+                {
+                    try
+                    {
+                        List<string> jsonObjects = jsonString.Split(new string[] { "},{" }, System.StringSplitOptions.None).Select(p => p.Trim('[', ']')).ToList();
+                        foreach (string jsonObject in jsonObjects)
+                        {
+                            string formattedJson = "{" + jsonObject.Trim('{', '}') + "}";
+                            Debug.Log(formattedJson);
+                            PlayerData player = JsonUtility.FromJson<PlayerData>(formattedJson);
+                            Debug.Log($"[json] {player.groupName} {player.progress}");
+                            groupList.Add(player);
+                        }
+
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError("JSON Parsing Error: " + e.Message);
+                    }
+                }
+            }
+        }
+    }
+    IEnumerator PostGroupData(string groupName, string progress)
+    {
+        PlayerData playerData = new PlayerData { groupName = groupName, progress = progress };
+        string jsonData = JsonUtility.ToJson(playerData);
 
         Debug.Log("JSON Data: " + jsonData); // Debug log to check JSON data
 
-        using (UnityWebRequest request = new UnityWebRequest(uri, "POST"))
+        using (UnityWebRequest request = new UnityWebRequest(baseUrl + "/group", "POST"))
         {
             byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -175,3 +253,4 @@ public class ClientConnection : MonoBehaviour
         }
     }
 }
+
