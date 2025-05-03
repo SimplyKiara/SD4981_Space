@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using UnityEditor.IMGUI.Controls;
 using System.Linq;
 
 public class ClientConnection : MonoBehaviour
@@ -12,12 +11,14 @@ public class ClientConnection : MonoBehaviour
 
     public Button connectBtn;
     public GameObject menuPanel;
+    public GameObject waitPanel;
     public GameObject gamePanel;
     public string groupName;
     public string progress = "0";
     private SocketIOUnity socket;
     List<PlayerData> groupList = new List<PlayerData>();
     bool isConnected = false;
+    bool isReady = false;
 
     [System.Serializable]
     public class PlayerData
@@ -44,14 +45,17 @@ public class ClientConnection : MonoBehaviour
     void Start()
     {
         menuPanel.SetActive(true);
+        waitPanel.SetActive(false);
         gamePanel.SetActive(false);
         connectBtn.onClick.AddListener(OnConnectClicked);
+        isConnected = false;
+        isReady = false;
     }
 
     private async void OnConnectClicked()
     {
         menuPanel.SetActive(false);
-        gamePanel.SetActive(true);
+        waitPanel.SetActive(true);
 
         var uri = new System.Uri(baseUrl);
         socket = new SocketIOUnity(uri, new SocketIOOptions
@@ -77,6 +81,7 @@ public class ClientConnection : MonoBehaviour
         socket.OnDisconnected += (sender, e) =>
         {
             Debug.Log("Connection closed!");
+            isConnected = false;
         };
 
         /* socket.On("groupUpdated", response =>
@@ -91,6 +96,7 @@ public class ClientConnection : MonoBehaviour
         socket.On("gameStarted", response =>
         {
             Debug.Log("start game");
+            isReady = true;
         });
 
         await socket.ConnectAsync();
@@ -108,6 +114,11 @@ public class ClientConnection : MonoBehaviour
             // Fetch current groups and generate new group name
             groupName = GenGroupName();
             StartCoroutine(PostGroupData(groupName, progress));
+        }
+        if (isReady && waitPanel.activeInHierarchy)
+        {
+            waitPanel.SetActive(false);
+            gamePanel.SetActive(true);
         }
     }
 
