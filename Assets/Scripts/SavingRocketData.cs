@@ -30,11 +30,11 @@ public class SavingRocketData : MonoBehaviour
     }
     public void OnGetBtnClicked()
     {
-        StartCoroutine(GetAllMessagesRequest(baseUrl + "/messages"));
+        StartCoroutine(GetAllMessagesRequest(baseUrl + "/Rocket"));
     }
     public void OnPostBtnClicked()
     {
-        StartCoroutine(PostMessageRequest(baseUrl + "/messages", inputField.text));
+        StartCoroutine(PostMessageRequest(baseUrl + "/Rocket", inputField.text));
     }
     IEnumerator GetRequest(string uri)
     {
@@ -109,7 +109,7 @@ public class SavingRocketData : MonoBehaviour
 
             string json = JsonUtility.ToJson(collisionData);
 
-            StartCoroutine(PostCollisionDataRequest(baseUrl + "/messages", json));
+            StartCoroutine(PostCollisionDataRequest(baseUrl + "/Rocket", json));
 
             Debug.Log("Rocket landing data is saved! " + json);
 
@@ -125,7 +125,7 @@ public class SavingRocketData : MonoBehaviour
 
             string json = JsonUtility.ToJson(collisionData);
 
-            StartCoroutine(PostCollisionDataRequest(baseUrl + "/messages", json));
+            StartCoroutine(PostCollisionDataRequest(baseUrl + "/Rocket", json));
 
             Debug.Log("Rocket landing data is saved! " + json);
 
@@ -141,7 +141,7 @@ public class SavingRocketData : MonoBehaviour
 
             string json = JsonUtility.ToJson(collisionData);
 
-            StartCoroutine(PostCollisionDataRequest(baseUrl + "/messages", json));
+            StartCoroutine(PostCollisionDataRequest(baseUrl + "/Rocket", json));
 
             Debug.Log("Rocket landing data is saved! " + json);
 
