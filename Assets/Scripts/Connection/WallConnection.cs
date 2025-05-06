@@ -46,6 +46,12 @@ public class WallConnection : MonoBehaviour
             HandleGameStarted();
         });
 
+        socket.On("gameEnded", response =>
+        {
+            Debug.Log("Game ended message received!");
+            HandleGameEnded();
+        });
+
         socket.ConnectAsync();
     }
 
@@ -53,5 +59,10 @@ public class WallConnection : MonoBehaviour
     {
         // Implement your logic for when the game starts
         Debug.Log("Handling game start logic...");
+    }
+    private void HandleGameEnded()
+    {
+        // Implement your logic for when the game starts
+        Debug.Log("Handling game end logic...");
     }
 }

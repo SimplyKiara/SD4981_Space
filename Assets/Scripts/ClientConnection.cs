@@ -19,6 +19,7 @@ public class ClientConnection : MonoBehaviour
     List<PlayerData> groupList = new List<PlayerData>();
     bool isConnected = false;
     bool isReady = false;
+    bool isEnded = false;
 
     [System.Serializable]
     public class PlayerData
@@ -50,6 +51,7 @@ public class ClientConnection : MonoBehaviour
         connectBtn.onClick.AddListener(OnConnectClicked);
         isConnected = false;
         isReady = false;
+        isEnded = false;
     }
 
     private async void OnConnectClicked()
@@ -97,6 +99,12 @@ public class ClientConnection : MonoBehaviour
         {
             Debug.Log("start game");
             isReady = true;
+        });
+
+        socket.On("gameEnded", response =>
+        {
+            Debug.Log("Game ended message received!");
+            isEnded = true;
         });
 
         await socket.ConnectAsync();
