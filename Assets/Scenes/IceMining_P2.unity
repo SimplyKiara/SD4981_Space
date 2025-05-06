@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 100564169}
   - component: {fileID: 100564168}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: InstructionCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -754,7 +754,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 410569173105846084, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1067.711
+      value: 800
       objectReference: {fileID: 0}
     - target: {fileID: 410569173105846084, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_SizeDelta.y
@@ -814,8 +814,19 @@ PrefabInstance:
         a ice-mining tool by clicking on the button in the top-right corner. You
         should mine the resources with the corresponding tool.
 
-
         Have Fun!'
+      objectReference: {fileID: 0}
+    - target: {fileID: 513969004958977665, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
+      propertyPath: m_margin.x
+      value: -295.20535
+      objectReference: {fileID: 0}
+    - target: {fileID: 513969004958977665, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
+      propertyPath: m_margin.y
+      value: 24.722046
+      objectReference: {fileID: 0}
+    - target: {fileID: 513969004958977665, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
+      propertyPath: m_margin.z
+      value: -299.04623
       objectReference: {fileID: 0}
     - target: {fileID: 1668098746775051102, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_Name
@@ -824,6 +835,10 @@ PrefabInstance:
     - target: {fileID: 1668098746775051102, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7505992137589929810, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -853,9 +868,25 @@ PrefabInstance:
         would have to mine the ice and rocks under the ground by using the correct
         tools."
       objectReference: {fileID: 0}
+    - target: {fileID: 6411319400003431256, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
+      propertyPath: m_margin.x
+      value: -301.97656
+      objectReference: {fileID: 0}
+    - target: {fileID: 6411319400003431256, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
+      propertyPath: m_margin.z
+      value: -301.99536
+      objectReference: {fileID: 0}
     - target: {fileID: 6570951363002986286, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_Name
       value: 1st Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6570951363002986286, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7601697021141616599, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7716712814157067241, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_Pivot.x
@@ -883,7 +914,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7716712814157067241, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1067.711
+      value: 800
       objectReference: {fileID: 0}
     - target: {fileID: 7716712814157067241, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_SizeDelta.y
@@ -919,7 +950,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7716712814157067241, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 0.00097656
       objectReference: {fileID: 0}
     - target: {fileID: 7716712814157067241, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_AnchoredPosition.y
