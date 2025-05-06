@@ -79,6 +79,13 @@ public class WallConnection : MonoBehaviour
             }
         }
     }
+    public void TriggerTask(string taskName, string group)
+    {
+        // TaskGenerator taskSelector = new TaskGenerator();
+        // string randomTask = taskSelector.GetRandomTask();
+
+        StartCoroutine(PostTaskRequest(baseUrl + "/tasks", taskName, group));
+    }
     [System.Serializable]
     public class Task
     {

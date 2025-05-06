@@ -23,14 +23,14 @@ public class CoverCraterUI : MonoBehaviour
     void Update()
     {
         // Monitor StartingUI destruction
-        if (StartingUI == null)
+        if (StartingUI == null && CraterUI != null)
         {
             Debug.Log("Starting UI has been destroyed!");
             CraterUI.SetActive(true);
         }
 
         // Find all active GameObjects
-       GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
 
         foreach (GameObject obj in allObjects)
         {
