@@ -4977,6 +4977,7 @@ GameObject:
   - component: {fileID: 1665331731}
   - component: {fileID: 1665331730}
   - component: {fileID: 1665331729}
+  - component: {fileID: 1665331732}
   m_Layer: 5
   m_Name: RocketUI
   m_TagString: Untagged
@@ -5055,6 +5056,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1665331727}
   m_CullTransparentMesh: 1
+--- !u!114 &1665331732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665331727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9be93a6886ff744aaf4af1d2e8c2590, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallConnection: {fileID: 1294428959}
 --- !u!1 &1689005172
 GameObject:
   m_ObjectHideFlags: 0
