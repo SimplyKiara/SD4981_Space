@@ -4016,7 +4016,7 @@ MonoBehaviour:
   playerInfoCardPrefab: {fileID: 6434325983489945577, guid: 004915497af975742ac0b21f9522d63c, type: 3}
   playerInfoGrid: {fileID: 1388589698}
   startBtn: {fileID: 150514410}
-  endBtn: {fileID: 0}
+  endBtn: {fileID: 1883785300}
 --- !u!1 &1563439620
 GameObject:
   m_ObjectHideFlags: 0

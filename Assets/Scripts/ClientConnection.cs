@@ -5,11 +5,13 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 
 public class ClientConnection : MonoBehaviour
 {
 
     public Button connectBtn;
+    public TMP_Text groupDisplay;
     public GameObject menuPanel;
     public GameObject waitPanel;
     public GameObject gamePanel;
@@ -58,6 +60,7 @@ public class ClientConnection : MonoBehaviour
     {
         menuPanel.SetActive(false);
         waitPanel.SetActive(true);
+        StartCoroutine(GetGroupData());
 
         var uri = new System.Uri(baseUrl);
         socket = new SocketIOUnity(uri, new SocketIOOptions
@@ -113,16 +116,16 @@ public class ClientConnection : MonoBehaviour
     public void Awake()
     {
         StartCoroutine(GetRequest(baseUrl));
-        StartCoroutine(GetGroupData());
     }
     public void Update()
     {
         if (isConnected && groupName == "")
         {
-            // Fetch current groups and generate new group name
             groupName = GenGroupName();
             StartCoroutine(PostGroupData(groupName, progress));
+            groupDisplay.text = groupName;
         }
+
         if (isReady && waitPanel.activeInHierarchy)
         {
             waitPanel.SetActive(false);
