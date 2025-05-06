@@ -7,12 +7,17 @@ using SocketIOClient;
 public class WallConnection : MonoBehaviour
 {
     public GameObject startPanel;
+    public GameObject waitPanel;
+    bool isGameStarted = false;
+    bool isGameEnded = false;
     private SocketIOUnity socket;
     private string baseUrl = "http://localhost:3000"; // Update with your server URL
 
     void Start()
     {
         InitializeSocket();
+        startPanel.SetActive(false);
+        waitPanel.SetActive(true);
     }
 
     private void InitializeSocket()
@@ -45,28 +50,34 @@ public class WallConnection : MonoBehaviour
         socket.On("gameStarted", response =>
         {
             Debug.Log("Game started message received!");
-            HandleGameStarted();
+            isGameStarted = true;
         });
 
         socket.On("gameEnded", response =>
         {
             Debug.Log("Game ended message received!");
-            HandleGameEnded();
+            isGameEnded = true;
         });
 
         socket.ConnectAsync();
     }
-
-    private void HandleGameStarted()
+    void Update()
     {
-        // Implement your logic for when the game starts
-        Debug.Log("Handling game start logic...");
-        startPanel.SetActive(true);
-    }
-    private void HandleGameEnded()
-    {
-        // Implement your logic for when the game starts
-        Debug.Log("Handling game end logic...");
+        if (isGameStarted && waitPanel.activeInHierarchy)
+        {
+            // Implement your logic for when the game starts
+            Debug.Log("Handling game start logic...");
+            startPanel.SetActive(true);
+            waitPanel.SetActive(false);
+        }
+        if (isGameEnded)
+        {
+            {
+                // Implement your logic for when the game starts
+                Debug.Log("Handling game end logic...");
+                isGameEnded = false;
+            }
+        }
     }
     [System.Serializable]
     public class Task
