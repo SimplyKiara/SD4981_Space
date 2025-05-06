@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OriginalPanel: {fileID: 6570951363002986286}
-  nextPanel: {fileID: 0}
+  nextPanel: {fileID: 1668098746775051102, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
 --- !u!1 &7352119891532389795
 GameObject:
   m_ObjectHideFlags: 0
