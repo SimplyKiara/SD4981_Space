@@ -1596,6 +1596,14 @@ PrefabInstance:
       value: "Hello, Welcome to the Expedition minigame! \n\nIn this minigame, you
         would have to drive the lunar mobile to find resources and record their positions."
       objectReference: {fileID: 0}
+    - target: {fileID: 6411319400003431256, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
+      propertyPath: m_margin.x
+      value: -294.06528
+      objectReference: {fileID: 0}
+    - target: {fileID: 6411319400003431256, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
+      propertyPath: m_margin.z
+      value: -302.98343
+      objectReference: {fileID: 0}
     - target: {fileID: 6570951363002986286, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_Name
       value: 1st Panel
@@ -1606,7 +1614,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6570951363002986286, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7352119891532389795, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_Layer
@@ -1642,7 +1650,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7716712814157067241, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1067.711
+      value: 800
       objectReference: {fileID: 0}
     - target: {fileID: 7716712814157067241, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1678,7 +1686,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7716712814157067241, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.00097656
       objectReference: {fileID: 0}
     - target: {fileID: 7716712814157067241, guid: 1a13f15550ddcbb4dab9589573d54f99, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3026,7 +3034,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 410569173105846084, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1067.711
+      value: 808.26
       objectReference: {fileID: 0}
     - target: {fileID: 410569173105846084, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_SizeDelta.y
@@ -3062,7 +3070,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 410569173105846084, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -4.1335
       objectReference: {fileID: 0}
     - target: {fileID: 410569173105846084, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3090,13 +3098,33 @@ PrefabInstance:
         Have
         Fun!'
       objectReference: {fileID: 0}
+    - target: {fileID: 513969004958977665, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
+      propertyPath: m_fontSize
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 513969004958977665, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
+      propertyPath: m_margin.x
+      value: -294.21695
+      objectReference: {fileID: 0}
+    - target: {fileID: 513969004958977665, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
+      propertyPath: m_margin.y
+      value: 3.9550018
+      objectReference: {fileID: 0}
+    - target: {fileID: 513969004958977665, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
+      propertyPath: m_margin.z
+      value: -302.0117
+      objectReference: {fileID: 0}
+    - target: {fileID: 513969004958977665, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 32
+      objectReference: {fileID: 0}
     - target: {fileID: 1668098746775051102, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_Name
       value: 2nd Panel
       objectReference: {fileID: 0}
     - target: {fileID: 1668098746775051102, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7505992137589929810, guid: 93e2e5dddc6b17944a27208cdee465d2, type: 3}
       propertyPath: m_Color.a
@@ -3544,7 +3572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
