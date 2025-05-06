@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using SocketIOClient;
 
 public class WallConnection : MonoBehaviour
 {
+    public GameObject startPanel;
     private SocketIOUnity socket;
     private string baseUrl = "http://localhost:3000"; // Update with your server URL
 
@@ -59,10 +61,43 @@ public class WallConnection : MonoBehaviour
     {
         // Implement your logic for when the game starts
         Debug.Log("Handling game start logic...");
+        startPanel.SetActive(true);
     }
     private void HandleGameEnded()
     {
         // Implement your logic for when the game starts
         Debug.Log("Handling game end logic...");
+    }
+    [System.Serializable]
+    public class Task
+    {
+        public string title;
+        public string group;
+    }
+    IEnumerator PostTaskRequest(string uri, string title, string group)
+    {
+        Task task = new Task { title = title, group = group };
+        string jsonData = JsonUtility.ToJson(task);
+
+        Debug.Log("JSON Data: " + jsonData); // Debug log to check JSON data
+
+        using (UnityWebRequest request = new UnityWebRequest(uri, "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError(request.error);
+            }
+            else
+            {
+                Debug.Log("Response: " + request.downloadHandler.text);
+            }
+        }
     }
 }

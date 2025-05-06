@@ -51,17 +51,20 @@ public class ClientConnection : MonoBehaviour
         waitPanel.SetActive(false);
         gamePanel.SetActive(false);
         connectBtn.onClick.AddListener(OnConnectClicked);
+        connectBtn.onClick.AddListener(OnConnection);
         isConnected = false;
         isReady = false;
         isEnded = false;
     }
 
+    public void OnConnection()
+    {
+        StartCoroutine(GetGroupData());
+    }
     private async void OnConnectClicked()
     {
         menuPanel.SetActive(false);
         waitPanel.SetActive(true);
-        StartCoroutine(GetGroupData());
-
         var uri = new System.Uri(baseUrl);
         socket = new SocketIOUnity(uri, new SocketIOOptions
         {
@@ -72,7 +75,7 @@ public class ClientConnection : MonoBehaviour
             Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
         });
 
-        socket.OnConnected += async (sender, e) =>
+        socket.OnConnected += (sender, e) =>
         {
             Debug.Log("Connection open!");
             isConnected = true;
