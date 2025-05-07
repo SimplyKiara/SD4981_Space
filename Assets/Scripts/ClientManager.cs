@@ -15,12 +15,13 @@ public class ClientManager : MonoBehaviour
     // Deactivate all buttons first
     private void Start()
     {
+        Screen.SetResolution(1728, 1080, FullScreenMode.Windowed);
         foreach (var button in buttonList)
         {
             button.SetActive(false);
         }
 
-        statusText.text = "No tasks availble: Wait or refresh.";
+        statusText.text = "No tasks available: Wait or refresh.";
     }
 
     public void ActivateButton(string buttonName)
@@ -45,15 +46,14 @@ public class ClientManager : MonoBehaviour
         }
 
         // Change text accordingly
-        if (activeTasks >= 0)
+        if (activeTasks > 0)
         {
             statusText.text = "Task(s) available:";
         }
         else
         {
-            statusText.text = "No tasks availble: Wait or refresh.";
+            statusText.text = "No tasks available: Wait or refresh.";
         }
-        
     }
 
     // Change scenes when clicking button
@@ -66,23 +66,23 @@ public class ClientManager : MonoBehaviour
 
             switch (index)
             {
-                case 1:
+                case 0:
                     SceneManager.LoadScene("TabletScene");
                     break;
-                case 2:
+                case 1:
                     SceneManager.LoadScene("IceMining_P1");
                     break;
-                case 3:
+                case 2:
                     SceneManager.LoadScene("Planting");
                     break;
-                case 4:
+                case 3:
                     SceneManager.LoadScene("Harvest");
                     break;
-                case 5:
+                case 4:
                     SceneManager.LoadScene("IceMining_P2");
                     break;
                 default:
-                    Debug.Log("Scene(s) not provided yet"); 
+                    Debug.Log("Scene(s) not provided yet");
                     break;
             }
         }

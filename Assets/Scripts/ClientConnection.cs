@@ -9,12 +9,11 @@ using TMPro;
 
 public class ClientConnection : MonoBehaviour
 {
-
     public Button connectBtn;
     public TMP_Text groupDisplay;
     public GameObject menuPanel;
     public GameObject waitPanel;
-    public GameObject gamePanel;
+    public GameObject selectPanel;
     public string groupName;
     public string progress = "0";
     private SocketIOUnity socket;
@@ -49,12 +48,9 @@ public class ClientConnection : MonoBehaviour
     {
         menuPanel.SetActive(true);
         waitPanel.SetActive(false);
-        gamePanel.SetActive(false);
+        selectPanel.SetActive(false);
         connectBtn.onClick.AddListener(OnConnectClicked);
         connectBtn.onClick.AddListener(OnConnection);
-        isConnected = false;
-        isReady = false;
-        isEnded = false;
     }
 
     public void OnConnection()
@@ -111,6 +107,8 @@ public class ClientConnection : MonoBehaviour
         {
             Debug.Log("Game ended message received!");
             isEnded = true;
+            isConnected = false;
+            isReady = false;
         });
 
         await socket.ConnectAsync();
@@ -132,7 +130,7 @@ public class ClientConnection : MonoBehaviour
         if (isReady && waitPanel.activeInHierarchy)
         {
             waitPanel.SetActive(false);
-            gamePanel.SetActive(true);
+            selectPanel.SetActive(true);
         }
     }
 
