@@ -13,7 +13,7 @@ public class PlantingController : MonoBehaviour
 {
     public Text ResourcesText;
     public Text AnnounceText;
-    public int groupId = 0;
+    public string groupName = "Group 1";
 
     private string baseUrl = "http://";
     private bool called = false;

@@ -19,10 +19,12 @@ public class OreMining : MonoBehaviour
     // spawning directions
     private Vector3[] directions =
     {
-        new Vector3(15, 6, -10),
-        new Vector3(-15, 6, -10),
-        new Vector3(10, 6, -10),
-        new Vector3(-10, 6, -10)
+        new Vector3(5, 7, -5),
+        new Vector3(10, 9, -10),
+        new Vector3(5, 9, -5),
+        new Vector3(-5, 7, -5),
+        new Vector3(8, 7, -8),
+        new Vector3(-8, 7, -8)
     };
 
     private void OnEnable()
@@ -33,6 +35,11 @@ public class OreMining : MonoBehaviour
 
         longPressGesture.StateChanged += longPressedHandler;
         pressGesture.Pressed += pressedHandler;
+
+        if (pressGesture == null)
+        {
+            Debug.LogError("PressGesture component missing!");
+        }
     }
 
     private void OnDisable()
@@ -83,6 +90,10 @@ public class OreMining : MonoBehaviour
             {
                 GameManager.instance.AddCollectedRocks(1);
             }
+            else if (gameObject.tag == "Ice")
+            {
+                GameManager.instance.ChangeCollectedWater(0.5f);
+            }
             Destroy(gameObject);
         }
         else
@@ -102,26 +113,32 @@ public class OreMining : MonoBehaviour
         if (e.State == Gesture.GestureState.Recognized)
         {
             startGrowing();
-            if (transform.localScale.x > 0.5f)
+            if (transform.localScale.x > 0.5f) // size larger than 0.5f => parent ore
             {
-                for (int i = 0; i < 4; i++)
+                int spawnCount = UnityEngine.Random.Range(3, 6); // Randomizing between 3 to 6
+
+                for (int i = 0; i < spawnCount; i++)
                 {
-                    var obj = Instantiate(gameObject) as GameObject;
-                    var cube = obj.transform;
+                    GameObject obj = Instantiate(gameObject); // Create a new object
+                    Transform cube = obj.transform;
 
                     cube.parent = transform.parent;
                     cube.name = "Cube";
                     cube.localScale = 0.3f * transform.localScale;
-                    cube.position = transform.TransformPoint(directions[i] / 4);
+                    cube.position = transform.position + directions[i % directions.Length] * 0.25f; // Keep them closer to the parent
                     cube.GetComponent<Rigidbody>().AddForce(Power * UnityEngine.Random.insideUnitSphere, ForceMode.Impulse);
                     cube.GetComponent<Renderer>().material.color = Color.white;
 
                     cube.gameObject.isStatic = false;
-                    Rigidbody rb = cube.GetComponent<Rigidbody>();
-                    if (rb != null)
+
+                    if (cube.GetComponent<Rigidbody>() is Rigidbody rb)
                     {
                         rb.constraints = RigidbodyConstraints.None;
                     }
+                }
+                if (gameObject.tag == "Ice") // Destroy parent if it's Ice
+                {
+                    Destroy(gameObject);
                 }
             }
         }
