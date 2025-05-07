@@ -51,7 +51,7 @@ public class DataPersistenceManager : MonoBehaviour
             dataPersistenceObj.LoadData(gameData);
         }
 
-        Debug.Log("Loaded: Iron = " + gameData.ironOre + ", Rock = " + gameData.rocks);
+        Debug.Log($"Loaded: Iron = {gameData.ironOre}, Rock = {gameData.rocks}, Water = {gameData.water}/30");
     }
 
     public void SaveGame()
@@ -61,7 +61,7 @@ public class DataPersistenceManager : MonoBehaviour
             dataPersistenceObj.SaveData(ref gameData);
         }
 
-        Debug.Log("Saved: Iron = " + gameData.ironOre + ", Rock = " + gameData.rocks);
+        Debug.Log($"Saved: Iron = {gameData.ironOre}, Rock = {gameData.rocks}, Water = {gameData.water}/30");
 
         dataHandler.Save(gameData);
     }

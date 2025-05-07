@@ -23,6 +23,7 @@ TagManager:
   - LandingPadMid
   - LandingPadBest
   - LandingPadWorst
+  - Ice
   layers:
   - Default
   - TransparentFX

@@ -51,5 +51,5 @@ public class CraterDigging : MonoBehaviour
     private void changeHP()
     {
         craterHP -= 10;
-    }
+    } 
 }

@@ -12,18 +12,30 @@ public class OreMining : MonoBehaviour
     private LongPressGesture longPressGesture;
     private PressGesture pressGesture;
     private MeshRenderer rnd;
+    private Color originalColor;
+
     private bool growing = false;
     private float growingTime = 0;
     private bool isPressed;
+    private Vector3 prefabScale;
 
     // spawning directions
     private Vector3[] directions =
     {
-        new Vector3(15, 6, -10),
-        new Vector3(-15, 6, -10),
-        new Vector3(10, 6, -10),
-        new Vector3(-10, 6, -10)
+        new Vector3(5, 7, -5),
+        new Vector3(10, 9, -10),
+        new Vector3(5, 9, -5),
+        new Vector3(-5, 7, -5),
+        new Vector3(8, 7, -8),
+        new Vector3(-8, 7, -8)
     };
+
+
+    private void Start()
+    {
+        originalColor = GetComponent<MeshRenderer>().material.color; // Save original color
+        prefabScale = transform.localScale;
+    }
 
     private void OnEnable()
     {
@@ -33,6 +45,11 @@ public class OreMining : MonoBehaviour
 
         longPressGesture.StateChanged += longPressedHandler;
         pressGesture.Pressed += pressedHandler;
+
+        if (pressGesture == null)
+        {
+            Debug.LogError("PressGesture component missing!");
+        }
     }
 
     private void OnDisable()
@@ -62,7 +79,7 @@ public class OreMining : MonoBehaviour
     {
         growing = false;
         growingTime = 0;
-        rnd.material.color = Color.white;
+        rnd.material.color = originalColor;
     }
 
     // Short press to collect materials
@@ -71,9 +88,9 @@ public class OreMining : MonoBehaviour
         if (isPressed) return;
         isPressed = true;
         Invoke("ResetPress", 0.1f);
-        
+
         // Collect if the rocks are small (aka spawned ones)
-        if (transform.localScale.x < 0.4f)
+        if (prefabScale.x < 0.4f)
         {
             if (gameObject.tag == "Iron ore")
             {
@@ -82,6 +99,10 @@ public class OreMining : MonoBehaviour
             else if (gameObject.tag == "Lunar rocks")
             {
                 GameManager.instance.AddCollectedRocks(1);
+            }
+            else if (gameObject.tag == "Ice")
+            {
+                GameManager.instance.ChangeCollectedWater(0.5f);
             }
             Destroy(gameObject);
         }
@@ -102,26 +123,31 @@ public class OreMining : MonoBehaviour
         if (e.State == Gesture.GestureState.Recognized)
         {
             startGrowing();
-            if (transform.localScale.x > 0.5f)
+            if (transform.localScale.x > 0.5f) // size larger than 0.5f => parent ore
             {
-                for (int i = 0; i < 4; i++)
+                int spawnCount = UnityEngine.Random.Range(3, 6); // Randomizing between 3 to 6
+
+                for (int i = 0; i < spawnCount; i++)
                 {
-                    var obj = Instantiate(gameObject) as GameObject;
-                    var cube = obj.transform;
+                    GameObject obj = Instantiate(gameObject); // Create a new object
+                    Transform cube = obj.transform;
 
                     cube.parent = transform.parent;
-                    cube.name = "Cube";
+                    cube.name = "Collectible";
                     cube.localScale = 0.3f * transform.localScale;
-                    cube.position = transform.TransformPoint(directions[i] / 4);
+                    cube.position = transform.position + directions[i % directions.Length] * 0.25f; // Keep them closer to the parent
                     cube.GetComponent<Rigidbody>().AddForce(Power * UnityEngine.Random.insideUnitSphere, ForceMode.Impulse);
-                    cube.GetComponent<Renderer>().material.color = Color.white;
-
+                    cube.GetComponent<Renderer>().material.color = originalColor;
                     cube.gameObject.isStatic = false;
-                    Rigidbody rb = cube.GetComponent<Rigidbody>();
-                    if (rb != null)
+
+                    if (cube.GetComponent<Rigidbody>() is Rigidbody rb)
                     {
                         rb.constraints = RigidbodyConstraints.None;
                     }
+                }
+                if (gameObject.tag == "Ice") // Destroy parent if it's Ice
+                {
+                    Destroy(gameObject);
                 }
             }
         }

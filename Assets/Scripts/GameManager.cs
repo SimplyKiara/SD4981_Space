@@ -179,8 +179,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void UpdateUI()
     {
-        ironOreText.text = "Iron ore: " + ironOre;
-        rocksText.text = "Lunar rocks: " + rocks;
-        waterText.text = $"Water: {water}/{waterCap}";
+        if ((ironOreText != null) && (rocksText != null) && (waterText != null))
+        {
+            ironOreText.text = "Iron ore: " + ironOre;
+            rocksText.text = "Lunar rocks: " + rocks;
+            waterText.text = $"Water: {water}/{waterCap}";
+        }
     }
 }
