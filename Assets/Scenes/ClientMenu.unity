@@ -1311,6 +1311,7 @@ GameObject:
   m_Component:
   - component: {fileID: 998947552}
   - component: {fileID: 998947553}
+  - component: {fileID: 998947554}
   m_Layer: 0
   m_Name: KeepDataContainer
   m_TagString: Untagged
@@ -1347,6 +1348,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ab1ec264282c445aaa88fcc2ad3675, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &998947554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998947551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5007ce2cf2d53c4fb39336e570cc086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clientConnection: {fileID: 0}
 --- !u!1 &1007039520
 GameObject:
   m_ObjectHideFlags: 0

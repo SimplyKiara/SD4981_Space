@@ -1,4 +1,5 @@
 using SocketIOClient;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -15,7 +16,7 @@ public class ClientConnection : MonoBehaviour
     public GameObject waitPanel;
     public GameObject selectPanel;
     public string groupName;
-    public string progress = "0";
+    public string progress;
     private SocketIOUnity socket;
     List<PlayerData> groupList = new List<PlayerData>();
     bool isConnected = false;
@@ -46,6 +47,7 @@ public class ClientConnection : MonoBehaviour
         selectPanel.SetActive(false);
         connectBtn.onClick.AddListener(OnConnectClicked);
         connectBtn.onClick.AddListener(OnConnection);
+        progress = "0";
     }
 
     public void OnConnection()
@@ -138,6 +140,35 @@ public class ClientConnection : MonoBehaviour
     {
         // StartCoroutine(GetLatestTaskRequest(baseUrl + "/tasks"));
         StartCoroutine(GetTasksRequest(baseUrl + "/tasks"));
+    }
+
+    public void UpdateProgress()
+    {
+        try
+        {
+            int preProgress = Convert.ToInt32(progress);
+            Console.WriteLine("Converted the {0} value '{1}' to the {2} value {3}.", progress.GetType().Name, progress, progress.GetType().Name, preProgress);
+            int newProgress = preProgress + 1;
+            if (isConnected)
+            {
+                var updateData = new
+                {
+                    groupName = groupName,
+                    updateData = new { progress = newProgress.ToString() }
+                };
+                socket.EmitAsync("updateGroup", updateData);
+                Debug.Log("Update group event emitted with progress: " + progress);
+            }
+            progress = newProgress.ToString();
+        }
+        catch (OverflowException)
+        {
+            Console.WriteLine("{0} is outside the range of the Int32 type.", progress);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("The {0} value '{1}' is not in a recognizable format.", progress.GetType().Name, progress);
+        }
     }
 
     IEnumerator GetRequest(string uri)

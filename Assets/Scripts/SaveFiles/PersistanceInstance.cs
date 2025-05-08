@@ -4,6 +4,11 @@ using UnityEngine.SceneManagement;
 public class PersistentInstance : MonoBehaviour
 {
     private static PersistentInstance instance;
+    private bool isChildActive;
+    void Start()
+    {
+        isChildActive = true;
+    }
     void Awake()
     {
         // Ensure that only one instance of the persistent object exists
@@ -19,15 +24,17 @@ public class PersistentInstance : MonoBehaviour
     }
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "ClientMenu")
+        if (SceneManager.GetActiveScene().name == "ClientMenu" && !isChildActive)
         {
             Debug.Log(SceneManager.GetActiveScene().name + "");
             SetAllChildrenActive(gameObject, true);
+            isChildActive = true;
         }
-        else if (SceneManager.GetActiveScene().name != "ClientMenu" && gameObject.activeInHierarchy)
+        else if (SceneManager.GetActiveScene().name != "ClientMenu" && isChildActive)
         {
             Debug.Log(SceneManager.GetActiveScene().name + "");
             SetAllChildrenActive(gameObject, false);
+            isChildActive = false;
         }
     }
 
@@ -38,5 +45,4 @@ public class PersistentInstance : MonoBehaviour
             child.gameObject.SetActive(isActive);
         }
     }
-
 }
