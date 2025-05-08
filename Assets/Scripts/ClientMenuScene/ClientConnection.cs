@@ -30,15 +30,10 @@ public class ClientConnection : MonoBehaviour
     }
 
     [System.Serializable]
-    public class GroupList
-    {
-        public PlayerData[] groups;
-    }
-
-    [System.Serializable]
-    public class avaliableTask
+    public class AvaliableTask
     {
         public string title;
+        public string group;
     }
 
     private string baseUrl = "http://localhost:3000"; // "http://10.11.36.4:3000";
@@ -141,7 +136,8 @@ public class ClientConnection : MonoBehaviour
 
     public void OnGetTaskClicked()
     {
-        StartCoroutine(GetLatestTaskRequest(baseUrl + "/tasks"));
+        // StartCoroutine(GetLatestTaskRequest(baseUrl + "/tasks"));
+        StartCoroutine(GetTasksRequest(baseUrl + "/tasks"));
     }
 
     IEnumerator GetRequest(string uri)
@@ -162,7 +158,7 @@ public class ClientConnection : MonoBehaviour
         }
     }
 
-    IEnumerator GetLatestTaskRequest(string uri)
+    /* IEnumerator GetLatestTaskRequest(string uri)
     {
         using (UnityWebRequest request = UnityWebRequest.Get(uri))
         {
@@ -188,7 +184,7 @@ public class ClientConnection : MonoBehaviour
                         Debug.Log($"Task Name: {taskResponse.title}");
 
                         // Pass taskName to ClientManager
-                        ClientManager clientManager = FindObjectOfType<ClientManager>();
+                        // ClientManager clientManager = FindObjectOfType<ClientManager>();
                         if (clientManager != null)
                         {
                             clientManager.ActivateButton(taskResponse.title);
@@ -209,7 +205,58 @@ public class ClientConnection : MonoBehaviour
                 }
             }
         }
+    } */
+
+    IEnumerator GetTasksRequest(string uri)
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(uri))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error: " + request.error);
+            }
+            else
+            {
+                string jsonString = request.downloadHandler.text;
+                Debug.Log("Response JSON: " + jsonString);
+                if (jsonString != "[]")
+                {
+                    try
+                    {
+                        List<string> jsonObjects = jsonString.Split(new string[] { "},{" }, System.StringSplitOptions.None).Select(p => p.Trim('[', ']')).ToList();
+                        foreach (string jsonObject in jsonObjects)
+                        {
+                            string formattedJson = "{" + jsonObject.Trim('{', '}') + "}";
+                            Debug.Log("[task data] " + formattedJson);
+                            AvaliableTask avaliableTask = JsonUtility.FromJson<AvaliableTask>(formattedJson);
+                            Debug.Log($"[task json] {avaliableTask.title} {avaliableTask.group}");
+                            if (avaliableTask.group == groupName)
+                            {
+                                // Pass taskName to ClientManager
+                                ClientManager clientManager = GetComponent<ClientManager>();
+                                // ClientManager clientManager = FindObjectOfType<ClientManager>();
+                                if (clientManager != null)
+                                {
+                                    clientManager.ActivateButton(avaliableTask.title);
+                                }
+                                else
+                                {
+                                    Debug.LogError("ClientManager not found!");
+                                }
+                            }
+                        }
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogError($"JSON Parsing Error: {ex.Message}");
+                    }
+                }
+            }
+        }
     }
+
 
     IEnumerator GetGroupData()
     {
