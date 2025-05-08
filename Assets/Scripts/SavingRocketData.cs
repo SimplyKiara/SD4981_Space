@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
 
-
 [System.Serializable]
 public class CollisionData
 {
@@ -11,144 +10,80 @@ public class CollisionData
     public string object1;
     public string object2;
     public string timestamp;
+    public string groupName; // Include group name
+}
+
+[System.Serializable]
+public class GroupData
+{
+    public string groupName;
 }
 
 public class SavingRocketData : MonoBehaviour
 {
-    public TMP_InputField inputField;
-    public TMP_Text messageText;
     private string baseUrl = "http://localhost:3000";
+    private string groupName = ""; // Store group name
+
+    void Start()
+    {
+        StartCoroutine(GetGroupNameRequest(baseUrl + "/group"));
+    }
+
+    IEnumerator GetGroupNameRequest(string uri)
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(uri))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error retrieving group name: " + request.error);
+            }
+            else
+            {
+                string jsonResponse = "{\"data\":" + request.downloadHandler.text + "}"; // Wrap for parsing
+                GroupData[] groups = JsonUtility.FromJson<GroupWrapper>(jsonResponse).data;
+
+                if (groups.Length > 0)
+                {
+                    groupName = groups[0].groupName; // Extract first group's name
+                    Debug.Log("Group Name Retrieved: " + groupName);
+                }
+                else
+                {
+                    Debug.LogWarning("No group data found in response!");
+                }
+            }
+        }
+    }
+
     [System.Serializable]
-    public class Message
+    private class GroupWrapper
     {
-        public string content;
-    }
-
-    public void Start()
-    {
-        StartCoroutine(GetRequest(baseUrl));
-    }
-    public void OnGetBtnClicked()
-    {
-        StartCoroutine(GetAllMessagesRequest(baseUrl + "/Rocket"));
-    }
-    public void OnPostBtnClicked()
-    {
-        StartCoroutine(PostMessageRequest(baseUrl + "/Rocket", inputField.text));
-    }
-    IEnumerator GetRequest(string uri)
-    {
-        using (UnityWebRequest request = UnityWebRequest.Get(uri))
-        {
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError(request.error);
-            }
-            else
-            {
-                //messageText.text = request.downloadHandler.text;
-                Debug.Log("Response: " + request.downloadHandler.text);
-            }
-        }
-    }
-    IEnumerator GetAllMessagesRequest(string uri)
-    {
-        using (UnityWebRequest request = UnityWebRequest.Get(uri))
-        {
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError(request.error);
-            }
-            else    
-            {
-                //messageText.text = request.downloadHandler.text;
-                Debug.Log("Response: " + request.downloadHandler.text);
-            }
-        }
-    }
-    IEnumerator PostMessageRequest(string uri, string content)
-    {
-        Message message = new Message { content = content };
-        string jsonData = JsonUtility.ToJson(message);
-
-        Debug.Log("JSON Data: " + jsonData); // Debug log to check JSON data
-
-        using (UnityWebRequest request = new UnityWebRequest(uri, "POST"))
-        {
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError(request.error);
-            }
-            else
-            {
-                Debug.Log("Response: " + request.downloadHandler.text);
-            }
-        }
+        public GroupData[] data;
     }
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.tag == "LandingPadWorst") {
-            CollisionData collisionData = new CollisionData {
+        if (col.gameObject.CompareTag("LandingPadWorst") || col.gameObject.CompareTag("LandingPadMid") || col.gameObject.CompareTag("LandingPadBest"))
+        {
+            CollisionData collisionData = new CollisionData
+            {
                 TaskID = "Rocket Landing task",
                 object1 = gameObject.name,
                 object2 = col.gameObject.tag,
-                timestamp = System.DateTime.Now.ToString()
+                timestamp = System.DateTime.Now.ToString(),
+                groupName = groupName // Store retrieved group name
             };
 
             string json = JsonUtility.ToJson(collisionData);
-
             StartCoroutine(PostCollisionDataRequest(baseUrl + "/Rocket", json));
 
-            Debug.Log("Rocket landing data is saved! " + json);
-
-        }
-        
-        if (col.gameObject.tag == "LandingPadMid") {
-            CollisionData collisionData = new CollisionData {
-                TaskID = "Rocket Landing task",
-                object1 = gameObject.name,
-                object2 = col.gameObject.tag,
-                timestamp = System.DateTime.Now.ToString()
-            };
-
-            string json = JsonUtility.ToJson(collisionData);
-
-            StartCoroutine(PostCollisionDataRequest(baseUrl + "/Rocket", json));
-
-            Debug.Log("Rocket landing data is saved! " + json);
-
-        }
-
-        if (col.gameObject.tag == "LandingPadBest") {
-            CollisionData collisionData = new CollisionData {
-                TaskID = "Rocket Landing task",
-                object1 = gameObject.name,
-                object2 = col.gameObject.tag,
-                timestamp = System.DateTime.Now.ToString()
-            };
-
-            string json = JsonUtility.ToJson(collisionData);
-
-            StartCoroutine(PostCollisionDataRequest(baseUrl + "/Rocket", json));
-
-            Debug.Log("Rocket landing data is saved! " + json);
-
+            Debug.Log("Rocket landing data saved! " + json);
         }
     }
 
-IEnumerator PostCollisionDataRequest(string uri, string jsonData)
+    IEnumerator PostCollisionDataRequest(string uri, string jsonData)
     {
         using (UnityWebRequest request = new UnityWebRequest(uri, "POST"))
         {
@@ -157,7 +92,7 @@ IEnumerator PostCollisionDataRequest(string uri, string jsonData)
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
 
-            Debug.Log("Sending collision data to server..."); // Log the sending process.
+            Debug.Log("Sending collision data to server...");
 
             yield return request.SendWebRequest();
 
@@ -165,7 +100,7 @@ IEnumerator PostCollisionDataRequest(string uri, string jsonData)
             {
                 Debug.LogError("Error sending collision data: " + request.error);
             }
-             else
+            else
             {
                 Debug.Log("Server Response: " + request.downloadHandler.text);
             }

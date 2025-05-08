@@ -9,6 +9,7 @@ public class RocketData
     public string object1;
     public string object2;
     public string timestamp;
+    public string groupName; // Added groupName field
 }
 
 // Wrapper class for deserializing an array
@@ -29,7 +30,7 @@ public class RocketReceiver : MonoBehaviour
     void Start()
     {
         // Start with the object inactive
-        rocketObject.SetActive(false);
+        if (rocketObject != null) rocketObject.SetActive(false);
         StartCoroutine(CheckForRocketData());
     }
 
@@ -50,11 +51,26 @@ public class RocketReceiver : MonoBehaviour
                     string jsonResponse = "{\"rockets\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
                     Debug.Log("Formatted JSON: " + jsonResponse);
 
-                    // Deserialize as a wrapper class
+                    // Deserialize JSON
                     RocketDataList rocketDataList = JsonUtility.FromJson<RocketDataList>(jsonResponse);
 
                     foreach (RocketData rocket in rocketDataList.rockets)
                     {
+                        if (rocket.groupName == "Group 1") // Check if groupName matches
+                        {
+                            GameObject targetObject = GameObject.FindWithTag("gp1"); // Find GameObject with tag "gp1"
+                            if (targetObject != null)
+                            {
+                                targetObject.name = rocket.object2; // Assign object2 value
+                                gameManager.RocketLanded = rocket.object2;
+                                Debug.Log($"Assigned '{rocket.object2}' to GameObject with tag 'gp1'.");
+                            }
+                            else
+                            {
+                                Debug.LogWarning("No GameObject found with tag 'gp1'.");
+                            }
+                        }
+
                         if (rocket.object2 == "LandingPadMid")
                         {
                             ActivateRocket(rocket, 10);
@@ -86,7 +102,7 @@ public class RocketReceiver : MonoBehaviour
     void ActivateRocket(RocketData rocket, int resourceAmount)
     {
         dataLoaded = true;
-        rocketObject.SetActive(true);
+        if (rocketObject != null) rocketObject.SetActive(true);
         Debug.Log($"Matching object2 found: {rocket.object2}. Activating rocketObject.");
 
         // Add resources based on landing quality

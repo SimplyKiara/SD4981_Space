@@ -6437,6 +6437,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gp1_GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2491418560156240654, guid: 9fe41427028f5554e94f5709cda254d1, type: 3}
+      propertyPath: m_TagString
+      value: gp1
+      objectReference: {fileID: 0}
     - target: {fileID: 2911595702228322030, guid: 9fe41427028f5554e94f5709cda254d1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -4,24 +4,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
-    public static GameManager instance {  get; private set; }
+    public static GameManager instance { get; private set; }
     public List<SolarPanel> solarPanels;
     public GameObject GreenHouse;
     public GameObject UpgradedBase;
     public Text ironOreText;
     public Text rocksText;
     public Text waterText;
+    public Text groupNameText; // UI element for displaying group name
     public GameData gameData;
 
     [NonSerialized] public int ironOre;
     [NonSerialized] public int rocks;
     [NonSerialized] public float water;
     [NonSerialized] public float waterCap;
-    public string GpName;
+    
+    [SerializeField] private string groupName = "Fetching..."; // Group name displayed in Inspector
+    [SerializeField] public string RocketLanded = "Fetching..."; 
+    private string baseUrl = "http://localhost:3000";
 
     private void Awake()
     {
@@ -39,7 +42,52 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void Start()
     {
+        StartCoroutine(GetGroupNameRequest(baseUrl + "/group"));
         UpdateUI();
+    }
+
+    [System.Serializable]
+    private class GroupWrapper
+    {
+        public List<GroupData> data;
+    }
+
+    [System.Serializable]
+    private class GroupData
+    {
+        public string groupName;
+    }
+
+    IEnumerator GetGroupNameRequest(string uri)
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(uri))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error retrieving group name: " + request.error);
+            }
+            else
+            {
+                string jsonResponse = "{\"data\":" + request.downloadHandler.text + "}"; // Wrapping response for parsing
+                GroupWrapper groupWrapper = JsonUtility.FromJson<GroupWrapper>(jsonResponse);
+
+                if (groupWrapper.data.Count > 0)
+                {
+                    groupName = groupWrapper.data[0].groupName; // Extract first group's name
+                    Debug.Log("Group Name Retrieved: " + groupName);
+
+                    // Update UI text
+                    if (groupNameText != null)
+                        groupNameText.text = "Group Name: " + groupName;
+                }
+                else
+                {
+                    Debug.LogWarning("No group data found in response!");
+                }
+            }
+        }
     }
 
     public void LoadData(GameData data)
@@ -52,6 +100,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         waterCap = GameData.maxWater;
         UpdateUI();
     }
+
 
     public void SaveData(ref GameData data)
     {
@@ -146,7 +195,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void AddCollectedIron(int value)
     {
         ironOre += value;
-        //Debug.Log("No. of Iron changed by" + value);
         UpdateUI();
     }
 
@@ -158,7 +206,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void AddCollectedRocks(int value)
     {
         rocks += value;
-        //Debug.Log("No. of Rocks changed by" + value);
         UpdateUI();
     }
 
@@ -173,7 +220,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             water += value;
         }
-        //Debug.Log("Water volume changed by" + value);
         UpdateUI();
     }
 
@@ -184,6 +230,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
             ironOreText.text = "Iron ore: " + ironOre;
             rocksText.text = "Lunar rocks: " + rocks;
             waterText.text = $"Water: {water}/{waterCap}";
+        }
+
+        if (groupNameText != null)
+        {
+            groupNameText.text = "Group Name: " + groupName; // Show group name in UI
         }
     }
 }
