@@ -15,6 +15,7 @@ public class ClientConnection : MonoBehaviour
     public GameObject menuPanel;
     public GameObject waitPanel;
     public GameObject selectPanel;
+    public TMP_InputField urlField;
     public string groupName;
     public string progress;
     private SocketIOUnity socket;
@@ -37,21 +38,29 @@ public class ClientConnection : MonoBehaviour
         public string group;
     }
 
-    private string baseUrl = "http://localhost:3000"; // "http://10.11.36.4:3000";
+    public string baseUrl; //  = "https://space-expedition-server.vercel.app" "http://localhost:3000" "http://10.11.36.4:3000";
 
+    public void UpdateURL()
+    {
+        baseUrl = urlField.text;
+        Debug.Log("" + baseUrl);
+    }
 
     void Start()
     {
         menuPanel.SetActive(true);
         waitPanel.SetActive(false);
         selectPanel.SetActive(false);
+        // connectBtn.onClick.AddListener(OnConnection);
         connectBtn.onClick.AddListener(OnConnectClicked);
-        connectBtn.onClick.AddListener(OnConnection);
         progress = "0";
+        baseUrl = "http://localhost:3000";
+
     }
 
     public void OnConnection()
     {
+        StartCoroutine(GetRequest(baseUrl));
         StartCoroutine(GetGroupData());
     }
     private async void OnConnectClicked()
@@ -77,6 +86,7 @@ public class ClientConnection : MonoBehaviour
         socket.OnError += (sender, e) =>
         {
             Debug.LogError("Error! " + e);
+            HandleConnectionError();
         };
 
         socket.OnDisconnected += (sender, e) =>
@@ -111,10 +121,6 @@ public class ClientConnection : MonoBehaviour
         await socket.ConnectAsync();
     }
 
-    public void Awake()
-    {
-        StartCoroutine(GetRequest(baseUrl));
-    }
     public void Update()
     {
         if (isConnected && groupName == "")
@@ -140,6 +146,16 @@ public class ClientConnection : MonoBehaviour
     {
         // StartCoroutine(GetLatestTaskRequest(baseUrl + "/tasks"));
         StartCoroutine(GetTasksRequest(baseUrl + "/tasks"));
+    }
+
+    private void HandleConnectionError()
+    {
+        // Reopen the connection panel
+        menuPanel.SetActive(true);
+        waitPanel.SetActive(false);
+        selectPanel.SetActive(false);
+        urlField.text = "";
+        baseUrl = "http://localhost:3000";
     }
 
     public void UpdateProgress()
@@ -180,6 +196,7 @@ public class ClientConnection : MonoBehaviour
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError(request.error);
+                HandleConnectionError();
             }
             else
             {
@@ -247,6 +264,7 @@ public class ClientConnection : MonoBehaviour
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError("Error: " + request.error);
+                HandleConnectionError();
             }
             else
             {
@@ -282,6 +300,7 @@ public class ClientConnection : MonoBehaviour
                     catch (System.Exception ex)
                     {
                         Debug.LogError($"JSON Parsing Error: {ex.Message}");
+                        HandleConnectionError();
                     }
                 }
             }
@@ -299,6 +318,7 @@ public class ClientConnection : MonoBehaviour
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError(request.error);
+                HandleConnectionError();
             }
             else
             {
@@ -322,6 +342,7 @@ public class ClientConnection : MonoBehaviour
                     catch (System.Exception e)
                     {
                         Debug.LogError("JSON Parsing Error: " + e.Message);
+                        HandleConnectionError();
                     }
                 }
             }
@@ -346,6 +367,7 @@ public class ClientConnection : MonoBehaviour
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError(request.error);
+                HandleConnectionError();
             }
             else
             {
