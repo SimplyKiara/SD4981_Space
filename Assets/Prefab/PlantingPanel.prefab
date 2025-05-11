@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 389.9081, y: 51.1649}
+  m_SizeDelta: {x: 320.6785, y: 36.0084}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1650685538532257170
 CanvasRenderer:
@@ -225,7 +225,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 16
+    m_FontSize: 15
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -272,7 +272,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 38.0557}
+  m_SizeDelta: {x: 136.8369, y: 38.0557}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3336436570377989136
 CanvasRenderer:
@@ -307,9 +307,9 @@ MonoBehaviour:
     m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -353,7 +353,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 131.5914, y: 23.0185}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5826442042025697288
 CanvasRenderer:
@@ -437,9 +437,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1871647911876632402}
-        m_TargetAssemblyTypeName: UICloser, Assembly-CSharp
-        m_MethodName: ClosePopup
+      - m_Target: {fileID: 7511769314679300861}
+        m_TargetAssemblyTypeName: PlantingController, Assembly-CSharp
+        m_MethodName: DeactivatePopUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -462,7 +462,6 @@ GameObject:
   - component: {fileID: 5893093844170899036}
   - component: {fileID: 5163475466933773484}
   - component: {fileID: 7511769314679300861}
-  - component: {fileID: 1871647911876632402}
   m_Layer: 5
   m_Name: PlantingPanel
   m_TagString: Untagged
@@ -479,7 +478,7 @@ RectTransform:
   m_GameObject: {fileID: 2853995023354908242}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8956248149116295772}
@@ -493,8 +492,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2157.5, y: -42.5}
-  m_SizeDelta: {x: -6825, y: -705}
+  m_AnchoredPosition: {x: -79.85669, y: -4.380371}
+  m_SizeDelta: {x: -7148.908, y: -781.2391}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6971530586937599930
 CanvasRenderer:
@@ -574,19 +573,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ResourcesText: {fileID: 6421646041074197569}
   AnnounceText: {fileID: 8419004296825855439}
-  groupId: 0
---- !u!114 &1871647911876632402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2853995023354908242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e91eca74dc352d34fa97029e87318922, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  wallConnection: {fileID: 0}
+  groupManager: {fileID: 0}
+  groupName: Group 1
 --- !u!1 &3023681211151928652
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,7 +613,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 548.8905, y: 85}
+  m_SizeDelta: {x: 451.433, y: 59.8207}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6815827805952137332
 MonoBehaviour:
@@ -688,8 +677,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 407.5, y: -321.2661}
-  m_SizeDelta: {x: 548.8905, y: 85}
+  m_AnchoredPosition: {x: 339.76904, y: -227.5792}
+  m_SizeDelta: {x: 451.433, y: 59.8207}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4007620874297522933
 MonoBehaviour:
@@ -752,7 +741,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 171.1846, y: 38.0557}
+  m_SizeDelta: {x: 144.2424, y: 38.0557}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3186832017739024773
 CanvasRenderer:
@@ -787,7 +776,7 @@ MonoBehaviour:
     m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 3
     m_AlignByGeometry: 0
@@ -964,7 +953,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 38.0557}
+  m_SizeDelta: {x: 85.4063, y: 38.0557}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &399961671623783066
 CanvasRenderer:
@@ -999,7 +988,7 @@ MonoBehaviour:
     m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 3
     m_AlignByGeometry: 0
@@ -1045,7 +1034,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 110.0107, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5635194636597376656
 CanvasRenderer:
@@ -1129,10 +1118,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SupplyBuilder, Assembly-CSharp
-        m_MethodName: BuildStructure
-        m_Mode: 3
+      - m_Target: {fileID: 7511769314679300861}
+        m_TargetAssemblyTypeName: PlantingController, Assembly-CSharp
+        m_MethodName: callPlanting
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1334,7 +1323,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 38.0557}
+  m_SizeDelta: {x: 116.4028, y: 38.0557}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6537997017582552465
 CanvasRenderer:
@@ -1369,9 +1358,9 @@ MonoBehaviour:
     m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -1494,7 +1483,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 548.8905, y: 54.4363}
+  m_SizeDelta: {x: 451.433, y: 38.3107}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8760719461676973617
 MonoBehaviour:
@@ -1557,7 +1546,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 389.9081, y: 51.1649}
+  m_SizeDelta: {x: 320.6785, y: 36.0084}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6153971481079269611
 CanvasRenderer:
@@ -1592,7 +1581,7 @@ MonoBehaviour:
     m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 3
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -1636,7 +1625,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 334.45, y: 30}
+  m_SizeDelta: {x: 275.0672, y: 21.1131}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6668445718750452689
 CanvasRenderer:
@@ -1668,10 +1657,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 15
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 1
     m_AlignByGeometry: 0
@@ -1715,7 +1704,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 38.0557}
+  m_SizeDelta: {x: 132.1824, y: 38.0557}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1378246766633492215
 CanvasRenderer:
@@ -1750,7 +1739,7 @@ MonoBehaviour:
     m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 3
     m_AlignByGeometry: 0

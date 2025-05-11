@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void BuildGreenhouse()
     {
-        if (ironOre >= 20 && rocks >= 20)
+        if (ironOre >= 20 && rocks >= 20 && water >= 8)
         {
             if (!GreenHouse.activeSelf)
             {
@@ -187,31 +187,16 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
     }
 
-    public int GetCollectedIron()
-    {
-        return gameData.ironOre;
-    }
-
     public void AddCollectedIron(int value)
     {
         ironOre += value;
         UpdateUI();
     }
 
-    public int GetCollectedRocks()
-    {
-        return gameData.rocks;
-    }
-
     public void AddCollectedRocks(int value)
     {
         rocks += value;
         UpdateUI();
-    }
-
-    public float GetCollectedWater()
-    {
-        return gameData.water;
     }
 
     public void ChangeCollectedWater(float value)

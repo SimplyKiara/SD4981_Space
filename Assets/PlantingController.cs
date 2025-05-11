@@ -1,112 +1,91 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.Networking;
-using SocketIOClient;
-using System.Threading.Tasks;
 using UnityEngine.UI;
-using System.Net.Sockets;
-using static SocketIOManager;
 
 public class PlantingController : MonoBehaviour
 {
     public Text ResourcesText;
     public Text AnnounceText;
-    public int groupId = 0;
+    public WallConnection wallConnection;
+    public GameManager groupManager;
+    public string groupName = "Group 1";
 
-    private string baseUrl = "http://";
     private bool called = false;
+    private float currentWater;
+    private float maxWater;
+    private string gpName;
 
-    private SocketIOUnity socket;
-
-    [System.Serializable]
-    public class GroupUpdate
+    void Start()
     {
-        public string events;
-        public GroupData data;
+        AnnounceText.text = "";
+
+        if (groupManager.name == "Gp1_GameManager")
+        {
+            groupName = "Group 1";
+        }
+        else if (groupManager.name == "Gp2_GameManager")
+        {
+            groupName = "Group 2";
+        }
+        else if (groupManager.name == "Gp3_GameManager")
+        {
+            groupName = "Group 3";
+        }
+        else
+        {
+            Debug.LogError("Game Manager not identified correctly!");
+        }
     }
 
-    [System.Serializable]
-    public class GroupData
+    void OnEnable()
     {
-        public string groupName;
-        public string session;
+        if (groupManager != null)
+        {
+            currentWater = groupManager.water;
+            maxWater = groupManager.waterCap;
+
+            ResourcesText.text = $"Water resources: {currentWater} / {maxWater}";
+        }
+
+        AnnounceText.text = "";
     }
-
-    async void Start()
-    {
-        var uri = new System.Uri("http://localhost:3000");
-        socket = new SocketIOUnity(uri, new SocketIOOptions
-        {
-            Query = new System.Collections.Generic.Dictionary<string, string>
-            {
-                { "token", "UNITY" }
-            },
-            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
-        });
-
-        socket.OnConnected += (sender, e) =>
-        {
-            Debug.Log("Connection open!");
-        };
-
-        socket.OnError += (sender, e) =>
-        {
-            Debug.LogError("Error! " + e);
-        };
-
-        socket.OnDisconnected += (sender, e) =>
-        {
-            Debug.Log("Connection closed!");
-        };
-
-        socket.On("groupUpdated", response =>
-        {
-            var message = response.ToString();
-            Debug.Log("OnMessage! " + message);
-
-            GroupUpdate groupUpdate = JsonUtility.FromJson<GroupUpdate>(message);
-            Debug.Log("Group updated: " + groupUpdate.data.groupName + ", Session: " + groupUpdate.data.session);
-        });
-
-        await socket.ConnectAsync();
-    }
-
-    private void Awake()
-    {
-        
-    }
-
+    
     void Update()
     {
-        float currentWater = GameManager.instance.water;
-        float maxWater = GameManager.instance.waterCap;
+        if (groupManager != null)
+        {
+            currentWater = groupManager.water;
+            maxWater = groupManager.waterCap;
 
-        ResourcesText.text = $"Water resources: {currentWater} / {maxWater}";
+            ResourcesText.text = $"Water resources: {currentWater} / {maxWater}";
+        }
     }
 
     public void callPlanting()
     {
         if (!called)
         {
+            if ((currentWater >= 8) && (groupName != null))
+            {
+                AnnounceText.text = "Action called! Check your tablet.";
+                wallConnection.TriggerTask("Planting", groupName);
+            }
+            else
+            {
+                AnnounceText.text = "Not anough resources!";
+            }
             AnnounceText.text = "Action called! Check your tablet.";
-            //SendMessageToServer();
         }
-    }
-
-    private async void SendMessageToServer(string message)
-    {
-        if (socket.Connected)
+        else
         {
-            await socket.EmitAsync("message", message);
-            Debug.Log("Message sent: " + message);
+            AnnounceText.text = "Action called before! Finish the task first.";
         }
     }
 
-    private async void OnApplicationQuit()
+    public void DeactivatePopUp()
     {
-        await socket.DisconnectAsync();
+        gameObject.SetActive(false);
     }
 }
 

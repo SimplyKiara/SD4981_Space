@@ -5,13 +5,12 @@ using UnityEngine;
 
 public class GHouseController : MonoBehaviour
 {
-    public GameObject popupPrefab; // Assign the UI popup prefab
-    public Canvas targetCanvas; // Assign the specific UI Canvas
-    private GameObject currentPopup;
-    private bool isBuilt = false;
+    public GameObject popUpPanel; // Assign the UI popup
 
     private void Start()
     {
+        popUpPanel.SetActive(false);
+
         // Find all child objects with LongPressGesture
         foreach (Transform child in transform)
         {
@@ -31,7 +30,7 @@ public class GHouseController : MonoBehaviour
 
         if (e.State == Gesture.GestureState.Recognized)
         {
-            if (!isBuilt)
+            if (!popUpPanel.activeInHierarchy)
             {
                 ShowUIPopup();
             }
@@ -44,21 +43,8 @@ public class GHouseController : MonoBehaviour
 
     private void ShowUIPopup()
     {
-        if (popupPrefab != null && targetCanvas != null)
-        {
-            if (currentPopup == null)
-            {
-                currentPopup = Instantiate(popupPrefab, targetCanvas.transform, false);
-                Debug.Log("UI popup instantiated.");
-            }
-            else
-            {
-                Debug.Log("Popup already exists, not creating a new one.");
-            }
-        }
-        else
-        {
-            Debug.LogError("Popup prefab or target canvas is missing!");
-        }
+        popUpPanel.SetActive(true);
+
+        Debug.Log("UI popup instantiated.");
     }
 }

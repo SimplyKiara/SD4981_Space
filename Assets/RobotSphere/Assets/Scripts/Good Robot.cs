@@ -60,7 +60,7 @@ public class GoodRobot : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             incrementAction();
-            Debug.Log("Value: " + (currentTargetIndex == 0 ? GameManager.instance.GetCollectedRocks() : secondValue));
+            Debug.Log("Value: " + (currentTargetIndex == 0 ? GameManager.instance.rocks : secondValue));
             float randomDelay = UnityEngine.Random.Range(0.5f, 2.0f); // Random delay between 0.5 and 2 seconds
             yield return new WaitForSeconds(randomDelay);
         }

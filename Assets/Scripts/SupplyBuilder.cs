@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class SupplyBuilder : MonoBehaviour
 {
+    public GameManager manager;
+
     public void BuildStructure(int item)
     {
         switch (item)
         {
             case 0:
-                GameManager.instance.BuildSolarPanels();
+                manager.BuildSolarPanels();
                 break;
             case 1:
-                GameManager.instance.UpgradeBase();
+                manager.UpgradeBase();
                 break;
             case 2:
-                GameManager.instance.BuildGreenhouse();
+                manager.BuildGreenhouse();
                 break;
             default:
                 Debug.Log("Action Unknown");

@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class SuppliesController : MonoBehaviour
 {
     public GameObject popupPrefab; // Assign the UI popup prefab
-    public Canvas targetCanvas; // Assign the specific UI Canvas
+
+    private string gpName;
     private GameObject currentPopup;
-    private bool isBuilt = false;
 
     private void Start()
     {
@@ -32,25 +32,18 @@ public class SuppliesController : MonoBehaviour
 
         if (e.State == Gesture.GestureState.Recognized)
         {
-            if (!isBuilt)
-            {
-                ShowUIPopup();
-            }
-            else
-            {
-                Debug.Log("Prefab is already built.");
-            }
+            ShowUIPopup();
         }
     }
 
     private void ShowUIPopup()
     {
-        if (popupPrefab != null && targetCanvas != null)
+        if (popupPrefab != null)
         {
             if (currentPopup == null)
             {
-                currentPopup = Instantiate(popupPrefab, targetCanvas.transform, false);
-                Debug.Log("UI popup instantiated.");
+                currentPopup.SetActive(true);
+                Debug.Log($"Supplies UI instantiated");
             }
             else
             {
@@ -61,5 +54,10 @@ public class SuppliesController : MonoBehaviour
         {
             Debug.LogError("Popup prefab or target canvas is missing!");
         }
+    }
+
+    public void DeactivatePopUp()
+    {
+        gameObject.SetActive(false);
     }
 }

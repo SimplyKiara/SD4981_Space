@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -506,14 +506,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 939716773}
     m_Modifications:
-    - target: {fileID: 2320293852769696101, guid: fd30381a414c9f74c95cb34db3f2087c, type: 3}
-      propertyPath: m_SortingLayer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2320293852769696101, guid: fd30381a414c9f74c95cb34db3f2087c, type: 3}
-      propertyPath: m_SortingLayerID
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6409734450283553989, guid: fd30381a414c9f74c95cb34db3f2087c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -558,10 +550,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlantPot (8)
       objectReference: {fileID: 0}
-    - target: {fileID: 8937769906068585344, guid: fd30381a414c9f74c95cb34db3f2087c, type: 3}
-      propertyPath: ProgressText
-      value: 
-      objectReference: {fileID: 1100980448}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
