@@ -55,9 +55,6 @@ public class MudController : MonoBehaviour
     {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         StartMovement(mousePos);
-
-        if (moveCoroutine != null) StopCoroutine(moveCoroutine);
-        moveCoroutine = StartCoroutine(StopMovementAfterTimeout());
     }
 
     private void OnMouseUp()
@@ -104,13 +101,5 @@ public class MudController : MonoBehaviour
         {
             Debug.Log("MoveSystem cannot identify collision");
         }
-    }
-
-    // Timeout Coroutine
-    private IEnumerator StopMovementAfterTimeout()
-    {
-        yield return new WaitForSeconds(moveTimeout);
-        moving = false;
-        transform.localPosition = resetPosition;
     }
 }

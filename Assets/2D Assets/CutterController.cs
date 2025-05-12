@@ -60,10 +60,6 @@ public class CutterController : MonoBehaviour
         startPosX = mousePos.x - transform.localPosition.x;
         startPosY = mousePos.y - transform.localPosition.y;
         moving = true;
-
-        // Start the timeout coroutine
-        if (moveCoroutine != null) StopCoroutine(moveCoroutine);
-        moveCoroutine = StartCoroutine(StopMovementAfterTimeout());
     }
 
     private void OnMouseUp()
@@ -89,13 +85,5 @@ public class CutterController : MonoBehaviour
                 Debug.Log("MoveSystem cannot identify action, tag = " + collider.tag);
             }
         }
-    }
-
-    // Timeout Coroutine
-    private IEnumerator StopMovementAfterTimeout()
-    {
-        yield return new WaitForSeconds(moveTimeout);
-        moving = false;
-        transform.localPosition = resetPosition;
     }
 }

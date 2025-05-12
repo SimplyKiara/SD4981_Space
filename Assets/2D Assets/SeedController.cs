@@ -60,10 +60,6 @@ public class SeedController : MonoBehaviour
         startPosX = mousePos.x - transform.localPosition.x;
         startPosY = mousePos.y - transform.localPosition.y;
         moving = true;
-
-        // Start the timeout coroutine
-        if (moveCoroutine != null) StopCoroutine(moveCoroutine);
-        moveCoroutine = StartCoroutine(StopMovementAfterTimeout());
     }
 
     private void OnMouseUp()
@@ -93,13 +89,5 @@ public class SeedController : MonoBehaviour
         {
             Debug.Log("MoveSystem cannot identify collision");
         }
-    }
-
-    // Timeout Coroutine
-    private IEnumerator StopMovementAfterTimeout()
-    {
-        yield return new WaitForSeconds(moveTimeout);
-        moving = false;
-        transform.localPosition = resetPosition;
     }
 }
