@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TouchScript.Gestures;
-using UnityEditor.U2D.Aseprite;
+// using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.Networking;
 

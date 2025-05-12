@@ -13,9 +13,15 @@ public class PlayerInfoManager : MonoBehaviour
     public Transform playerInfoGrid; // Reference to the Grid Layout Group parent
     public GameObject startBtn;
     public GameObject endBtn;
-    private string serverUrl = "http://localhost:3000"; // Replace with your server URL
+    public GameObject reloadBtn;
+    public Button connectBtn;
+    public GameObject menuPanel;
+    public GameObject playerInfoPanel;
+    public TMP_InputField urlField;
+    private string serverUrl; // = "http://localhost:3000"; Replace with your server URL
     private SocketIOUnity socket;
     private bool isGameStarted = false;
+    bool isConnected = false;
 
     [System.Serializable]
     public class PlayerData
@@ -30,9 +36,26 @@ public class PlayerInfoManager : MonoBehaviour
 
     private List<PlayerData> players = new List<PlayerData>();
     private bool playerUpdated = false;
-
-    async void Start()
+    public void UpdateURL()
     {
+        serverUrl = urlField.text;
+        Debug.Log("" + serverUrl);
+    }
+    void Start()
+    {
+        menuPanel.SetActive(true);
+        playerInfoPanel.SetActive(false);
+        reloadBtn.SetActive(false);
+        // connectBtn.onClick.AddListener(OnConnection);
+        connectBtn.onClick.AddListener(OnConnectClicked);
+        serverUrl = "http://localhost:3000";
+
+    }
+    async void OnConnectClicked()
+    {
+        menuPanel.SetActive(false);
+        playerInfoPanel.SetActive(true);
+        reloadBtn.SetActive(true);
         var uri = new System.Uri(serverUrl);
         socket = new SocketIOUnity(uri, new SocketIOOptions
         {
@@ -46,6 +69,7 @@ public class PlayerInfoManager : MonoBehaviour
         socket.OnConnected += (sender, e) =>
         {
             Debug.Log("Connection open!");
+            isConnected = true;
         };
 
         socket.OnError += (sender, e) =>
@@ -73,7 +97,7 @@ public class PlayerInfoManager : MonoBehaviour
 
     void Update()
     {
-        if (playerUpdated)
+        if (playerUpdated && isConnected)
         {
             Refresh();
             playerUpdated = false;
@@ -158,6 +182,8 @@ public class PlayerInfoManager : MonoBehaviour
     void OnApplicationQuit()
     {
         StartCoroutine(DeleteGroupData());
+        isConnected = false;
+
     }
 
     IEnumerator DeleteGroupData()
