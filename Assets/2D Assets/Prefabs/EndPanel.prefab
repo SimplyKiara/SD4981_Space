@@ -117,10 +117,22 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 8020342485640091939}
+  m_TargetGraphic: {fileID: 0}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5895737318824868057}
+        m_TargetAssemblyTypeName: EndPanelController, Assembly-CSharp
+        m_MethodName: TaskOnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4499356744304795620
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +306,6 @@ GameObject:
   - component: {fileID: 927817226835046090}
   - component: {fileID: 4040391809794877783}
   - component: {fileID: 5895737318824868057}
-  - component: {fileID: 7028260845915207774}
   m_Layer: 5
   m_Name: EndPanel
   m_TagString: Untagged
@@ -401,21 +412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myButton: {fileID: 2370334721908592279}
-  description: {fileID: 0}
---- !u!114 &7028260845915207774
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7506182427358344825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 358a208502dd93a4483688b7d4f1541e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myButton: {fileID: 2370334721908592279}
-  description: {fileID: 0}
+  description: {fileID: 2352508616851714092}
 --- !u!1 &8806869534638408523
 GameObject:
   m_ObjectHideFlags: 0
