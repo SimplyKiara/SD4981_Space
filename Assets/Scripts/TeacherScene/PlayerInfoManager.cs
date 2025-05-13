@@ -51,7 +51,7 @@ public class PlayerInfoManager : MonoBehaviour
         serverUrl = "http://localhost:3000";
 
     }
-    async void OnConnectClicked()
+    public async void OnConnectClicked()
     {
         menuPanel.SetActive(false);
         playerInfoPanel.SetActive(true);

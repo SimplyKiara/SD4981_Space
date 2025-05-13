@@ -9,7 +9,7 @@ public class SuppliesController : MonoBehaviour
     public GameObject popupPrefab; // Assign the UI popup prefab
 
     private string gpName;
-    private GameObject currentPopup;
+    // private GameObject currentPopup;
 
     private void Start()
     {
@@ -40,7 +40,10 @@ public class SuppliesController : MonoBehaviour
     {
         if (popupPrefab != null)
         {
-            if (currentPopup == null)
+            popupPrefab.SetActive(true);
+            Debug.Log($"Supplies UI showed");
+
+            /* if (currentPopup == null)
             {
                 currentPopup.SetActive(true);
                 Debug.Log($"Supplies UI instantiated");
@@ -48,7 +51,7 @@ public class SuppliesController : MonoBehaviour
             else
             {
                 Debug.Log("Popup already exists, not creating a new one.");
-            }
+            } */
         }
         else
         {
