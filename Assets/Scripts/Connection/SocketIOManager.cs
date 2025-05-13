@@ -22,7 +22,7 @@ public class SocketIOManager : MonoBehaviour
 
     async void Start()
     {
-        var uri = new System.Uri("http://localhost:3000");
+        var uri = new System.Uri("https://spaceexpeditionserver.onrender.com"); // "http://localhost:3000"
         socket = new SocketIOUnity(uri, new SocketIOOptions
         {
             Query = new System.Collections.Generic.Dictionary<string, string>

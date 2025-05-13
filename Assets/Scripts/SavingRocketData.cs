@@ -21,7 +21,7 @@ public class GroupData
 
 public class SavingRocketData : MonoBehaviour
 {
-    private string baseUrl = "http://localhost:3000";
+    private string baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
     private string groupName = ""; // Store group name
 
     void Start()

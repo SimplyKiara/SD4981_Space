@@ -11,7 +11,7 @@ public class ServerConnection : MonoBehaviour
     public Button taskPostBtn;
     // public Button postBtn;
     // public Button getBtn;
-    private string baseUrl = "http://localhost:3000"; // "http://10.11.36.4:3000";
+    private string baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000"; // "http://10.11.36.4:3000";
     [System.Serializable]
     public class Message
     {

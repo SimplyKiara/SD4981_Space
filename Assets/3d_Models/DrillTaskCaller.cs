@@ -28,7 +28,7 @@ public class DrillTaskCaller : MonoBehaviour
     private string gpName;
     private GameObject currentPopup;
 
-    private string baseUrl = "http://localhost:3000/TaskDone";
+    private string baseUrl = "https://spaceexpeditionserver.onrender.com"; //"http://localhost:3000/TaskDone";
     private bool dataLoaded = false;
 
     private Vector3[] directions =

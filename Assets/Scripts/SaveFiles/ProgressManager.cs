@@ -93,7 +93,7 @@ public class ProgressManager : MonoBehaviour
     {
         State gameState = new State { gameState = state };
         string jsonData = JsonUtility.ToJson(gameState);
-        string url = "http://localhost:3000/gameState";
+        string url = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000/gameState";
 
         using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
         {

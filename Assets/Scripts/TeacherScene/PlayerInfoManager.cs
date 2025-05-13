@@ -48,7 +48,7 @@ public class PlayerInfoManager : MonoBehaviour
         reloadBtn.SetActive(false);
         // connectBtn.onClick.AddListener(OnConnection);
         connectBtn.onClick.AddListener(OnConnectClicked);
-        serverUrl = "http://localhost:3000";
+        serverUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
 
     }
     public async void OnConnectClicked()
@@ -75,6 +75,7 @@ public class PlayerInfoManager : MonoBehaviour
         socket.OnError += (sender, e) =>
         {
             Debug.LogError("Error! " + e);
+            HandleConnectionError();
         };
 
         socket.OnDisconnected += (sender, e) =>
@@ -128,7 +129,14 @@ public class PlayerInfoManager : MonoBehaviour
         StartCoroutine(GetPlayerData());
         Debug.Log("data retrieved");
     }
-
+    private void HandleConnectionError()
+    {
+        // Reopen the connection panel
+        menuPanel.SetActive(true);
+        playerInfoPanel.SetActive(false);
+        urlField.text = "";
+        serverUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
+    }
     IEnumerator GetPlayerData()
     {
         Debug.Log("GetPlayerData");

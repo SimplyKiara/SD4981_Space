@@ -54,7 +54,7 @@ public class ClientConnection : MonoBehaviour
         // connectBtn.onClick.AddListener(OnConnection);
         connectBtn.onClick.AddListener(OnConnectClicked);
         progress = "0";
-        baseUrl = "http://localhost:3000";
+        baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
 
     }
 
@@ -155,7 +155,7 @@ public class ClientConnection : MonoBehaviour
         waitPanel.SetActive(false);
         selectPanel.SetActive(false);
         urlField.text = "";
-        baseUrl = "http://localhost:3000";
+        baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
     }
 
     public void UpdateProgress()
