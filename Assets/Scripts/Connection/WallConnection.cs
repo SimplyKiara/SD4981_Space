@@ -11,7 +11,7 @@ public class WallConnection : MonoBehaviour
     bool isGameStarted = false;
     bool isGameEnded = false;
     private SocketIOUnity socket;
-    private string baseUrl = "http://localhost:3000"; // Update with your server URL
+    private string baseUrl = "https://spaceexpeditionserver.onrender.com";//"http://localhost:3000"; // Update with your server URL
 
     void Start()
     {
