@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4711838158204900793}
   - component: {fileID: 8386451953282957159}
   - component: {fileID: 961044418117352099}
+  - component: {fileID: 5489451347746513321}
   m_Layer: 0
   m_Name: Coriander
   m_TagString: Veggies
@@ -167,4 +168,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collected: 0
   watered: 0
-  VeggieText: {fileID: 0}
+--- !u!50 &5489451347746513321
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8469267945392721714}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

@@ -8,6 +8,9 @@ public class VeggiesController : MonoBehaviour
     public bool collected = false;
     public bool watered = false;
 
+    public bool HvCollected => collected;
+    public bool HvWatered => watered;
+
     private Animator animator;
     private static int collectedVeggies = 0;
 
@@ -53,7 +56,7 @@ public class VeggiesController : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Cannot collect veggie!");
+                    Debug.Log("Already collected!");
                 }
             }
             else if (collider.gameObject.CompareTag("WaterPipette"))
@@ -62,13 +65,15 @@ public class VeggiesController : MonoBehaviour
                 {
                     if (collected)
                     {
+                        watered = true;
                         animator.SetBool("Cut", true);
                         animator.SetBool("Watered", true);
+                        collider.gameObject.SendMessage("PipeHandler");
                         //Debug.Log("Watered veggie!");
                     }
                     else
                     {
-                        Debug.Log("Cannot water veggie!");
+                        Debug.Log("Not collected yet!");
                     }
                 }
                 else

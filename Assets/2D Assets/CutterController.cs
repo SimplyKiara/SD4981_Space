@@ -82,7 +82,7 @@ public class CutterController : MonoBehaviour
             }
             else
             {
-                Debug.Log("MoveSystem cannot identify action, tag = " + collider.tag);
+                Debug.Log($"Cannot identify action, self = {gameObject.tag}, collided = {collider.tag}");
             }
         }
     }

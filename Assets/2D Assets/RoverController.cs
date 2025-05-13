@@ -22,7 +22,7 @@ public class RoverController : MonoBehaviour
     private Vector2 movementInput;
     private Quaternion startRotation;
 
-    private float fillSpeed = 0.1f;
+    private float fillSpeed = 0.15f;
     private float drainSpeed = 0.5f;
     private bool isColliding = false;
     private bool wasFullyFilled = false;

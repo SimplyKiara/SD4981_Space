@@ -65,11 +65,12 @@ public class PipeController : MonoBehaviour
         if (collider != null && collider.gameObject != gameObject)
         {
             Debug.Log("Detected collider: " + collider.name + " with tag: " + collider.tag);
+
             if (collider.CompareTag("Water"))
             {
                 ChangeTag();
             }
-            else if (collider.CompareTag("Veggies"))
+            else if (collider.CompareTag("Veggies") || collider.CompareTag("Pots")) 
             {
                 if (gameObject.tag == "WaterPipette")
                 {
@@ -78,7 +79,7 @@ public class PipeController : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Cannot water!");
+                    Debug.Log("No water!");
                 }
             }
             else
@@ -94,13 +95,18 @@ public class PipeController : MonoBehaviour
         {
             animator.SetBool("Filled", false);
             gameObject.tag = "Pipette";
+            Debug.Log("Changed anim");
         }
         else if (gameObject.tag == "Pipette")
         {
             animator.SetBool("Filled", true);
             gameObject.tag = "WaterPipette";
+            Debug.Log("Changed anim");
         }
-        animator.Update(0);
+        else
+        {
+            Debug.Log($"Cannot change: current tag: {gameObject.tag}, Filled = {animator.GetBool("Filled")}");
+        }
     }
 
     private void OnMouseDown()

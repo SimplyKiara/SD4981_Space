@@ -44,6 +44,7 @@ public class PotController : MonoBehaviour
                 if (!haveSeed && haveMud)
                 {
                     haveSeed = true;
+                    animator.SetBool("Seeded", true);
                     Debug.Log("Seed planted!");
                 }
                 else

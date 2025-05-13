@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -800,6 +800,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &252983538 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7506182427358344825, guid: b588cc5311efbfa45869cc94800346ae, type: 3}
+  m_PrefabInstance: {fileID: 252983535}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &266816390
 GameObject:
   m_ObjectHideFlags: 0
@@ -1072,7 +1077,7 @@ Transform:
   m_GameObject: {fileID: 418225445}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.7331479, y: -2.8822649, z: -9.969178}
+  m_LocalPosition: {x: -2.7892873, y: -2.7763853, z: -9.969178}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3316,7 +3321,7 @@ PrefabInstance:
     - target: {fileID: 2091531281883990731, guid: 578bedb7b832d3549b4500e5c04c14d6, type: 3}
       propertyPath: endPanel
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 252983538}
     - target: {fileID: 2091531281883990731, guid: 578bedb7b832d3549b4500e5c04c14d6, type: 3}
       propertyPath: joystick
       value: 
