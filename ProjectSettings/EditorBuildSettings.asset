@@ -5,28 +5,28 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ClientMenu.unity
     guid: 1801c24926e4ff84b9512315c55dd5c6
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TabletScene.unity
     guid: 80959ead02692a641ad2653e0f1b3dc1
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/IceMining_P1.unity
     guid: 70781201b2fd69f46a8bdd88ecc847f8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/IceMining_P2.unity
     guid: 7e26e59de5c659d43a7746f0b91d14df
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Planting.unity
     guid: c720ad2afdb9c314885d64245cd999da
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Harvest.unity
     guid: 3c7c9fdd370f85b40aec48b99eaed815
   - enabled: 0
     path: Assets/Scenes/RubyTesting.unity
     guid: b901ca7dc96780c4196c0cad24b36665
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/TeacherMenu.unity
     guid: dfd00ea2b029cea4a91a355730813694
   - enabled: 0
