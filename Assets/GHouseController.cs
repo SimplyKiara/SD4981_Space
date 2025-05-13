@@ -19,7 +19,7 @@ public class GHouseController : MonoBehaviour
             if (longPressGesture != null)
             {
                 longPressGesture.StateChanged += longPressedHandler;
-                Debug.Log($"Subscribed to {child.name}'s LongPressGesture");
+                //Debug.Log($"Subscribed to {child.name}'s LongPressGesture");
             }
         }
     }

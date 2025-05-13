@@ -8,8 +8,8 @@ public class PlantingController : MonoBehaviour
     public Text AnnounceText;
     public WallConnection wallConnection;
     public GameManager groupManager;
-    public string groupName = "Group 1";
 
+    private string groupName = "";
     private bool called = false;
     private float currentWater;
     private float maxWater;
@@ -35,19 +35,6 @@ public class PlantingController : MonoBehaviour
         {
             Debug.LogError("Game Manager not identified correctly!");
         }
-    }
-
-    void OnEnable()
-    {
-        if (groupManager != null)
-        {
-            currentWater = groupManager.water;
-            maxWater = groupManager.waterCap;
-
-            ResourcesText.text = $"Water resources: {currentWater} / {maxWater}";
-        }
-
-        AnnounceText.text = "";
     }
     
     void Update()

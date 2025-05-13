@@ -18,10 +18,12 @@ public class PlayerInfoManager : MonoBehaviour
     public GameObject menuPanel;
     public GameObject playerInfoPanel;
     public TMP_InputField urlField;
+    public GameObject[] scenePanels;
     private string serverUrl; // = "http://localhost:3000"; Replace with your server URL
     private SocketIOUnity socket;
     private bool isGameStarted = false;
     bool isConnected = false;
+    private bool sceneStatus = false;
 
     [System.Serializable]
     public class PlayerData
@@ -129,6 +131,30 @@ public class PlayerInfoManager : MonoBehaviour
         StartCoroutine(GetPlayerData());
         Debug.Log("data retrieved");
     }
+
+    public void ChangeScenePanel()
+    {
+        if (scenePanels.Count() == 2)
+        {
+            if (!sceneStatus && !scenePanels[0].activeInHierarchy)
+            {
+                scenePanels[0].SetActive(true);   // Base To Site
+            }
+            else if (sceneStatus && !scenePanels[1].activeInHierarchy)
+            {
+                scenePanels[1].SetActive(true);   // Site To Base
+            }
+            else
+            {
+                Debug.Log("Cannot open panel, maybe opened already?");
+            }
+        }
+        else
+        {
+            Debug.LogError("Scene-chaning panels not set up correctly");
+        }
+    }
+
     private void HandleConnectionError()
     {
         // Reopen the connection panel
@@ -137,6 +163,7 @@ public class PlayerInfoManager : MonoBehaviour
         urlField.text = "";
         serverUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
     }
+
     IEnumerator GetPlayerData()
     {
         Debug.Log("GetPlayerData");
@@ -191,7 +218,6 @@ public class PlayerInfoManager : MonoBehaviour
     {
         StartCoroutine(DeleteGroupData());
         isConnected = false;
-
     }
 
     IEnumerator DeleteGroupData()

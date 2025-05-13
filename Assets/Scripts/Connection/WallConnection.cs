@@ -121,4 +121,42 @@ public class WallConnection : MonoBehaviour
             }
         }
     }
+
+    public void ChangeScene(string sceneName, string user)
+    {
+        StartCoroutine(PostSceneChangeRequest(baseUrl + "/scenes", sceneName, user));
+    }
+
+    [System.Serializable]
+    public class Scene
+    {
+        public string sceneName;
+        public string user;
+    }
+    IEnumerator PostSceneChangeRequest(string uri, string sceneName, string user)
+    {
+        Scene scene = new Scene { sceneName = sceneName, user = user };
+        string jsonData = JsonUtility.ToJson(scene);
+
+        Debug.Log("Scene: JSON Data: " + jsonData); // Debug log to check JSON data
+
+        using (UnityWebRequest request = new UnityWebRequest(uri, "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError(request.error);
+            }
+            else
+            {
+                Debug.Log("Response: " + request.downloadHandler.text);
+            }
+        }
+    }
 }
