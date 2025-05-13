@@ -24,13 +24,16 @@ public class ClientManager : MonoBehaviour
         statusText.text = "No tasks available: Wait or refresh.";
     }
 
-    public void ActivateButton(string buttonName)
+    public void Reset()
     {
         foreach (var button in buttonList)
         {
             button.SetActive(false);
         }
+    }
 
+    public void ActivateButton(string buttonName)
+    {
         int activeTasks = 0;
 
         // Activate the button that matches the given name
@@ -41,7 +44,7 @@ public class ClientManager : MonoBehaviour
                 button.SetActive(true);
                 Debug.Log($"Button activated: {button.name}");
                 activeTasks++;
-                break;
+                // break;
             }
         }
 

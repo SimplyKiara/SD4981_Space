@@ -144,6 +144,8 @@ public class ClientConnection : MonoBehaviour
 
     public void OnGetTaskClicked()
     {
+        ClientManager clientManager = GetComponent<ClientManager>();
+        clientManager.Reset();
         // StartCoroutine(GetLatestTaskRequest(baseUrl + "/tasks"));
         StartCoroutine(GetTasksRequest(baseUrl + "/tasks"));
     }
