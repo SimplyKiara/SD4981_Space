@@ -21,10 +21,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [NonSerialized] public int rocks;
     [NonSerialized] public float water;
     [NonSerialized] public float waterCap;
-    
+
     [SerializeField] private string groupName = "Fetching..."; // Group name displayed in Inspector
-    [SerializeField] public string RocketLanded = "Fetching..."; 
-    private string baseUrl = "http://localhost:3000";
+    [SerializeField] public string RocketLanded = "Fetching...";
+    private string baseUrl = "https://spaceexpeditionserver.onrender.com"; //"http://localhost:3000";
 
     private void Awake()
     {

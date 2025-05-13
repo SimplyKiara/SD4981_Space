@@ -22,7 +22,7 @@ public class RocketDataList
 public class RocketReceiver : MonoBehaviour
 {
     public GameObject rocketObject; // Attach the GameObject in the Inspector
-    private string baseUrl = "http://localhost:3000/Rocket";
+    private string baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000/Rocket";
     private bool dataLoaded = false;
     public GameManager gameManager;
     public float checkInterval = 5f; // Time interval for checking (in seconds)
@@ -38,7 +38,7 @@ public class RocketReceiver : MonoBehaviour
     {
         while (!dataLoaded) // Continuously check until valid data is found
         {
-            using (UnityWebRequest request = UnityWebRequest.Get(baseUrl))
+            using (UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/Rocket"))
             {
                 yield return request.SendWebRequest();
 

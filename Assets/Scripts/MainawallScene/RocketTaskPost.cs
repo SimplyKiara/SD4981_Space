@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class RocketTaskPost : MonoBehaviour
 {
+    public string group;
     public WallConnection wallConnection;
-    void OnDestroy()
+    public void PostTask()
     {
-        wallConnection.TriggerTask("Rocket Landing", "Group 1");
+        wallConnection.TriggerTask("Rocket Landing", group);
     }
 }
