@@ -15,7 +15,9 @@ public class ClientConnection : MonoBehaviour
     public GameObject menuPanel;
     public GameObject waitPanel;
     public GameObject selectPanel;
+    public GameObject winnerPopUp;
     public TMP_InputField urlField;
+    public Text winner;
     public string groupName;
     public string progress;
     private SocketIOUnity socket;
@@ -53,6 +55,7 @@ public class ClientConnection : MonoBehaviour
         selectPanel.SetActive(false);
         // connectBtn.onClick.AddListener(OnConnection);
         connectBtn.onClick.AddListener(OnConnectClicked);
+        winner.text = "";
         progress = "0";
         baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
 
@@ -86,7 +89,7 @@ public class ClientConnection : MonoBehaviour
         socket.OnError += (sender, e) =>
         {
             Debug.LogError("Error! " + e);
-            HandleConnectionError();
+            BackToConnectionMenu();
         };
 
         socket.OnDisconnected += (sender, e) =>
@@ -108,6 +111,12 @@ public class ClientConnection : MonoBehaviour
         {
             Debug.Log("start game");
             isReady = true;
+        });
+
+        socket.On("winnerAnnounce", res =>
+        {
+            Debug.Log("winner: " + res.ToString());
+            winner.text = res.ToString().Trim('[', ']', '"');
         });
 
         socket.On("gameEnded", response =>
@@ -135,6 +144,18 @@ public class ClientConnection : MonoBehaviour
             waitPanel.SetActive(false);
             selectPanel.SetActive(true);
         }
+
+        if (isConnected && winner.text != "" && !winnerPopUp.activeInHierarchy)
+        {
+
+            winnerPopUp.SetActive(true);
+        }
+
+        if (isEnded)
+        {
+            BackToConnectionMenu();
+            isEnded = false;
+        }
     }
 
     string GenGroupName()
@@ -150,12 +171,15 @@ public class ClientConnection : MonoBehaviour
         StartCoroutine(GetTasksRequest(baseUrl + "/tasks"));
     }
 
-    private void HandleConnectionError()
+    private void BackToConnectionMenu()
     {
         // Reopen the connection panel
         menuPanel.SetActive(true);
         waitPanel.SetActive(false);
         selectPanel.SetActive(false);
+        winnerPopUp.SetActive(false);
+        winner.text = "";
+        progress = "0";
         urlField.text = "";
         baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
     }
@@ -198,7 +222,7 @@ public class ClientConnection : MonoBehaviour
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError(request.error);
-                HandleConnectionError();
+                BackToConnectionMenu();
             }
             else
             {
@@ -266,7 +290,7 @@ public class ClientConnection : MonoBehaviour
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError("Error: " + request.error);
-                HandleConnectionError();
+                BackToConnectionMenu();
             }
             else
             {
@@ -302,7 +326,7 @@ public class ClientConnection : MonoBehaviour
                     catch (System.Exception ex)
                     {
                         Debug.LogError($"JSON Parsing Error: {ex.Message}");
-                        HandleConnectionError();
+                        BackToConnectionMenu();
                     }
                 }
             }
@@ -320,7 +344,7 @@ public class ClientConnection : MonoBehaviour
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError(request.error);
-                HandleConnectionError();
+                BackToConnectionMenu();
             }
             else
             {
@@ -344,7 +368,7 @@ public class ClientConnection : MonoBehaviour
                     catch (System.Exception e)
                     {
                         Debug.LogError("JSON Parsing Error: " + e.Message);
-                        HandleConnectionError();
+                        BackToConnectionMenu();
                     }
                 }
             }
@@ -369,7 +393,7 @@ public class ClientConnection : MonoBehaviour
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError(request.error);
-                HandleConnectionError();
+                BackToConnectionMenu();
             }
             else
             {

@@ -268,11 +268,10 @@ public class PlayerInfoManager : MonoBehaviour
     {
         if (socket.Connected)
         {
-            socket.Emit("end game");
-            Debug.Log("End game message emitted");
             endBtn.SetActive(false);
             playerInfoPanel.SetActive(false);
             endPanel.SetActive(true);
+            reloadBtn.SetActive(false);
             DisplayWinner();
             isGameStarted = false;
         }
@@ -312,6 +311,8 @@ public class PlayerInfoManager : MonoBehaviour
         // Disconnect the socket
         if (socket.Connected)
         {
+            socket.Emit("end game");
+            Debug.Log("End game message emitted");
             socket.DisconnectAsync();
             Debug.Log("Socket disconnected");
             isConnected = false;
