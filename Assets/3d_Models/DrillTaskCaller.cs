@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TouchScript.Gestures;
-// using UnityEditor.U2D.Aseprite;
 using UnityEngine;
-
 
 public class DrillTaskCaller : MonoBehaviour
 {
@@ -13,8 +11,6 @@ public class DrillTaskCaller : MonoBehaviour
 
     private string gpName;
     private GameObject currentPopup;
-
-    
 
     private Vector3[] directions =
     {
@@ -67,8 +63,6 @@ public class DrillTaskCaller : MonoBehaviour
             Debug.LogError("Popup prefab or target canvas is missing!");
         }
     }
-
-    
 
     public void ActivateDrill()
     {

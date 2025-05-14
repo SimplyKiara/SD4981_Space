@@ -716,8 +716,9 @@ GameObject:
   m_Component:
   - component: {fileID: 573426123}
   - component: {fileID: 573426124}
+  - component: {fileID: 573426125}
   m_Layer: 0
-  m_Name: TaskManager
+  m_Name: DataReceiveManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -750,7 +751,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67edb2c9d6969b149944e65c9e4805f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
+  checkInterval: 5
+--- !u!114 &573426125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 573426122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 563cd945c7dd20f4988ec97da8f9f5db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   checkInterval: 5
 --- !u!1 &603481933
 GameObject:

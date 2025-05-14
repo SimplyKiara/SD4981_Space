@@ -24,48 +24,19 @@ public class ResourceReceiver : MonoBehaviour
 {
     private string baseUrl = "https://spaceexpeditionserver.onrender.com"; //"http://localhost:3000/TaskDone";
     private bool dataLoaded = false;
-    public GameManager gameManager;
     public float checkInterval = 5f; // Time interval for checking (in seconds)
 
-    string Name;
     private string gpName;
 
     private void Start()
     {
         StartCoroutine(CheckForIceData());
-
-        Name = gameManager.name.Substring(0, 3);
-
-        if (Name == "Gp1")
-        {
-            gpName = "Group 1";
-        }
-        else if (Name == "Gp2")
-        {
-            gpName = "Group 2";
-        }
-        else if (Name == "Gp3")
-        {
-            gpName = "Group 3";
-        }
-        else
-        {
-            Debug.LogError("Group name not obtainable!");
-        }
     }
 
     IEnumerator CheckForIceData()
     {
         while (!dataLoaded) // Continuously check until valid data is found
         {
-            GameObject groupDrill = GameObject.Find(Name + "_DrillStructure");
-
-            if (groupDrill == null)
-            {
-                Debug.LogError("Group / Drill not found!");
-                break;
-            }
-
             using (UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/TaskDone"))
             {
                 yield return request.SendWebRequest();
@@ -86,7 +57,28 @@ public class ResourceReceiver : MonoBehaviour
                     {
                         foreach (TaskDoneData taskDone in taskDataList.tdone)
                         {
-                            if (taskDone.group == gpName)
+                            string Name = taskDone.group;
+
+                            if (Name == "Group 1")
+                            {
+                                gpName = "Gp1";
+                            }
+                            else if (Name == "Group 2")
+                            {
+                                gpName = "Gp2";
+                            }
+                            else if (Name == "Group 3")
+                            {
+                                gpName = "Gp3";
+                            }
+                            else
+                            {
+                                Debug.LogError("Group name not obtainable!");
+                                break;
+                            }
+
+                            GameObject groupDrill = GameObject.Find(gpName + "_DrillStructure");
+                            if (groupDrill != null)
                             {
                                 DrillTaskCaller drillScript = groupDrill.GetComponent<DrillTaskCaller>();
                                 if (drillScript != null)
@@ -97,8 +89,12 @@ public class ResourceReceiver : MonoBehaviour
                                 {
                                     Debug.LogError("DrillTaskCaller script not found on object");
                                 }
-                                break; // Exit loop once a match is found
                             }
+                            else
+                            {
+                                Debug.LogError($"Drill of {Name} not found!");
+                            }
+                            break;   // Exit loop once a match is found
                         }
                     }
                     else

@@ -124,18 +124,19 @@ public class WallConnection : MonoBehaviour
 
     public void ChangeScene(string sceneName, string user)
     {
-        StartCoroutine(PostSceneChangeRequest(baseUrl + "/scenes", sceneName, user));
+        StartCoroutine(PostSceneChangeRequest(baseUrl + "/Message", content, user));
     }
 
     [System.Serializable]
     public class Scene
     {
-        public string sceneName;
+        public string content;
         public string user;
     }
-    IEnumerator PostSceneChangeRequest(string uri, string sceneName, string user)
+
+    IEnumerator PostSceneChangeRequest(string uri, string content, string user)
     {
-        Scene scene = new Scene { sceneName = sceneName, user = user };
+        Scene scene = new Scene { content = content, user = user };
         string jsonData = JsonUtility.ToJson(scene);
 
         Debug.Log("Scene: JSON Data: " + jsonData); // Debug log to check JSON data

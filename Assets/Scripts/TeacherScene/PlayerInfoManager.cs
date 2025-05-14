@@ -149,10 +149,12 @@ public class PlayerInfoManager : MonoBehaviour
             if (!sceneStatus && !scenePanels[0].activeInHierarchy)
             {
                 scenePanels[0].SetActive(true);   // Base To Site
+                sceneStatus = true;
             }
             else if (sceneStatus && !scenePanels[1].activeInHierarchy)
             {
                 scenePanels[1].SetActive(true);   // Site To Base
+                sceneStatus = false;
             }
             else
             {

@@ -10,7 +10,7 @@ public class SiteToBaseController : MonoBehaviour
 
     public void SiteToBase()
     {
-        wallConnection.ChangeScene("Base", "Teacher");
+        wallConnection.ChangeScene("MainWallScene", "Teacher");
         descriptionText.text = "Request submitted.\nClosing panel:";
         Invoke("UIDeactivator", 2.5f);
     }
