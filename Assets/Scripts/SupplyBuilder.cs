@@ -8,6 +8,11 @@ public class SupplyBuilder : MonoBehaviour
 
     public void BuildStructure(int item)
     {
+        if (manager == null)
+        {
+            Debug.LogError("SupplyPanel: Manager not assigned!");
+        }
+
         switch (item)
         {
             case 0:
@@ -23,5 +28,10 @@ public class SupplyBuilder : MonoBehaviour
                 Debug.Log("Action Unknown");
                 break;
         }
+    }
+
+    public void DeactivatePopUp()
+    {
+        gameObject.SetActive(false);
     }
 }

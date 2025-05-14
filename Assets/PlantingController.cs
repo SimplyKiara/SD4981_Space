@@ -19,6 +19,11 @@ public class PlantingController : MonoBehaviour
     {
         AnnounceText.text = "";
 
+        if (groupManager == null)
+        {
+            Debug.LogError("SupplyPanel: Manager not assigned!");
+        }
+
         if (groupManager.name == "Gp1_GameManager")
         {
             groupName = "Group 1";
