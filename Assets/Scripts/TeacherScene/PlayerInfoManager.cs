@@ -93,6 +93,7 @@ public class PlayerInfoManager : MonoBehaviour
         socket.OnDisconnected += (sender, e) =>
         {
             Debug.Log("Connection closed!");
+            isConnected = false;
         };
 
         socket.On("groupUpdated", response =>
@@ -115,7 +116,7 @@ public class PlayerInfoManager : MonoBehaviour
             Refresh();
             playerUpdated = false;
         }
-        if (players != null && players.Count == 3 && !isGameStarted)
+        if (players != null && players.Count == 3 && isConnected && !isGameStarted)
         {
             startBtn.SetActive(true);
         }
@@ -173,6 +174,7 @@ public class PlayerInfoManager : MonoBehaviour
         menuPanel.SetActive(true);
         playerInfoPanel.SetActive(false);
         endPanel.SetActive(false);
+        reloadBtn.SetActive(false);
         urlField.text = "";
         serverUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
     }
@@ -270,9 +272,9 @@ public class PlayerInfoManager : MonoBehaviour
         if (socket.Connected)
         {
             endBtn.SetActive(false);
+            reloadBtn.SetActive(false);
             playerInfoPanel.SetActive(false);
             endPanel.SetActive(true);
-            reloadBtn.SetActive(false);
             DisplayWinner();
             isGameStarted = false;
         }
@@ -309,6 +311,8 @@ public class PlayerInfoManager : MonoBehaviour
     {
         StartCoroutine(DeleteGroupData());
         players.Clear();
+        foreach (Transform child in playerInfoGrid) Destroy(child.gameObject);
+        foreach (Transform child in winnerGrid) Destroy(child.gameObject);
         // Disconnect the socket
         if (socket.Connected)
         {
