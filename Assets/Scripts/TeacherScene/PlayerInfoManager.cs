@@ -11,10 +11,13 @@ public class PlayerInfoManager : MonoBehaviour
 {
     public GameObject playerInfoCardPrefab; // Reference to the Player Info Card prefab
     public Transform playerInfoGrid; // Reference to the Grid Layout Group parent
+    public Transform winnerGrid;
     public GameObject startBtn;
     public GameObject endBtn;
     public GameObject reloadBtn;
     public Button connectBtn;
+    public GameObject endPanel; // ending panel that show result
+    public Button backToMenuBtn; // navigate back to menu
     public GameObject menuPanel;
     public GameObject playerInfoPanel;
     public TMP_InputField urlField;
@@ -33,7 +36,12 @@ public class PlayerInfoManager : MonoBehaviour
         public string progress;
         public int __v;
 
-        // Other player fields if needed
+        // Helper method to get progress as integer
+        public int GetProgressValue()
+        {
+            int progressValue;
+            return int.TryParse(progress, out progressValue) ? progressValue : 0;
+        }
     }
 
     private List<PlayerData> players = new List<PlayerData>();
@@ -47,9 +55,11 @@ public class PlayerInfoManager : MonoBehaviour
     {
         menuPanel.SetActive(true);
         playerInfoPanel.SetActive(false);
+        endPanel.SetActive(false);
         reloadBtn.SetActive(false);
         // connectBtn.onClick.AddListener(OnConnection);
         connectBtn.onClick.AddListener(OnConnectClicked);
+        backToMenuBtn.onClick.AddListener(OnBackToMenuClicked);
         serverUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
 
     }
@@ -77,7 +87,7 @@ public class PlayerInfoManager : MonoBehaviour
         socket.OnError += (sender, e) =>
         {
             Debug.LogError("Error! " + e);
-            HandleConnectionError();
+            BackToConnectionMenu();
         };
 
         socket.OnDisconnected += (sender, e) =>
@@ -155,11 +165,12 @@ public class PlayerInfoManager : MonoBehaviour
         }
     }
 
-    private void HandleConnectionError()
+    private void BackToConnectionMenu()
     {
         // Reopen the connection panel
         menuPanel.SetActive(true);
         playerInfoPanel.SetActive(false);
+        endPanel.SetActive(false);
         urlField.text = "";
         serverUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
     }
@@ -257,8 +268,10 @@ public class PlayerInfoManager : MonoBehaviour
         {
             socket.Emit("end game");
             Debug.Log("End game message emitted");
-            StartCoroutine(DeleteGroupData());
             endBtn.SetActive(false);
+            playerInfoPanel.SetActive(false);
+            endPanel.SetActive(true);
+            DisplayWinner();
             isGameStarted = false;
         }
         else
@@ -266,4 +279,37 @@ public class PlayerInfoManager : MonoBehaviour
             Debug.LogError("Socket not connected");
         }
     }
+
+    public void DisplayWinner()
+    {
+        if (players == null || players.Count == 0) return;
+
+        // Clear existing winner display
+        foreach (Transform child in winnerGrid)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Find player with highest progress
+        PlayerData winner = players.OrderByDescending(p => p.GetProgressValue()).First();
+
+        // Create winner card
+        GameObject winnerCard = Instantiate(playerInfoCardPrefab, winnerGrid);
+        winnerCard.transform.Find("AvatarArea").transform.Find("Identity").GetComponent<TMP_Text>().text = winner.groupName;
+        winnerCard.transform.Find("AvatarArea").transform.Find("Progress").GetComponent<TMP_Text>().text = winner.progress;
+    }
+
+    public void OnBackToMenuClicked()
+    {
+        StartCoroutine(DeleteGroupData());
+        // Disconnect the socket
+        if (socket.Connected)
+        {
+            socket.DisconnectAsync();
+            Debug.Log("Socket disconnected");
+            isConnected = false;
+        }
+        BackToConnectionMenu();
+    }
+
 }
