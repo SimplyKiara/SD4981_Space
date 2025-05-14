@@ -10,6 +10,7 @@ public class CoverCraterUI : MonoBehaviour
     private UICloser uICloser;
     private bool suppliesPanelFound = false;
     private bool rocketUIShown = false;
+    private bool startUiDestroyed = false;
 
     void Start()
     {
@@ -22,12 +23,13 @@ public class CoverCraterUI : MonoBehaviour
     void Update()
     {
         // Monitor StartingUI destruction
-        if (StartingUI == null)
+        if (StartingUI == null && !startUiDestroyed)
         {
             Debug.Log("Starting UI has been destroyed!");
             foreach (GameObject obj in CraterUI) {
                 obj.SetActive(true);
             }
+            startUiDestroyed = true;
         }
 
         // Find all active GameObjects
