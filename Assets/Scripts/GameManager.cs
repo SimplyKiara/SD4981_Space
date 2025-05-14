@@ -26,19 +26,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] public string RocketLanded = "Fetching...";
     private string baseUrl = "https://spaceexpeditionserver.onrender.com"; //"http://localhost:3000";
 
-    private void Awake()
-    {
-        if (instance != null)
-        {
-            Debug.LogError("More than one GameManager found in the scene.");
-            Destroy(gameObject);
-        }
-        else
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-    }
 
     private void Start()
     {
