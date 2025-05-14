@@ -5,7 +5,7 @@ using UnityEngine;
 public class CoverCraterUI : MonoBehaviour
 {
     public GameObject StartingUI;
-    public GameObject CraterUI;
+    public GameObject[] CraterUI;
     public GameObject RocketUI;
     private UICloser uICloser;
     private bool suppliesPanelFound = false;
@@ -13,20 +13,21 @@ public class CoverCraterUI : MonoBehaviour
 
     void Start()
     {
-        CraterUI.SetActive(false);
+        foreach (GameObject obj in CraterUI) {
+            obj.SetActive(false);
+        }
         RocketUI.SetActive(false);
-        /*if (buttonHandler != null) {
-            buttonHandler.buttonPressedEvent.AddListener(OnButtonPressDetected);
-        }*/
     }
 
     void Update()
     {
         // Monitor StartingUI destruction
-        if (StartingUI == null && CraterUI != null)
+        if (StartingUI == null)
         {
             Debug.Log("Starting UI has been destroyed!");
-            CraterUI.SetActive(true);
+            foreach (GameObject obj in CraterUI) {
+                obj.SetActive(true);
+            }
         }
 
         // Find all active GameObjects
