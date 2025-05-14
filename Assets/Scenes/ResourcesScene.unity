@@ -603,6 +603,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneChangeCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4614770677677279007, guid: b62d9bd5bb84f9e43a20fcf94ce17e8f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8338417382197556607, guid: b62d9bd5bb84f9e43a20fcf94ce17e8f, type: 3}
       propertyPath: m_Pivot.x
       value: 0
