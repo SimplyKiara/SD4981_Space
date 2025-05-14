@@ -197,7 +197,6 @@ public class PlayerInfoManager : MonoBehaviour
                     try
                     {
                         List<string> jsonObjects = jsonString.Split(new string[] { "},{" }, System.StringSplitOptions.None).Select(p => p.Trim('[', ']')).ToList();
-                        Debug.Log("[object list] " + jsonObjects);
                         foreach (string jsonObject in jsonObjects)
                         {
                             string formattedJson = "{" + jsonObject.Trim('{', '}') + "}";
