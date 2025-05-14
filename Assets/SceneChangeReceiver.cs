@@ -22,14 +22,31 @@ public class SceneMessageList
 
 public class SceneChangeReceiver : MonoBehaviour
 {
+    public GameObject SceneChangingCanvas;
+
     private string baseUrl = "https://spaceexpeditionserver.onrender.com"; //"http://localhost:3000/TaskDone";
     private bool dataLoaded = false;
     public float checkInterval = 5f; // Time interval for checking (in seconds)
-    private string SceneName;
+    private string currentSceneName;
+    private string nextSceneName;
 
     private void Start()
     {
-        SceneName = SceneManager.GetActiveScene().name;
+        SceneChangingCanvas.SetActive(false);
+        currentSceneName = SceneManager.GetActiveScene().name;
+
+        if (currentSceneName == "MainWallScene")
+        {
+            nextSceneName = "ResourcesScene";
+        }
+        else if (currentSceneName == "ResourcesScene")
+        {
+            nextSceneName = "MainWallScene";
+        }
+        else
+        {
+            Debug.LogError("Scene names not loaded correctly.");
+        }
     }
 
     IEnumerator CheckForIceData()
@@ -56,7 +73,25 @@ public class SceneChangeReceiver : MonoBehaviour
                     {
                         foreach (SceneMessage sceneMessage in sceneMessageList.scMessage)
                         {
-
+                            if (sceneMessage.content == nextSceneName)
+                            {
+                                if (sceneMessage.user == "Teacher")
+                                {
+                                    if (SceneChangingCanvas != null)
+                                    {
+                                        SceneChangingCanvas.SetActive(true);
+                                    }
+                                    Invoke("ChangeToAnotherScene", 5f);
+                                }
+                                else
+                                {
+                                    Debug.Log("Scene changing: not enough access");
+                                }
+                            }
+                            else
+                            {
+                                Debug.LogWarning("Scene changing: already changed scene / not receiving scene names correctly");
+                            }
                             break;   // Exit loop once a match is found
                         }
                     }
@@ -69,5 +104,10 @@ public class SceneChangeReceiver : MonoBehaviour
 
             yield return new WaitForSeconds(checkInterval); // Wait before rechecking
         }
+    }
+
+    void ChangeToAnotherScene()
+    {
+        SceneManager.LoadScene(nextSceneName);
     }
 }

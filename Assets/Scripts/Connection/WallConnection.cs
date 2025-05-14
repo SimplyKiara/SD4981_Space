@@ -122,7 +122,7 @@ public class WallConnection : MonoBehaviour
         }
     }
 
-    public void ChangeScene(string sceneName, string user)
+    public void ChangeScene(string content, string user)
     {
         StartCoroutine(PostSceneChangeRequest(baseUrl + "/Message", content, user));
     }
