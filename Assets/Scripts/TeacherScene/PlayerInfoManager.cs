@@ -295,6 +295,10 @@ public class PlayerInfoManager : MonoBehaviour
         // Find player with highest progress
         PlayerData winner = players.OrderByDescending(p => p.GetProgressValue()).First();
 
+        // Emit winner information through socket
+        socket.Emit("game winner", winner.groupName);
+        Debug.Log($"Winner emitted: {winner.groupName} with progress {winner.progress}");
+
         // Create winner card
         GameObject winnerCard = Instantiate(playerInfoCardPrefab, winnerGrid);
         winnerCard.transform.Find("AvatarArea").transform.Find("Identity").GetComponent<TMP_Text>().text = winner.groupName;
@@ -304,6 +308,7 @@ public class PlayerInfoManager : MonoBehaviour
     public void OnBackToMenuClicked()
     {
         StartCoroutine(DeleteGroupData());
+        players.Clear();
         // Disconnect the socket
         if (socket.Connected)
         {
