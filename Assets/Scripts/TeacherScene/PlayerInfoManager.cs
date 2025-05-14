@@ -230,6 +230,7 @@ public class PlayerInfoManager : MonoBehaviour
     void OnApplicationQuit()
     {
         StartCoroutine(DeleteGroupData());
+        socket.DisconnectAsync();
         isConnected = false;
     }
 
