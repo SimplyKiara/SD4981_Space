@@ -197,6 +197,7 @@ public class PlayerInfoManager : MonoBehaviour
                     try
                     {
                         List<string> jsonObjects = jsonString.Split(new string[] { "},{" }, System.StringSplitOptions.None).Select(p => p.Trim('[', ']')).ToList();
+                        Debug.Log("[object list] " + jsonObjects);
                         foreach (string jsonObject in jsonObjects)
                         {
                             string formattedJson = "{" + jsonObject.Trim('{', '}') + "}";
@@ -222,9 +223,9 @@ public class PlayerInfoManager : MonoBehaviour
         GameObject newCard = Instantiate(playerInfoCardPrefab, playerInfoGrid);
         Debug.Log($"[info card] {playerData.groupName} {playerData.progress}");
         newCard.transform.Find("AvatarArea").transform.Find("Identity").GetComponent<TMP_Text>().text = playerData.groupName;
-        newCard.transform.Find("AvatarArea").transform.Find("Progress").GetComponent<TMP_Text>().text = playerData.progress;
+        newCard.transform.Find("AvatarArea").transform.Find("TasksDone").GetComponent<TMP_Text>().text = playerData.progress;
         Debug.Log($"[identity: ] {newCard.transform.Find("AvatarArea").transform.Find("Identity").GetComponent<TMP_Text>().text}");
-        Debug.Log($"[progress: ] {newCard.transform.Find("AvatarArea").transform.Find("Progress").GetComponent<TMP_Text>().text}");
+        Debug.Log($"[progress: ] {newCard.transform.Find("AvatarArea").transform.Find("TasksDone").GetComponent<TMP_Text>().text}");
     }
 
     void OnApplicationQuit()
