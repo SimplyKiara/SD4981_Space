@@ -138,80 +138,89 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void BuildSolarPanels()
     {
-        if (ironOre >= 8 && rocks >= 8)
+        if (solarPanels != null)
         {
-            bool panelActivated = false;
-
-            foreach (GameObject panel in solarPanels)
+            if (ironOre >= 8 && rocks >= 8)
             {
-                if (!panel.gameObject.activeSelf)
+                bool panelActivated = false;
+
+                foreach (GameObject panel in solarPanels)
                 {
-                    panel.gameObject.SetActive(true);
-                    panelActivated = true;
-                    break; // Exit the loop after activating one panel
+                    if (!panel.gameObject.activeSelf)
+                    {
+                        panel.gameObject.SetActive(true);
+                        panelActivated = true;
+                        break; // Exit the loop after activating one panel
+                    }
                 }
-            }
 
-            if (panelActivated)
-            {
-                AddCollectedIron(-8);
-                AddCollectedRocks(-8);
-                Debug.Log("Build successful! Iron: " + ironOre + ", Rocks: " + rocks);
+                if (panelActivated)
+                {
+                    AddCollectedIron(-8);
+                    AddCollectedRocks(-8);
+                    Debug.Log("Build successful! Iron: " + ironOre + ", Rocks: " + rocks);
 
-                // Save updated data
-                DataPersistenceManager.instance.SaveGame();
+                    // Save updated data
+                    DataPersistenceManager.instance.SaveGame();
+                }
+                else
+                {
+                    Debug.Log("Solar Panels: Maximum reached");
+                }
             }
             else
             {
-                Debug.Log("Solar Panels: Maximum reached");
+                Debug.Log("Solar Panels: Not enough resources");
             }
-        }
-        else
-        {
-            Debug.Log("Solar Panels: Not enough resources");
         }
     }
 
     public void UpgradeBase()
     {
-        if (ironOre >= 25 && rocks >= 25)
+        if (UpgradedBase != null)
         {
-            if (!GreenHouse.activeSelf)
+            if (ironOre >= 25 && rocks >= 25)
             {
-                AddCollectedIron(-25);
-                AddCollectedRocks(-25);
-                UpgradedBase.SetActive(true);
+                if (!UpgradedBase.activeSelf)
+                {
+                    AddCollectedIron(-25);
+                    AddCollectedRocks(-25);
+                    UpgradedBase.SetActive(true);
+                }
+                else
+                {
+                    Debug.Log("Base upgrade: Already built");
+                }
             }
             else
             {
-                Debug.Log("Base upgrade: Already built");
+                Debug.Log("Greenhouse: Not enough resources");
             }
-        }
-        else
-        {
-            Debug.Log("Greenhouse: Not enough resources");
         }
     }
 
     public void BuildGreenhouse()
     {
-        if (ironOre >= 20 && rocks >= 20 && water >= 5)
+        if (GreenHouse != null)
         {
-            if (!GreenHouse.activeSelf)
+            if (ironOre >= 20 && rocks >= 20 && water >= 5)
             {
-                AddCollectedIron(-20);
-                AddCollectedRocks(-20);
-                ChangeCollectedWater(-5);
-                GreenHouse.SetActive(true);
+                if (!GreenHouse.activeSelf)
+                {
+                    AddCollectedIron(-20);
+                    AddCollectedRocks(-20);
+                    ChangeCollectedWater(-5);
+                    GreenHouse.SetActive(true);
+                }
+                else
+                {
+                    Debug.Log("Greenhouse: Already built");
+                }
             }
             else
             {
-                Debug.Log("Greenhouse: Already built");
+                Debug.Log("Greenhouse: Not enough resources");
             }
-        }
-        else
-        {
-            Debug.Log("Greenhouse: Not enough resources");
         }
     }
 

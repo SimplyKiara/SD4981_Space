@@ -15,10 +15,14 @@ public class PlantingController : MonoBehaviour
     private float maxWater;
     private string gpName;
 
-    void Start()
+    private void OnEnable()
     {
         AnnounceText.text = "";
+        called = true;
+    }
 
+    void Start()
+    {
         if (groupManager == null)
         {
             Debug.LogError("SupplyPanel: Manager not assigned!");

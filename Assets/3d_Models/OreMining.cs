@@ -18,6 +18,7 @@ public class OreMining : MonoBehaviour
     private float growingTime = 0;
     private bool isPressed;
     private Vector3 prefabScale;
+    private ResourceZone currentZone;
 
     // spawning directions
     private Vector3[] directions =
@@ -82,6 +83,11 @@ public class OreMining : MonoBehaviour
         rnd.material.color = originalColor;
     }
 
+    private void ResetPress()
+    {
+        isPressed = false;
+    }
+
     // Short press to collect materials
     private void pressedHandler(object sender, EventArgs e)
     {
@@ -89,20 +95,14 @@ public class OreMining : MonoBehaviour
         isPressed = true;
         Invoke("ResetPress", 0.1f);
 
-        // Collect if the rocks are small (aka spawned ones)
-        if (prefabScale.x < 0.4f)
+        if (transform.localScale.x < 0.4f && currentZone != null) // Ensure ore is collectible
         {
-            if (gameObject.tag == "Iron ore")
+            GameManager manager = currentZone.gameManager;
+            if (manager != null)
             {
-                GameManager.instance.AddCollectedIron(1);
-            }
-            else if (gameObject.tag == "Lunar rocks")
-            {
-                GameManager.instance.AddCollectedRocks(1);
-            }
-            else if (gameObject.tag == "Ice")
-            {
-                GameManager.instance.ChangeCollectedWater(0.5f);
+                if (gameObject.tag == "Iron ore") manager.AddCollectedIron(1);
+                else if (gameObject.tag == "Lunar rocks") manager.AddCollectedRocks(1);
+                else if (gameObject.tag == "Ice") manager.ChangeCollectedWater(0.5f);
             }
             Destroy(gameObject);
         }
@@ -110,11 +110,6 @@ public class OreMining : MonoBehaviour
         {
             Debug.Log("No ores collected");
         }
-    }
-
-    private void ResetPress()
-    {
-        isPressed = false;
     }
 
     // Long press for spawning smaller materials
@@ -155,5 +150,15 @@ public class OreMining : MonoBehaviour
         {
             stopGrowing();
         }
+    }
+
+    public void SetCurrentZone(ResourceZone zone)
+    {
+        currentZone = zone;
+    }
+
+    public void ClearCurrentZone()
+    {
+        currentZone = null;
     }
 }
