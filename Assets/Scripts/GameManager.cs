@@ -128,10 +128,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         dataHandler.Save(gameData); // Save a fresh copy before modifications
 
-        Debug.Log($"Game Saved! File Path: {Path.Combine(Application.persistentDataPath, FileName)}");
+        Debug.Log($"Game Saved! ({FileName})");
+
     }
-
-
 
     [System.Serializable]
     private class GroupWrapper
@@ -235,7 +234,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             }
             else
             {
-                Debug.Log("Greenhouse: Not enough resources");
+                Debug.Log("Base upgrade: Not enough resources");
             }
         }
     }

@@ -59,23 +59,17 @@ public class PlantingController : MonoBehaviour
 
     public void callPlanting()
     {
-        if (!called)
+        if ((currentWater >= 8) && (groupName != null))
         {
-            if ((currentWater >= 8) && (groupName != null))
-            {
-                AnnounceText.text = "Action called! Check your tablet.";
-                groupManager.ChangeCollectedWater(-8);
-                wallConnection.TriggerTask("Planting", groupName);
-            }
-            else
-            {
-                AnnounceText.text = "Not anough resources!";
-            }
             AnnounceText.text = "Action called! Check your tablet.";
+            groupManager.ChangeCollectedWater(-8);
+            wallConnection.TriggerTask("Planting", groupName);
+            Debug.Log("Planting Task called");
         }
         else
         {
-            AnnounceText.text = "Action called before! Finish the task first.";
+            AnnounceText.text = "Not anough resources!";
+            Debug.Log("Too little resources");
         }
     }
 

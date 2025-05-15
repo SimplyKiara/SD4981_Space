@@ -46,11 +46,6 @@ public class MudController : MonoBehaviour
         }
     }
 
-    private void HandleInput()
-    {
-        
-    }
-
     private void OnMouseDown()
     {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
