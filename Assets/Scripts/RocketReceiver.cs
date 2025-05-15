@@ -24,6 +24,9 @@ public class RocketReceiver : MonoBehaviour
     public GameObject rocketObject1; // Corresponds to gameManager1
     public GameObject rocketObject2; // Corresponds to gameManager2
     public GameObject rocketObject3; // Corresponds to gameManager3
+    public GameObject reminder1;
+    public GameObject reminder2;
+    public GameObject reminder3;
 
     private string baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000/Rocket";
     private string lastTimestamp1 = ""; // Store last timestamp for Group 1
@@ -43,6 +46,9 @@ public class RocketReceiver : MonoBehaviour
     {
         // Ensure all rocket objects start inactive
         SetRocketState(false);
+        reminder1.SetActive(false);
+        reminder2.SetActive(false);
+        reminder3.SetActive(false);
         StartCoroutine(CheckForRocketData());
     }
 
@@ -103,9 +109,10 @@ public class RocketReceiver : MonoBehaviour
         {
             targetRocket.SetActive(true);
             Debug.Log($"New rocket data detected for {rocket.groupName}: {rocket.object2}. Activating corresponding rocket.");
-
+            Debug.Log("Target manager is " + targetManager);
             // Add resources based on landing quality
             int resourceAmount = GetResourceAmount(rocket.object2);
+            Debug.Log("resouce amount is: " + resourceAmount);
             targetManager.AddCollectedIron(resourceAmount);
             targetManager.AddCollectedRocks(resourceAmount);
             targetManager.ChangeCollectedWater(resourceAmount);
@@ -128,5 +135,8 @@ public class RocketReceiver : MonoBehaviour
         if (rocketObject1 != null) rocketObject1.SetActive(state);
         if (rocketObject2 != null) rocketObject2.SetActive(state);
         if (rocketObject3 != null) rocketObject3.SetActive(state);
+        if (rocketObject1.activeSelf) reminder1.SetActive(true);
+        if (rocketObject2.activeSelf) reminder2.SetActive(true);
+        if (rocketObject3.activeSelf) reminder3.SetActive(true);
     }
 }
