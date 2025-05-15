@@ -317,12 +317,12 @@ public class PlayerInfoManager : MonoBehaviour
 
         // Emit winner information through socket
         socket.Emit("game winner", winner.groupName);
-        Debug.Log($"Winner emitted: {winner.groupName} with progress {winner.progress}");
+        Debug.Log($"Winner emitted: {winner.groupName} with tasks done {winner.progress}");
 
         // Create winner card
         GameObject winnerCard = Instantiate(playerInfoCardPrefab, winnerGrid);
         winnerCard.transform.Find("AvatarArea").transform.Find("Identity").GetComponent<TMP_Text>().text = winner.groupName;
-        winnerCard.transform.Find("AvatarArea").transform.Find("Progress").GetComponent<TMP_Text>().text = winner.progress;
+        winnerCard.transform.Find("AvatarArea").transform.Find("TasksDone").GetComponent<TMP_Text>().text = winner.progress;
     }
 
     public void OnBackToMenuClicked()
