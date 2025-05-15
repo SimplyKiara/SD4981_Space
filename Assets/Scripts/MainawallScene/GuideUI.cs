@@ -7,16 +7,22 @@ public class GuideUI : MonoBehaviour
 {
     public Transform nonBlockCanvas;
     public GameObject clickHerePrefab;
+    public Camera sceneCamera;
 
-    public void CreateCircle(Transform locationToSpawn)
+
+    public void CreateCircle(Transform referenceObj)
     {
         GameObject spawnedPrefabs = Instantiate(clickHerePrefab, nonBlockCanvas);
         spawnedPrefabs.transform.SetParent(nonBlockCanvas);
-        spawnedPrefabs.transform.localPosition = locationToSpawn.localPosition;
-        // return spawnedPrefabs;
-    }
-    public void MountUItoObject(Transform obj)
-    {
+        spawnedPrefabs.GetComponent<ClickUI>().refObj = referenceObj;
 
+        Vector3 screenPosition = sceneCamera.WorldToScreenPoint(referenceObj.position);
+        Vector3 correctPosition = new Vector3(screenPosition.x, screenPosition.y, 1);
+        if (referenceObj.name == "coveringCrater")
+        {
+            correctPosition = new Vector3(screenPosition.x - 100, screenPosition.y + 150, 1);
+        }
+        spawnedPrefabs.transform.position = correctPosition;
+        Debug.Log($"screen position {screenPosition} ,prefab position: {correctPosition}");
     }
 }
