@@ -27,6 +27,12 @@ TagManager:
   - gp1
   - gp2
   - gp3
+  - gp1_RocketUI
+  - gp2_RocketUI
+  - gp3_RocketUI
+  - gp1_SuppliesPanel
+  - gp2_SuppliesPanel
+  - gp3_SuppliesPanel
   layers:
   - Default
   - TransparentFX
