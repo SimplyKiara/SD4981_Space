@@ -8,6 +8,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour, IDataPersistence
 {
     public static GameManager instance { get; private set; }
+
+    public string FileName;  // file name for data saving
+    private FileDataHandler dataHandler;
+
     public List<GameObject> solarPanels;
     public GameObject GreenHouse;
     public GameObject UpgradedBase;
@@ -29,8 +33,63 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void Start()
     {
-        StartCoroutine(GetGroupNameRequest(baseUrl + "/group"));
-        UpdateUI();
+        string dataPath = Application.persistentDataPath;
+        dataHandler = new FileDataHandler(dataPath, FileName, false); // Each manager has its own file
+        LoadGame();
+    }
+
+    public void LoadData(GameData data)
+    {
+        if (data != null)
+        {
+            gameData = data;
+            ironOre = data.ironOre;
+            rocks = data.rocks;
+            water = data.water;
+            waterCap = GameData.maxWater;
+            UpdateUI();
+            Debug.Log($"Loaded {FileName}: Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
+        }
+        else
+        {
+            Debug.Log($"No saved data found for {FileName}, initializing new game.");
+            gameData = new GameData();
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.ironOre = ironOre;
+        data.rocks = rocks;
+        data.water = water;
+        Debug.Log($"Saved {FileName}: Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
+    }
+
+    public void LoadGame()
+    {
+        // Load data from file
+        GameData loadedData = dataHandler.Load();
+
+        if (loadedData != null)
+        {
+            LoadData(loadedData); // Apply loaded data to current instance
+            Debug.Log($"Game Loaded ({FileName}): Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
+        }
+        else
+        {
+            Debug.Log($"Save file {FileName} not found. Creating new game data.");
+            gameData = new GameData(); // Initialize default values
+        }
+    }
+
+    public void SaveGame()
+    {
+        // Ensure current instance updates `GameData`
+        SaveData(ref gameData);
+
+        // Save to file
+        dataHandler.Save(gameData);
+        Debug.Log($"Game Saved ({FileName}): Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
     }
 
     [System.Serializable]
@@ -75,25 +134,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 }
             }
         }
-    }
-
-    public void LoadData(GameData data)
-    {
-        gameData = data;
-
-        ironOre = data.ironOre;
-        rocks = data.rocks;
-        water = data.water;
-        waterCap = GameData.maxWater;
-        UpdateUI();
-    }
-
-
-    public void SaveData(ref GameData data)
-    {
-        data.ironOre = ironOre;
-        data.rocks = rocks;
-        data.water = water;
     }
 
     public void BuildSolarPanels()
@@ -155,12 +195,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void BuildGreenhouse()
     {
-        if (ironOre >= 20 && rocks >= 20 && water >= 8)
+        if (ironOre >= 20 && rocks >= 20 && water >= 5)
         {
             if (!GreenHouse.activeSelf)
             {
                 AddCollectedIron(-20);
                 AddCollectedRocks(-20);
+                ChangeCollectedWater(-5);
                 GreenHouse.SetActive(true);
             }
             else

@@ -59,5 +59,6 @@ public class GHouseController : MonoBehaviour
     public void CallHarvest()
     {
         wallConnection.TriggerTask("Harvesting", "Group " + gpName);
+        wallConnection.DeleteTask("Planting", "Group " + gpName);
     }
 }
