@@ -24,13 +24,13 @@ public class PersistentInstance : MonoBehaviour
     }
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "ClientMenu" && !isChildActive)
+        if ((SceneManager.GetActiveScene().name == "ClientMenu" || SceneManager.GetActiveScene().name == "MainWallScene" || SceneManager.GetActiveScene().name == "ResourcesScene") && !isChildActive)
         {
             Debug.Log(SceneManager.GetActiveScene().name + "");
             SetAllChildrenActive(gameObject, true);
             isChildActive = true;
         }
-        else if (SceneManager.GetActiveScene().name != "ClientMenu" && isChildActive)
+        else if (!(SceneManager.GetActiveScene().name == "ClientMenu" || SceneManager.GetActiveScene().name == "MainWallScene" || SceneManager.GetActiveScene().name == "ResourcesScene") && isChildActive)
         {
             Debug.Log(SceneManager.GetActiveScene().name + "");
             SetAllChildrenActive(gameObject, false);

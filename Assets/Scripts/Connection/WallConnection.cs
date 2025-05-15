@@ -82,7 +82,7 @@ public class WallConnection : MonoBehaviour
         }
     }
 
-    
+
     public void TriggerTask(string taskName, string group)
     {
         // TaskGenerator taskSelector = new TaskGenerator();
@@ -135,23 +135,23 @@ public class WallConnection : MonoBehaviour
     IEnumerator DeleteTaskRequest(string uri, string title, string group)
     {
         // Create a new UnityWebRequest for the DELETE method
-        UnityWebRequest request = new UnityWebRequest(uri, "DELETE");
+        UnityWebRequest request = new UnityWebRequest(uri, "DELETE");
 
-        // Create a JSON object with the title and group
-        string jsonData = JsonUtility.ToJson(new { title = title, group = group });
+        // Create a JSON object with the title and group
+        string jsonData = JsonUtility.ToJson(new { title = title, group = group });
 
-        // Convert the JSON object to a byte array
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        // Convert the JSON object to a byte array
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
 
-        // Set the request body
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        // Set the request body
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
 
-        // Set the request headers
-        request.SetRequestHeader("Content-Type", "application/json");
+        // Set the request headers
+        request.SetRequestHeader("Content-Type", "application/json");
 
-        // Send the request and wait for a response
-        yield return request.SendWebRequest();
+        // Send the request and wait for a response
+        yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
