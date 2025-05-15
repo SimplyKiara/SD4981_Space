@@ -353,7 +353,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 38.0557}
+  m_SizeDelta: {x: 165, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3336436570377989136
 CanvasRenderer:
@@ -396,7 +396,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Solar Panel
+  m_Text: 'Solar Panel
+
+    (Provide energy)'
 --- !u!1 &2065621411612361706
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,7 +698,7 @@ MonoBehaviour:
     m_Top: 5
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 0
+  m_Spacing: 2
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -1603,7 +1605,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 38.0557}
+  m_SizeDelta: {x: 165, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6705716696666459685
 CanvasRenderer:
@@ -1646,7 +1648,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Upgrade base
+  m_Text: 'Upgrade base
+
+    (Increase storage)'
 --- !u!1 &5841838852880440118
 GameObject:
   m_ObjectHideFlags: 0
@@ -1682,7 +1686,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 38.0557}
+  m_SizeDelta: {x: 165, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9119140395580022547
 CanvasRenderer:
@@ -1725,7 +1729,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Greenhouse
+  m_Text: 'Greenhouse
+
+    (Unlock farming)'
 --- !u!1 &7103774661025642424
 GameObject:
   m_ObjectHideFlags: 0

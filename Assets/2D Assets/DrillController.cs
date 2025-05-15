@@ -9,6 +9,8 @@ public class DrillController : MonoBehaviour
 {
     public Button myButton;
     public Text iceText;
+    public GameObject endPanel;
+    public WallConnection wallConnection;
 
     private Animator animator;
     private Rigidbody2D rb;
@@ -128,6 +130,7 @@ public class DrillController : MonoBehaviour
                 if (collectedIce == 3)
                 {
                     atGoal = true;
+                    GoalAction();
                 }
             }
             else
@@ -141,5 +144,11 @@ public class DrillController : MonoBehaviour
         rotation2.w = 0;
         transform.rotation = rotation2;
         moving = false;
+    }
+
+    private void GoalAction()
+    {
+        endPanel.SetActive(true);
+        wallConnection.TriggerTaskDone("Expedition", "");
     }
 }

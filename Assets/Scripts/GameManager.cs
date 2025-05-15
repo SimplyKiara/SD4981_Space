@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour, IDataPersistence
 {
     public static GameManager instance { get; private set; }
-    public List<SolarPanel> solarPanels;
+    public List<GameObject> solarPanels;
     public GameObject GreenHouse;
     public GameObject UpgradedBase;
     public Text ironOreText;
@@ -100,19 +100,19 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         if (ironOre >= 8 && rocks >= 8)
         {
-            int activatedCount = 0;
+            bool panelActivated = false;
 
-            foreach (SolarPanel panel in solarPanels)
+            foreach (GameObject panel in solarPanels)
             {
                 if (!panel.gameObject.activeSelf)
                 {
                     panel.gameObject.SetActive(true);
-                    activatedCount++;
-                    if (activatedCount >= 1) break;
+                    panelActivated = true;
+                    break; // Exit the loop after activating one panel
                 }
             }
 
-            if (activatedCount >= 1)
+            if (panelActivated)
             {
                 AddCollectedIron(-8);
                 AddCollectedRocks(-8);

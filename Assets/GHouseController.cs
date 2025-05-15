@@ -1,15 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using TouchScript.Gestures;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
+
 
 public class GHouseController : MonoBehaviour
 {
     public GameObject popUpPanel; // Assign the UI popup
+    public WallConnection wallConnection;
+
+    private string gpName;
 
     private void Start()
     {
         popUpPanel.SetActive(false);
+        gpName = gameObject.name.Substring(12,1);
 
         // Find all child objects with LongPressGesture
         foreach (Transform child in transform)
@@ -46,5 +54,10 @@ public class GHouseController : MonoBehaviour
         popUpPanel.SetActive(true);
 
         Debug.Log("UI popup instantiated.");
+    }
+
+    public void CallHarvest()
+    {
+        wallConnection.TriggerTaskDone("Harvesting", "Group " + gpName);
     }
 }

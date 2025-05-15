@@ -7,6 +7,7 @@ public class TextProgressManager : MonoBehaviour
 {
     public Text ProgressText;
     public GameObject popUpPanel;
+    public WallConnection wallConnection;
 
     private int completedCount;
     private int totalCount;
@@ -28,6 +29,7 @@ public class TextProgressManager : MonoBehaviour
         {
             finished = true;
             CallPanel();
+            wallConnection.TriggerTaskDone("Planting", ""); ////////
         }
     }
 
