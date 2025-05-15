@@ -6,6 +6,12 @@ public class CoverCraterUI : MonoBehaviour
 {
     public GameObject StartingUI;
     public GameObject[] CraterUI;
+    public GameObject Crater1;
+    public GameObject Crater2;
+    public GameObject Crater3;
+    public GameObject SuppliesGuideUI1;
+    public GameObject SuppliesGuideUI2;
+    public GameObject SuppliesGuideUI3;
     public GameObject gp1_RocketUI;
     public GameObject gp2_RocketUI;
     public GameObject gp3_RocketUI;
@@ -14,6 +20,9 @@ public class CoverCraterUI : MonoBehaviour
     public GameManager gameManager2;
     public GameManager gameManager3;
 
+    bool SuppliesGuide1shown = false;
+    bool SuppliesGuide2shown = false;
+    bool SuppliesGuide3shown = false;
     private bool suppliesPanelFound_1 = false;
     private bool suppliesPanelFound_2 = false;
     private bool suppliesPanelFound_3 = false;
@@ -25,6 +34,9 @@ public class CoverCraterUI : MonoBehaviour
     void Start()
     {
         SetUIState(CraterUI, false);
+        SuppliesGuideUI1.SetActive(false);
+        SuppliesGuideUI2.SetActive(false);
+        SuppliesGuideUI3.SetActive(false);
         gp1_RocketUI.SetActive(false);
         gp2_RocketUI.SetActive(false);
         gp3_RocketUI.SetActive(false);
@@ -40,6 +52,25 @@ public class CoverCraterUI : MonoBehaviour
             startUiDestroyed = true;
         }
 
+        if (Crater1 == null && !SuppliesGuide1shown)
+        {
+            Debug.Log("Supplies guide start");
+            SuppliesGuideUI1.SetActive(true);
+            SuppliesGuide1shown = true;
+        }
+        if (Crater2 == null && !SuppliesGuide2shown)
+        {
+            Debug.Log("Supplies guide start");
+            SuppliesGuideUI2.SetActive(true);
+            SuppliesGuide2shown = true;
+        }
+        if (Crater3 == null && !SuppliesGuide3shown)
+        {
+            Debug.Log("Supplies guide start");
+            SuppliesGuideUI3.SetActive(true);
+            SuppliesGuide3shown = true;
+        }
+
         // Check for SuppliesPanel only once
         if (!suppliesPanelFound_1 && GameObject.FindWithTag("gp1_SuppliesPanel") != null)
         {
@@ -52,7 +83,7 @@ public class CoverCraterUI : MonoBehaviour
             Debug.Log("Supplies Panel has been found for the first time!");
             suppliesPanelFound_2 = true;
         }
-        
+
         if (!suppliesPanelFound_3 && GameObject.FindWithTag("gp3_SuppliesPanel") != null)
         {
             Debug.Log("Supplies Panel has been found for the first time!");

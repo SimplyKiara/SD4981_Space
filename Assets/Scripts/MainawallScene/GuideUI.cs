@@ -17,6 +17,10 @@ public class GuideUI : MonoBehaviour
         spawnedPrefabs.GetComponent<ClickUI>().refObj = referenceObj;
 
         Vector3 screenPosition = sceneCamera.WorldToScreenPoint(referenceObj.position);
+        if (referenceObj.name == "Supplies")
+        {
+            screenPosition = sceneCamera.WorldToScreenPoint(referenceObj.parent.transform.position);
+        }
         Vector3 correctPosition = new Vector3(screenPosition.x, screenPosition.y, 1);
         if (referenceObj.name == "coveringCrater")
         {
