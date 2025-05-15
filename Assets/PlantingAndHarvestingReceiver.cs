@@ -31,10 +31,14 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Received JSON: " + request.downloadHandler.text);
+                    if (!string.IsNullOrEmpty(request.downloadHandler.text))
+                    {
+                        Debug.Log("Raw JSON Response: " + request.downloadHandler.text);
+                    }
 
-                    // Directly deserialize into TaskDataList
-                    TaskDataList taskDataList = JsonUtility.FromJson<TaskDataList>(request.downloadHandler.text);
+                    // Ensure JSON is properly structured before deserialization
+                    string jsonResponse = "{\"tdone\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
+                    TaskDataList taskDataList = JsonUtility.FromJson<TaskDataList>(jsonResponse);
 
                     if (taskDataList != null && taskDataList.tdone.Length > 0)
                     {
@@ -47,11 +51,12 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
                             if (greenHouse != null)
                             {
                                 Invoke("CallGHouseHarvest", 120f);
+                                dataLoaded = true; // Prevents continuous unnecessary checks
                                 break;   // Exit loop once a match is found
                             }
                             else
                             {
-                                Debug.LogError($"Drill of {Name} not found!");
+                                Debug.LogError($"Greenhouse for {Name} not found!");
                             }
                         }
                     }
@@ -65,6 +70,7 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
             yield return new WaitForSeconds(checkInterval); // Wait before rechecking
         }
     }
+
 
     void CallGHouseHarvest()
     {

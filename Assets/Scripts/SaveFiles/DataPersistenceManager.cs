@@ -13,18 +13,9 @@ public class DataPersistenceManager : MonoBehaviour
     private List<IDataPersistence> dataPersistenceObjects;
     private FileDataHandler dataHandler;
 
-    private void Awake()
-    {
-        if (instance != null)
-        {
-            Debug.LogError("More than one data persistence manager found in scene.");
-        }
-        instance = this;
-    }
-
     private void Start()
     {
-        // Initialize data handlers for each GameManager dynamically
+        dataHandler = new FileDataHandler(Application.persistentDataPath, "GlobalSave.game"); // Ensure a file handler exists
         dataPersistenceObjects = FindAllDataPersistenceObjects();
 
         foreach (IDataPersistence obj in dataPersistenceObjects)
@@ -32,19 +23,7 @@ public class DataPersistenceManager : MonoBehaviour
             GameManager gameManager = obj as GameManager;
             if (gameManager != null)
             {
-                // Each GameManager gets a separate FileDataHandler instance
-                FileDataHandler localDataHandler = new FileDataHandler(Application.persistentDataPath, gameManager.FileName, false);
-                GameData loadedData = localDataHandler.Load();
-
-                if (loadedData != null)
-                {
-                    obj.LoadData(loadedData);
-                }
-                else
-                {
-                    Debug.Log($"No save found for {gameManager.FileName}. Creating new game data.");
-                    obj.LoadData(new GameData()); // Initialize new data for this manager
-                }
+                gameManager.LoadGame(); // Each GameManager loads its own file
             }
         }
     }
@@ -57,13 +36,19 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void LoadGame()
     {
+        if (dataHandler == null)
+        {
+            Debug.LogError("DataHandler is null. Ensure it's initialized properly.");
+            return;
+        }
+
         this.gameData = dataHandler.Load();
 
-        // New game if no data found
         if (this.gameData == null)
         {
-            Debug.Log("No data found. Initializing data.");
-            NewGame();
+            Debug.LogWarning("No data found. Creating new GameData.");
+            this.gameData = new GameData();
+            dataHandler.Save(gameData); // Ensure new data is saved immediately
         }
 
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
@@ -74,15 +59,37 @@ public class DataPersistenceManager : MonoBehaviour
         Debug.Log($"Loaded: Iron = {gameData.ironOre}, Rock = {gameData.rocks}, Water = {gameData.water}/30");
     }
 
+
     public void SaveGame()
     {
+        // Ensure gameData is initialized before attempting to save
+        if (gameData == null)
+        {
+            Debug.LogError("SaveGame failed: gameData is null! Initializing new GameData.");
+            gameData = new GameData(); // Prevents null errors
+        }
+
+        // Ensure dataPersistenceObjects exist before looping
+        if (dataPersistenceObjects == null || dataPersistenceObjects.Count == 0)
+        {
+            Debug.LogError("No data persistence objects found! Make sure GameManagers are initialized.");
+            return; // Prevents further execution
+        }
+
+        // Save data for each GameManager separately
         foreach (IDataPersistence obj in dataPersistenceObjects)
         {
-            obj.SaveData(ref gameData);
+            GameManager gameManager = obj as GameManager;
+            if (gameManager != null)
+            {
+                gameManager.SaveGame(); // Calls each GameManager's individual save function
+            }
         }
-        dataHandler.Save(gameData);
-        Debug.Log($"Saved: Iron = {gameData.ironOre}, Rock = {gameData.rocks}, Water = {gameData.water}/30");
+
+        Debug.Log("All GameManagers have saved their data.");
     }
+
+
 
     private void OnApplicationQuit()
     {
