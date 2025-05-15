@@ -39,15 +39,15 @@ public class ClickUI : MonoBehaviour
         }
         else if (refObj.name == "Supplies" && refObj2 != null && refObj3 == null)
         {
-            if (refObj2.name.StartsWith("Gp1"))
+            if (refObj2.name.EndsWith("1"))
             {
                 refObj3 = GameObject.FindWithTag("gp1_SuppliesPanel");
             }
-            else if (refObj2.name.StartsWith("Gp2"))
+            else if (refObj2.name.EndsWith("2"))
             {
                 refObj3 = GameObject.FindWithTag("gp2_SuppliesPanel");
             }
-            else if (refObj2.name.StartsWith("Gp3"))
+            else if (refObj2.name.EndsWith("3"))
             {
                 refObj3 = GameObject.FindWithTag("gp3_SuppliesPanel");
             }
