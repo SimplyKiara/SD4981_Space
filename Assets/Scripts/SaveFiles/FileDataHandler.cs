@@ -48,22 +48,14 @@ public class FileDataHandler
     // Save data
     public void Save(GameData data)
     {
-        string fullPath = Path.Combine(dataDirPath, dataFileName); // Uses assigned filename format
+        string fullPath = Path.Combine(dataDirPath, dataFileName);
 
         try
         {
-            string serializedData = JsonUtility.ToJson(data, true); // Default JSON serialization
+            // Convert GameData into pure JSON format (without GAME_SAVE_FORMAT)
+            string jsonData = JsonUtility.ToJson(data, true);
 
-            // Determine file format from filename
-            string fileExtension = Path.GetExtension(dataFileName).ToLower();
-
-            if (fileExtension == ".game")
-            {
-                // Example: Apply a basic encryption or modification for .game format (optional)
-                serializedData = "GAME_SAVE_FORMAT\n" + serializedData;
-            }
-
-            File.WriteAllText(fullPath, serializedData);
+            File.WriteAllText(fullPath, jsonData);
             Debug.Log($"Game Saved! File Path: {fullPath}");
         }
         catch (Exception e)
@@ -71,4 +63,5 @@ public class FileDataHandler
             Debug.LogError("Error saving data: " + e.Message);
         }
     }
+
 }

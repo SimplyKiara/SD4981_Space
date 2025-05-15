@@ -75,44 +75,62 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadGame()
     {
-        // Load data from file
-        GameData loadedData = dataHandler.Load();
+        string fullPath = Path.Combine(Application.persistentDataPath, FileName);
 
-        // Check if `loadedData` exists and matches `GameManager.FileName`
-        if (loadedData != null && FileName != dataHandler.dataFileName)
+        if (File.Exists(fullPath))
         {
-            Debug.LogWarning($"Mismatch detected! Expected {FileName}, but loaded {dataHandler.dataFileName}. Creating new file.");
-            gameData = new GameData(); // Initialize new game data
-            dataHandler = new FileDataHandler(Application.persistentDataPath, FileName); // Reinitialize handler with correct name
-            dataHandler.Save(gameData); // Save new file
-        }
-        else if (loadedData != null)
-        {
-            LoadData(loadedData); // Apply loaded data to current instance
-            Debug.Log($"Game Loaded ({FileName}): Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
+            try
+            {
+                string rawJson = File.ReadAllText(fullPath);
+
+                // Remove "GAME_SAVE_FORMAT" if present at the beginning
+                if (rawJson.StartsWith("GAME_SAVE_FORMAT"))
+                {
+                    rawJson = rawJson.Substring("GAME_SAVE_FORMAT".Length).Trim(); // Strip unwanted text
+                }
+
+                // Deserialize JSON into GameData object
+                gameData = JsonUtility.FromJson<GameData>(rawJson);
+
+                if (gameData != null)
+                {
+                    LoadData(gameData);
+                    Debug.Log($"Game Loaded ({FileName}): Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
+                }
+                else
+                {
+                    Debug.LogWarning("Failed to parse JSON. Creating new game data.");
+                    gameData = new GameData();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error loading data from {FileName}: {e.Message}");
+                gameData = new GameData();
+            }
         }
         else
         {
             Debug.Log($"Save file {FileName} not found. Creating new game data.");
-            gameData = new GameData(); // Initialize default values
-            dataHandler.Save(gameData); // Save new file
+            gameData = new GameData();
         }
     }
+
+
 
     public void SaveGame()
     {
         if (gameData == null)
         {
-            Debug.LogError($"SaveGame failed for {FileName}: gameData is null! Initializing new GameData.");
+            Debug.LogWarning($"SaveGame failed for {FileName}: gameData is null! Initializing new GameData.");
             gameData = new GameData();
         }
 
-        SaveData(ref gameData); // Updates local GameData
-        dataHandler.Save(gameData); // Saves using each manager’s specific FileName
+        dataHandler.Save(gameData); // Save a fresh copy before modifications
 
-        string fullPath = Path.Combine(Application.persistentDataPath, FileName);
-        Debug.Log($"Game Saved! File Path: {fullPath}");
+        Debug.Log($"Game Saved! File Path: {Path.Combine(Application.persistentDataPath, FileName)}");
     }
+
 
 
     [System.Serializable]
