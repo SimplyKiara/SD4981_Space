@@ -766,6 +766,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5812982273414957172, guid: 9fe41427028f5554e94f5709cda254d1, type: 3}
+      propertyPath: FileName
+      value: Gp2Data.game
+      objectReference: {fileID: 0}
+    - target: {fileID: 5812982273414957172, guid: 9fe41427028f5554e94f5709cda254d1, type: 3}
       propertyPath: rocksText
       value: 
       objectReference: {fileID: 0}
@@ -3401,6 +3405,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5812982273414957172, guid: 9fe41427028f5554e94f5709cda254d1, type: 3}
+      propertyPath: FileName
+      value: Gp3Data.game
+      objectReference: {fileID: 0}
+    - target: {fileID: 5812982273414957172, guid: 9fe41427028f5554e94f5709cda254d1, type: 3}
       propertyPath: rocksText
       value: 
       objectReference: {fileID: 0}
@@ -4980,7 +4988,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5812982273414957172, guid: 9fe41427028f5554e94f5709cda254d1, type: 3}
       propertyPath: FileName
-      value: 
+      value: Gp1Data.game
       objectReference: {fileID: 0}
     - target: {fileID: 5812982273414957172, guid: 9fe41427028f5554e94f5709cda254d1, type: 3}
       propertyPath: rocksText
