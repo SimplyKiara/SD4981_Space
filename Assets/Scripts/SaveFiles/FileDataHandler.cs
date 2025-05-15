@@ -6,19 +6,15 @@ using System.IO;
 
 public class FileDataHandler
 {
-    // Filepath: C:\Users\{YourUsername}\AppData\LocalLow\DefaultCompany\My project (1)
-    private string dataDirPath = "";
-    private string dataFileName = "";
-
-    private bool useEncryption = false;
-    private readonly string encryptCodeWord = "space";
+    // Filepath: C:\Users\{YourUserName}\AppData\LocalLow\DefaultCompany\SD4981_Space
+    private string dataDirPath;
+    public string dataFileName;
 
     // Marks file path, file name and encryption
-    public FileDataHandler(string dataDirPath, string dataFileName, bool useEncryption)
+    public FileDataHandler(string dataDirPath, string dataFileName)
     {
         this.dataDirPath = dataDirPath;
         this.dataFileName = dataFileName;
-        this.useEncryption = useEncryption;
     }
 
     // Load data
@@ -26,71 +22,53 @@ public class FileDataHandler
     {
         string fullPath = Path.Combine(dataDirPath, dataFileName);
         GameData loadedData = null;
+
         if (File.Exists(fullPath))
         {
             try
             {
-                string dataToLoad = "";
-                using (FileStream stream = new FileStream(fullPath, FileMode.Open))
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        dataToLoad = reader.ReadToEnd();
-                    }
-                }
-
-                if (useEncryption)
-                {
-                    dataToLoad = EncryptDecrypt(dataToLoad);
-                }
-
-                loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
+                string jsonData = File.ReadAllText(fullPath);
+                loadedData = JsonUtility.FromJson<GameData>(jsonData);
             }
             catch (Exception e)
             {
-                Debug.LogError("Error occured when trying to load data from file: " + fullPath + "\n" + e);
+                Debug.LogError("Error loading data: " + e.Message);
             }
         }
+
+        if (loadedData == null)
+        {
+            Debug.LogError("Loaded data is null, initializing new GameData.");
+            loadedData = new GameData(); // Create default data if load fails
+        }
+
         return loadedData;
     }
 
     // Save data
     public void Save(GameData data)
     {
-        string fullPath = Path.Combine(dataDirPath, dataFileName);
+        string fullPath = Path.Combine(dataDirPath, dataFileName); // Uses assigned filename format
+
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-            string dataToStore = JsonUtility.ToJson(data, true);
+            string serializedData = JsonUtility.ToJson(data, true); // Default JSON serialization
 
-            if (useEncryption)
+            // Determine file format from filename
+            string fileExtension = Path.GetExtension(dataFileName).ToLower();
+
+            if (fileExtension == ".game")
             {
-                dataToStore = EncryptDecrypt(dataToStore);
+                // Example: Apply a basic encryption or modification for .game format (optional)
+                serializedData = "GAME_SAVE_FORMAT\n" + serializedData;
             }
 
-            using (FileStream stream = new FileStream(fullPath, FileMode.Create))
-            {
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    writer.Write(dataToStore);
-                }
-            } 
+            File.WriteAllText(fullPath, serializedData);
+            Debug.Log($"Game Saved! File Path: {fullPath}");
         }
         catch (Exception e)
         {
-            Debug.LogError("Error occured when writing save to file: " + fullPath + "\n" + e);
+            Debug.LogError("Error saving data: " + e.Message);
         }
-    }
-
-    // XOR encryption
-    private string EncryptDecrypt(string data)
-    {
-        string modifiedData = "";
-        for (int i = 0; i < data.Length; i++)
-        {
-            modifiedData += (char)(data[i] ^ encryptCodeWord[i % encryptCodeWord.Length]);
-        }
-
-        return modifiedData;
     }
 }

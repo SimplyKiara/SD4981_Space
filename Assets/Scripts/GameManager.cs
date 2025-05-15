@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -33,8 +34,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void Start()
     {
-        string dataPath = "C:\\Users\\User\\AppData\\LocalLow\\DefaultCompany\\SD4981_Space";
-        dataHandler = new FileDataHandler(dataPath, FileName, false); // Each manager has its own file
+        string dataPath = Application.persistentDataPath; // Use platform-independent path
+        dataHandler = new FileDataHandler(Application.persistentDataPath, FileName); // No encryption parameter needed
         LoadGame();
     }
 
@@ -59,10 +60,17 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
+        if (data == null)
+        {
+            Debug.LogError("SaveData failed: GameData object is null!");
+            return;
+        }
+
         data.ironOre = ironOre;
         data.rocks = rocks;
         data.water = water;
-        Debug.Log($"Saved {FileName}: Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
+        string fullPath = Path.Combine(Application.persistentDataPath, FileName);
+        Debug.Log($"Saved {FileName}, File Path = {fullPath}: Iron = {gameData.ironOre}, Rocks = {gameData.rocks}, Water = {gameData.water}/{waterCap}");
     }
 
     public void LoadGame()
@@ -70,7 +78,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
         // Load data from file
         GameData loadedData = dataHandler.Load();
 
-        if (loadedData != null)
+        // Check if `loadedData` exists and matches `GameManager.FileName`
+        if (loadedData != null && FileName != dataHandler.dataFileName)
+        {
+            Debug.LogWarning($"Mismatch detected! Expected {FileName}, but loaded {dataHandler.dataFileName}. Creating new file.");
+            gameData = new GameData(); // Initialize new game data
+            dataHandler = new FileDataHandler(Application.persistentDataPath, FileName); // Reinitialize handler with correct name
+            dataHandler.Save(gameData); // Save new file
+        }
+        else if (loadedData != null)
         {
             LoadData(loadedData); // Apply loaded data to current instance
             Debug.Log($"Game Loaded ({FileName}): Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
@@ -79,18 +95,25 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             Debug.Log($"Save file {FileName} not found. Creating new game data.");
             gameData = new GameData(); // Initialize default values
+            dataHandler.Save(gameData); // Save new file
         }
     }
 
     public void SaveGame()
     {
-        // Ensure current instance updates `GameData`
-        SaveData(ref gameData);
+        if (gameData == null)
+        {
+            Debug.LogError($"SaveGame failed for {FileName}: gameData is null! Initializing new GameData.");
+            gameData = new GameData();
+        }
 
-        // Save to file
-        dataHandler.Save(gameData);
-        Debug.Log($"Game Saved ({FileName}): Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
+        SaveData(ref gameData); // Updates local GameData
+        dataHandler.Save(gameData); // Saves using each manager’s specific FileName
+
+        string fullPath = Path.Combine(Application.persistentDataPath, FileName);
+        Debug.Log($"Game Saved! File Path: {fullPath}");
     }
+
 
     [System.Serializable]
     private class GroupWrapper
