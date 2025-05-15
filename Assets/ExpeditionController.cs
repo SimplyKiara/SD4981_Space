@@ -7,16 +7,7 @@ public class ExpeditionController : MonoBehaviour
     public GameObject closingPanel;
     public WallConnection wallConnection;
 
-    private bool triggered;
-
-    private void Start()
-    {
-        if (closingPanel == null)
-        {
-            Debug.LogError("closingPanel not assigned!");
-        }
-        triggered = true;
-    }
+    private bool triggered = false;
 
     // Update is called once per frame
     void Update()

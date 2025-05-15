@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.04053174, g: 0.038871218, b: 0.040995747, a: 1}
+  m_IndirectSpecularColor: {r: 0.04055813, g: 0.038893826, b: 0.041023046, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -8529,6 +8529,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1199541580230306113, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1317891757234421436, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
       propertyPath: groupManager
       value: 
@@ -8560,6 +8564,22 @@ PrefabInstance:
     - target: {fileID: 1612694225825338001, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 1633624688612179919, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1633624688612179919, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1633624688612179919, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -605.6997
+      objectReference: {fileID: 0}
+    - target: {fileID: 1633624688612179919, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -679.38715
       objectReference: {fileID: 0}
     - target: {fileID: 2156759568788082364, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8700,6 +8720,22 @@ PrefabInstance:
     - target: {fileID: 3734237956864736723, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3790273328314376866, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3790273328314376866, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3790273328314376866, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -605.6997
+      objectReference: {fileID: 0}
+    - target: {fileID: 3790273328314376866, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -545.7175
       objectReference: {fileID: 0}
     - target: {fileID: 4632952982243457179, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
       propertyPath: wallConnection
@@ -8937,6 +8973,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 1092364492}
+    - target: {fileID: 8614207131267915849, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8614207131267915849, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8614207131267915849, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -605.6997
+      objectReference: {fileID: 0}
+    - target: {fileID: 8614207131267915849, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -264.07562
+      objectReference: {fileID: 0}
     - target: {fileID: 8663478153657149128, guid: 2f506ca8303827641a016dffb2108b42, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
