@@ -232,6 +232,7 @@ public class PlayerInfoManager : MonoBehaviour
     void OnApplicationQuit()
     {
         StartCoroutine(DeleteGroupData());
+        StartCoroutine(DeleteTasksData());
         socket.DisconnectAsync();
         isConnected = false;
     }
@@ -249,6 +250,23 @@ public class PlayerInfoManager : MonoBehaviour
             else
             {
                 Debug.Log("Group data deleted successfully");
+            }
+        }
+    }
+
+    IEnumerator DeleteTasksData()
+    {
+        using (UnityWebRequest request = UnityWebRequest.Delete(serverUrl + "/allTasks"))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error deleting group data: " + request.error);
+            }
+            else
+            {
+                Debug.Log("Tasks data deleted successfully");
             }
         }
     }
@@ -310,6 +328,7 @@ public class PlayerInfoManager : MonoBehaviour
     public void OnBackToMenuClicked()
     {
         StartCoroutine(DeleteGroupData());
+        StartCoroutine(DeleteTasksData());
         players.Clear();
         foreach (Transform child in playerInfoGrid) Destroy(child.gameObject);
         foreach (Transform child in winnerGrid) Destroy(child.gameObject);
