@@ -26,6 +26,10 @@ public class GuideUI : MonoBehaviour
         {
             correctPosition = new Vector3(screenPosition.x - 100, screenPosition.y + 150, 1);
         }
+        if (referenceObj.name == "Supplies")
+        {
+            correctPosition = new Vector3(screenPosition.x, screenPosition.y + 150, 1);
+        }
         spawnedPrefabs.transform.position = correctPosition;
         Debug.Log($"screen position {screenPosition} ,prefab position: {correctPosition}");
     }
