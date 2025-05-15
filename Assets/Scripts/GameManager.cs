@@ -31,6 +31,18 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] public string RocketLanded = "Fetching...";
     private string baseUrl = "https://spaceexpeditionserver.onrender.com"; //"http://localhost:3000";
 
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // Ensure persistence across scene changes
+        }
+        else
+        {
+            Destroy(gameObject); // Prevent duplicate instances
+        }
+    }
 
     private void Start()
     {
@@ -77,45 +89,45 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         string fullPath = Path.Combine(Application.persistentDataPath, FileName);
 
-        if (File.Exists(fullPath))
-        {
-            try
-            {
-                string rawJson = File.ReadAllText(fullPath);
-
-                // Remove "GAME_SAVE_FORMAT" if present at the beginning
-                if (rawJson.StartsWith("GAME_SAVE_FORMAT"))
-                {
-                    rawJson = rawJson.Substring("GAME_SAVE_FORMAT".Length).Trim(); // Strip unwanted text
-                }
-
-                // Deserialize JSON into GameData object
-                gameData = JsonUtility.FromJson<GameData>(rawJson);
-
-                if (gameData != null)
-                {
-                    LoadData(gameData);
-                    Debug.Log($"Game Loaded ({FileName}): Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
-                }
-                else
-                {
-                    Debug.LogWarning("Failed to parse JSON. Creating new game data.");
-                    gameData = new GameData();
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Error loading data from {FileName}: {e.Message}");
-                gameData = new GameData();
-            }
-        }
-        else
+        if (!File.Exists(fullPath))
         {
             Debug.Log($"Save file {FileName} not found. Creating new game data.");
             gameData = new GameData();
+            dataHandler.Save(gameData);
+            return;
+        }
+
+        try
+        {
+            string rawJson = File.ReadAllText(fullPath);
+
+            if (rawJson.StartsWith("GAME_SAVE_FORMAT"))
+            {
+                rawJson = rawJson.Substring("GAME_SAVE_FORMAT".Length).Trim();
+            }
+
+            GameData loadedData = JsonUtility.FromJson<GameData>(rawJson);
+
+            if (loadedData != null)
+            {
+                gameData = loadedData;
+                LoadData(gameData);
+                Debug.Log($"Game Loaded ({FileName}): Iron = {gameData.ironOre}, Rocks = {gameData.rocks}, Water = {gameData.water}/{GameData.maxWater}");
+            }
+            else
+            {
+                Debug.LogWarning("Failed to parse JSON. Creating new game data.");
+                gameData = new GameData();
+                dataHandler.Save(gameData);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error loading data from {FileName}: {e.Message}");
+            gameData = new GameData();
+            dataHandler.Save(gameData);
         }
     }
-
 
 
     public void SaveGame()
@@ -126,11 +138,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
             gameData = new GameData();
         }
 
-        dataHandler.Save(gameData); // Save a fresh copy before modifications
+        SaveData(ref gameData); // Ensure in-memory updates are applied
+        dataHandler.Save(gameData); // Save updated data
 
         Debug.Log($"Game Saved! ({FileName})");
-
     }
+
 
     [System.Serializable]
     private class GroupWrapper

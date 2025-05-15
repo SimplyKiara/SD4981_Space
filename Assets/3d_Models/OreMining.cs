@@ -8,6 +8,7 @@ using System;
 public class OreMining : MonoBehaviour
 {
     public float Power = 5.0f;
+    public GameManager manager;
 
     private LongPressGesture longPressGesture;
     private PressGesture pressGesture;
@@ -18,7 +19,6 @@ public class OreMining : MonoBehaviour
     private float growingTime = 0;
     private bool isPressed;
     private Vector3 prefabScale;
-    private ResourceZone currentZone;
 
     // spawning directions
     private Vector3[] directions =
@@ -95,14 +95,23 @@ public class OreMining : MonoBehaviour
         isPressed = true;
         Invoke("ResetPress", 0.1f);
 
-        if (transform.localScale.x < 0.4f && currentZone != null) // Ensure ore is collectible
+        if (transform.localScale.x < 0.4f) // Ensure ore is collectible
         {
-            GameManager manager = currentZone.gameManager;
             if (manager != null)
             {
-                if (gameObject.tag == "Iron ore") manager.AddCollectedIron(1);
-                else if (gameObject.tag == "Lunar rocks") manager.AddCollectedRocks(1);
-                else if (gameObject.tag == "Ice") manager.ChangeCollectedWater(0.5f);
+                if (gameObject.tag == "Iron ore")
+                {
+                    manager.AddCollectedIron(1);
+                }
+                else if (gameObject.tag == "Lunar rocks")
+                {
+                    manager.AddCollectedRocks(1);
+                }
+                else if (gameObject.tag == "Ice")
+                {
+                    manager.ChangeCollectedWater(0.5f);
+                }
+                Debug.Log("Ore collected");
             }
             Destroy(gameObject);
         }
@@ -150,15 +159,5 @@ public class OreMining : MonoBehaviour
         {
             stopGrowing();
         }
-    }
-
-    public void SetCurrentZone(ResourceZone zone)
-    {
-        currentZone = zone;
-    }
-
-    public void ClearCurrentZone()
-    {
-        currentZone = null;
     }
 }

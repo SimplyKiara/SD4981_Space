@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ResourceZone : MonoBehaviour
 {
+    /*
     public GameManager gameManager; // Assign in Inspector
 
     private void OnTriggerEnter(Collider other)
@@ -29,4 +30,5 @@ public class ResourceZone : MonoBehaviour
             }
         }
     }
+    */
 }
