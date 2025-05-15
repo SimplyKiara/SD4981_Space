@@ -12,6 +12,11 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
 
     private GameObject greenHouse;
 
+    private void OnEnable()
+    {
+        StartCoroutine(CheckForHarvestData());
+    }
+
     IEnumerator CheckForHarvestData()
     {
         while (!dataLoaded) // Continuously check until valid data is found
@@ -22,12 +27,11 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
 
                 if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Debug.LogError("Error retrieving ice mining data: " + request.error);
+                    Debug.LogError("Error retrieving planting and harvesting data: " + request.error);
                 }
                 else
                 {
-                    string jsonResponse = "{\"tdone\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
-                    Debug.Log("Formatted JSON: " + jsonResponse);
+                    Debug.Log("Received JSON: " + request.downloadHandler.text);
 
                     // Directly deserialize into TaskDataList
                     TaskDataList taskDataList = JsonUtility.FromJson<TaskDataList>(request.downloadHandler.text);
@@ -43,12 +47,12 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
                             if (greenHouse != null)
                             {
                                 Invoke("CallGHouseHarvest", 120f);
+                                break;   // Exit loop once a match is found
                             }
                             else
                             {
                                 Debug.LogError($"Drill of {Name} not found!");
                             }
-                            break;   // Exit loop once a match is found
                         }
                     }
                     else

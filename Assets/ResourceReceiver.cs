@@ -28,7 +28,7 @@ public class ResourceReceiver : MonoBehaviour
 
     private string gpName;
 
-    private void Start()
+    private void OnEnable()
     {
         StartCoroutine(CheckForIceData());
     }
@@ -47,8 +47,7 @@ public class ResourceReceiver : MonoBehaviour
                 }
                 else
                 {
-                    string jsonResponse = "{\"tdone\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
-                    Debug.Log("Formatted JSON: " + jsonResponse);
+                    Debug.Log("Received JSON: " + request.downloadHandler.text);
 
                     // Directly deserialize into TaskDataList
                     TaskDataList taskDataList = JsonUtility.FromJson<TaskDataList>(request.downloadHandler.text);
@@ -84,6 +83,7 @@ public class ResourceReceiver : MonoBehaviour
                                 if (drillScript != null)
                                 {
                                     drillScript.ActivateDrill();
+                                    dataLoaded = true;
                                 }
                                 else
                                 {

@@ -32,6 +32,7 @@ public class SceneChangeReceiver : MonoBehaviour
 
     private void Start()
     {
+        dataLoaded = false;
         SceneChangingCanvas.SetActive(false);
         currentSceneName = SceneManager.GetActiveScene().name;
 
@@ -49,7 +50,12 @@ public class SceneChangeReceiver : MonoBehaviour
         }
     }
 
-    IEnumerator CheckForIceData()
+    private void OnEnable()
+    {
+        StartCoroutine(CheckForSceneChangeData());
+    }
+
+    IEnumerator CheckForSceneChangeData()
     {
         while (!dataLoaded) // Continuously check until valid data is found
         {
@@ -59,40 +65,33 @@ public class SceneChangeReceiver : MonoBehaviour
 
                 if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Debug.LogError("Error retrieving ice mining data: " + request.error);
+                    Debug.LogError("Error retrieving scene changing: " + request.error);
                 }
                 else
                 {
-                    string jsonResponse = "{\"tdone\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
-                    Debug.Log("Formatted JSON: " + jsonResponse);
+                    Debug.Log("Received JSON: " + request.downloadHandler.text);
 
-                    // Directly deserialize into TaskDataList
+                    // Directly deserialize into SceneMessageList
                     SceneMessageList sceneMessageList = JsonUtility.FromJson<SceneMessageList>(request.downloadHandler.text);
 
                     if (sceneMessageList != null && sceneMessageList.scMessage.Length > 0)
                     {
                         foreach (SceneMessage sceneMessage in sceneMessageList.scMessage)
                         {
-                            if (sceneMessage.content == nextSceneName)
+                            if (sceneMessage.content == nextSceneName && sceneMessage.user == "Teacher")
                             {
-                                if (sceneMessage.user == "Teacher")
+                                if (SceneChangingCanvas != null)
                                 {
-                                    if (SceneChangingCanvas != null)
-                                    {
-                                        SceneChangingCanvas.SetActive(true);
-                                    }
-                                    Invoke("ChangeToAnotherScene", 5f);
+                                    SceneChangingCanvas.SetActive(true);
                                 }
-                                else
-                                {
-                                    Debug.Log("Scene changing: not enough access");
-                                }
+                                Invoke("ChangeToAnotherScene", 5f);
+                                dataLoaded = true; // Stop loop after scene change
+                                break;
                             }
                             else
                             {
-                                Debug.LogWarning("Scene changing: already changed scene / not receiving scene names correctly");
+                                Debug.LogWarning("Incorrect calling.");
                             }
-                            break;   // Exit loop once a match is found
                         }
                     }
                     else
