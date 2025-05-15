@@ -6,7 +6,6 @@ using System.Linq;
 public class DataPersistenceManager : MonoBehaviour
 {
     [Header("File Storage Config")]
-    [SerializeField] private string fileName;
     [SerializeField] private bool useEncryption;
 
     private GameData gameData;
@@ -25,10 +24,31 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Start()
     {
-        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
-        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
-        LoadGame();
+        // Initialize data handlers for each GameManager dynamically
+        dataPersistenceObjects = FindAllDataPersistenceObjects();
+
+        foreach (IDataPersistence obj in dataPersistenceObjects)
+        {
+            GameManager gameManager = obj as GameManager;
+            if (gameManager != null)
+            {
+                // Each GameManager gets a separate FileDataHandler instance
+                FileDataHandler localDataHandler = new FileDataHandler(Application.persistentDataPath, gameManager.FileName, false);
+                GameData loadedData = localDataHandler.Load();
+
+                if (loadedData != null)
+                {
+                    obj.LoadData(loadedData);
+                }
+                else
+                {
+                    Debug.Log($"No save found for {gameManager.FileName}. Creating new game data.");
+                    obj.LoadData(new GameData()); // Initialize new data for this manager
+                }
+            }
+        }
     }
+
 
     public void NewGame()
     {
@@ -56,14 +76,12 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void SaveGame()
     {
-        foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+        foreach (IDataPersistence obj in dataPersistenceObjects)
         {
-            dataPersistenceObj.SaveData(ref gameData);
+            obj.SaveData(ref gameData);
         }
-
-        Debug.Log($"Saved: Iron = {gameData.ironOre}, Rock = {gameData.rocks}, Water = {gameData.water}/30");
-
         dataHandler.Save(gameData);
+        Debug.Log($"Saved: Iron = {gameData.ironOre}, Rock = {gameData.rocks}, Water = {gameData.water}/30");
     }
 
     private void OnApplicationQuit()

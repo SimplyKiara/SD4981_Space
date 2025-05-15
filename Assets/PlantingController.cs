@@ -60,6 +60,7 @@ public class PlantingController : MonoBehaviour
             if ((currentWater >= 8) && (groupName != null))
             {
                 AnnounceText.text = "Action called! Check your tablet.";
+                groupManager.ChangeCollectedWater(-8);
                 wallConnection.TriggerTask("Planting", groupName);
             }
             else
