@@ -58,6 +58,6 @@ public class GHouseController : MonoBehaviour
 
     public void CallHarvest()
     {
-        wallConnection.TriggerTaskDone("Harvesting", "Group " + gpName);
+        wallConnection.TriggerTask("Harvesting", "Group " + gpName);
     }
 }
