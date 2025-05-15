@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.040444024, g: 0.03880817, b: 0.04092612, a: 1}
+  m_IndirectSpecularColor: {r: 0.040493913, g: 0.038841136, b: 0.04097823, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -8279,6 +8279,10 @@ PrefabInstance:
       propertyPath: targetCanvas
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5652939459967924147, guid: e1acecce7c82c8f4dbce8f20abfda139, type: 3}
+      propertyPath: wallConnection
+      value: 
+      objectReference: {fileID: 1294428959}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8951,6 +8955,10 @@ PrefabInstance:
       propertyPath: targetCanvas
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5652939459967924147, guid: e1acecce7c82c8f4dbce8f20abfda139, type: 3}
+      propertyPath: wallConnection
+      value: 
+      objectReference: {fileID: 1294428959}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12737,6 +12745,10 @@ PrefabInstance:
       propertyPath: popUpPanel
       value: 
       objectReference: {fileID: 2130505705}
+    - target: {fileID: 5652939459967924147, guid: e1acecce7c82c8f4dbce8f20abfda139, type: 3}
+      propertyPath: wallConnection
+      value: 
+      objectReference: {fileID: 1294428959}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
