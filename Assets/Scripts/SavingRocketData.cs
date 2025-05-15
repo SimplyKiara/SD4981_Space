@@ -2,6 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
+using SocketIOClient;
+using System.Linq;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class TaskData
@@ -31,12 +34,41 @@ public class SavingRocketData : MonoBehaviour
 {
     private string baseUrl = "https://spaceexpeditionserver.onrender.com"; // Adjust if needed
     private string groupName = ""; // Store group name
-
+    private SocketIOUnity socket;
     void Start()
     {
         StartCoroutine(GetLatestTaskData(baseUrl + "/tasks"));
+        OnStart();
     }
+    async void OnStart()
+    {
+        var uri = new System.Uri(baseUrl);
+        socket = new SocketIOUnity(uri, new SocketIOOptions
+        {
+            Query = new Dictionary<string, string>
+            {
+                { "token", "UNITY" }
+            },
+            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
+        });
 
+        socket.OnConnected += (sender, e) =>
+        {
+            Debug.Log("Connection open!");
+        };
+
+        socket.OnError += (sender, e) =>
+        {
+            Debug.LogError("Error! " + e);
+        };
+
+        socket.OnDisconnected += (sender, e) =>
+        {
+            Debug.Log("Connection closed!");
+        };
+
+        await socket.ConnectAsync();
+     }
     IEnumerator GetLatestTaskData(string uri)
     {
         using (UnityWebRequest request = UnityWebRequest.Get(uri))
@@ -86,6 +118,7 @@ public class SavingRocketData : MonoBehaviour
 
             string json = JsonUtility.ToJson(collisionData);
             StartCoroutine(PostCollisionDataRequest(baseUrl + "/Rocket", json));
+            socket.Emit("updateRocket");
 
             Debug.Log("Rocket landing data saved! " + json);
         }

@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using SocketIOClient;
+using System.Linq;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class RocketData
@@ -34,12 +37,13 @@ public class RocketReceiver : MonoBehaviour
     private string lastTimestamp3 = ""; // Store last timestamp for Group 3
 
     private bool firstCheckDone = false; // Prevent activation on first database check
+    bool isRocketUpdated = false;
 
     // Game Managers for each group
     public GameManager gameManager1;
     public GameManager gameManager2;
     public GameManager gameManager3;
-
+    private SocketIOUnity socket;
     public float checkInterval = 5f; // Time interval for checking (in seconds)
 
     void Start()
@@ -49,9 +53,51 @@ public class RocketReceiver : MonoBehaviour
         reminder1.SetActive(false);
         reminder2.SetActive(false);
         reminder3.SetActive(false);
-        StartCoroutine(CheckForRocketData());
+        // StartCoroutine(CheckForRocketData());
+        OnStart();
     }
+    async void OnStart()
+    {
+        var uri = new System.Uri(baseUrl);
+        socket = new SocketIOUnity(uri, new SocketIOOptions
+        {
+            Query = new Dictionary<string, string>
+            {
+                { "token", "UNITY" }
+            },
+            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
+        });
 
+        socket.OnConnected += (sender, e) =>
+        {
+            Debug.Log("Connection open!");
+        };
+
+        socket.OnError += (sender, e) =>
+        {
+            Debug.LogError("Error! " + e);
+        };
+
+        socket.OnDisconnected += (sender, e) =>
+        {
+            Debug.Log("Connection closed!");
+        };
+
+        socket.On("rocketUpdate", res =>
+        {
+            isRocketUpdated = true;
+        });
+
+        await socket.ConnectAsync();
+    }
+    void Update()
+    {
+        if (isRocketUpdated)
+        {
+            StartCoroutine(CheckForRocketData());
+            isRocketUpdated = false;
+        }
+    }
     IEnumerator CheckForRocketData()
     {
         while (true) // Continuously check for updates
@@ -71,6 +117,9 @@ public class RocketReceiver : MonoBehaviour
 
                     foreach (RocketData rocket in rocketDataList.rockets)
                     {
+                        Debug.Log($"group: {rocket.groupName}, time: {rocket.object2}");
+                        GameManager targetManager = GetGameManagerByGroupName(rocket.groupName);
+                        GameObject targetRocket = GetRocketObjectByGroupName(rocket.groupName);
                         // Determine which GameManager this rocket belongs to
                         if (rocket.groupName == "Group 1" && rocket.timestamp != lastTimestamp1)
                         {
@@ -97,7 +146,32 @@ public class RocketReceiver : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(checkInterval); // Keep checking
+            //yield return new WaitForSeconds(checkInterval); // Keep checking
+        }
+    }
+    GameManager GetGameManagerByGroupName(string groupName)
+    {
+        switch (groupName.Trim()) // Trim to remove any spaces
+        {
+            case "Group 1": return gameManager1;
+            case "Group 2": return gameManager2;
+            case "Group 3": return gameManager3;
+            default:
+                Debug.LogWarning($"Unknown groupName: {groupName}");
+                return null;
+        }
+    }
+
+    GameObject GetRocketObjectByGroupName(string groupName)
+    {
+        switch (groupName.Trim())
+        {
+            case "Group 1": return rocketObject1;
+            case "Group 2": return rocketObject2;
+            case "Group 3": return rocketObject3;
+            default:
+                Debug.LogWarning($"Unknown groupName: {groupName}");
+                return null;
         }
     }
 
@@ -108,11 +182,12 @@ public class RocketReceiver : MonoBehaviour
         if (firstCheckDone) // Ensure activation only happens on new database updates
         {
             targetRocket.SetActive(true);
-            Debug.Log($"New rocket data detected for {rocket.groupName}: {rocket.object2}. Activating corresponding rocket.");
-            Debug.Log("Target manager is " + targetManager);
-            // Add resources based on landing quality
+            Debug.Log($"New rocket data detected for {rocket.groupName}. Activating corresponding rocket.");
+
+            // **Ensure resources are going to the correct group!**
+            Debug.Log($"Target Manager: {targetManager} assigned to {rocket.groupName}");
+
             int resourceAmount = GetResourceAmount(rocket.object2);
-            Debug.Log("resouce amount is: " + resourceAmount);
             targetManager.AddCollectedIron(resourceAmount);
             targetManager.AddCollectedRocks(resourceAmount);
             targetManager.ChangeCollectedWater(resourceAmount);
