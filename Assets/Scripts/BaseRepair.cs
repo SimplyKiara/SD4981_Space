@@ -17,13 +17,20 @@ public class BaseRepair : MonoBehaviour
     private Coroutine checkRustCoroutine;
     private bool isPressed;
     public GameObject warning;
+    public GameObject instructions;
     // Start is called before the first frame update
 
     void Start()
     {
         warning.SetActive(false);
-        if (!gameObject.activeInHierarchy) {
+        instructions.SetActive(false);
+        if (!gameObject.activeInHierarchy)
+        {
             return;
+        }
+        else
+        {
+            instructions.SetActive(true);
         }
         GetComponent<Renderer>().material = oldMaterial;
         StartNewCoroutine();
