@@ -7,11 +7,11 @@ public class TextProgressManager : MonoBehaviour
 {
     public Text ProgressText;
     public GameObject popUpPanel;
-    public WallConnection wallConnection;
 
     private int completedCount;
     private int totalCount;
     private bool finished = false;
+    private ClientConnection clientConnection;
 
     GameObject[] objectsWithTag;
 
@@ -19,6 +19,7 @@ public class TextProgressManager : MonoBehaviour
     {
         objectsWithTag = GameObject.FindGameObjectsWithTag("Pots");
         totalCount = objectsWithTag.Length;
+        clientConnection = GameObject.Find("Client Manager").GetComponent<ClientConnection>();
     }
 
     void Update()
@@ -29,7 +30,14 @@ public class TextProgressManager : MonoBehaviour
         {
             finished = true;
             CallPanel();
-            wallConnection.TriggerTaskDone("Planting", ""); ////////
+            if (clientConnection != null)
+            {
+                clientConnection.TriggerTaskDone("Planting", clientConnection.groupName);
+            }
+            else
+            {
+                Debug.LogError("Client connection missing!");
+            }
         }
     }
 

@@ -17,6 +17,7 @@ public class RoverController : MonoBehaviour
     private Rigidbody2D rb;
     private InputAction moveAction;
     private PlayerInput playerInput;
+    private ClientConnection clientConnection;
 
     private Vector2 startPos;
     private Vector2 movementInput;
@@ -47,6 +48,7 @@ public class RoverController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         startPos = transform.position; // Stores the initial position of the rover
         startRotation = transform.rotation; // Stores original rotation
+        clientConnection = GameObject.Find("Client Manager").GetComponent<ClientConnection>();
 
         progressBar.gameObject.SetActive(false);
         endPanel.SetActive(false);
@@ -94,6 +96,14 @@ public class RoverController : MonoBehaviour
         {
             done = true;
             callPanel();
+            if (clientConnection != null)
+            {
+                clientConnection.TriggerTaskDone("Expedition", clientConnection.groupName);
+            }
+            else
+            {
+                Debug.LogError("Client connection missing!");
+            }
         }
     }
 

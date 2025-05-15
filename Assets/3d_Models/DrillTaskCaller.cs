@@ -55,7 +55,7 @@ public class DrillTaskCaller : MonoBehaviour
             }
             else
             {
-                Debug.Log("Popup already exists, not creating a new one.");
+                Debug.Log("Popup already exists.");
             }
         }
         else

@@ -401,5 +401,40 @@ public class ClientConnection : MonoBehaviour
             }
         }
     }
+
+    public void TriggerTaskDone(string taskID, string group)
+    {
+        StartCoroutine(PostTaskDoneRequest(baseUrl + "/TaskDone", taskID, group));
+    }
+
+    IEnumerator PostTaskDoneRequest(string uri, string taskID, string group)
+    {
+        DateTime dateTime = DateTime.Now;
+        string currentTime = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+        TaskDoneData taskDoneData = new TaskDoneData { TaskID = taskID, timestamp = currentTime, group = group };
+        string jsonData = JsonUtility.ToJson(taskDoneData);
+
+        Debug.Log("JSON Data: " + jsonData); // Debug log to check JSON data
+
+        using (UnityWebRequest request = new UnityWebRequest(uri, "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError(request.error);
+            }
+            else
+            {
+                Debug.Log("Response: " + request.downloadHandler.text);
+            }
+        }
+    }
 }
 

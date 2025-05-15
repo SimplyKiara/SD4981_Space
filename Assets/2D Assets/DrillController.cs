@@ -10,10 +10,11 @@ public class DrillController : MonoBehaviour
     public Button myButton;
     public Text iceText;
     public GameObject endPanel;
-    public WallConnection wallConnection;
 
     private Animator animator;
     private Rigidbody2D rb;
+    private ClientManager clientManager;
+    private ClientConnection clientConnection;
 
     public float speed = 2f;
     private Vector3 startPos;
@@ -34,6 +35,7 @@ public class DrillController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        clientConnection = GameObject.Find("Client Manager").GetComponent<ClientConnection>();
 
         myButton.onClick.AddListener(TaskOnClick);
         startPos = transform.position;
@@ -149,6 +151,13 @@ public class DrillController : MonoBehaviour
     private void GoalAction()
     {
         endPanel.SetActive(true);
-        wallConnection.TriggerTaskDone("Expedition", "");
+        if (clientConnection != null)
+        {
+            clientConnection.TriggerTaskDone("Ice Mining", clientConnection.groupName);
+        }
+        else
+        {
+            Debug.LogError("Client connection missing!");
+        }
     }
 }
