@@ -4,6 +4,20 @@ using UnityEngine.Networking;
 using TMPro;
 
 [System.Serializable]
+public class TaskData
+{
+    public string _id;
+    public string title;
+    public string group;
+}
+
+[System.Serializable]
+public class TaskWrapper
+{
+    public TaskData[] data;
+}
+
+[System.Serializable]
 public class CollisionData
 {
     public string TaskID;
@@ -13,23 +27,17 @@ public class CollisionData
     public string groupName; // Include group name
 }
 
-[System.Serializable]
-public class GroupData
-{
-    public string groupName;
-}
-
 public class SavingRocketData : MonoBehaviour
 {
-    private string baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
+    private string baseUrl = "https://spaceexpeditionserver.onrender.com"; // Adjust if needed
     private string groupName = ""; // Store group name
 
     void Start()
     {
-        StartCoroutine(GetGroupNameRequest(baseUrl + "/group"));
+        StartCoroutine(GetLatestTaskData(baseUrl + "/tasks"));
     }
 
-    IEnumerator GetGroupNameRequest(string uri)
+    IEnumerator GetLatestTaskData(string uri)
     {
         using (UnityWebRequest request = UnityWebRequest.Get(uri))
         {
@@ -37,34 +45,34 @@ public class SavingRocketData : MonoBehaviour
 
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
-                Debug.LogError("Error retrieving group name: " + request.error);
+                Debug.LogError("Error retrieving task data: " + request.error);
             }
             else
             {
                 string jsonResponse = "{\"data\":" + request.downloadHandler.text + "}"; // Wrap for parsing
-                GroupData[] groups = JsonUtility.FromJson<GroupWrapper>(jsonResponse).data;
+                TaskData[] tasks = JsonUtility.FromJson<TaskWrapper>(jsonResponse).data;
 
-                if (groups.Length > 0)
+                if (tasks.Length > 0)
                 {
-                    groupName = groups[0].groupName; // Extract first group's name
-                    Debug.Log("Group Name Retrieved: " + groupName);
+                    groupName = tasks[tasks.Length - 1].group; // Get the most recent task's group
+                    Debug.Log("Latest Group Retrieved: " + groupName);
                 }
                 else
                 {
-                    Debug.LogWarning("No group data found in response!");
+                    Debug.LogWarning("No task data found in response!");
                 }
             }
         }
     }
 
-    [System.Serializable]
-    private class GroupWrapper
-    {
-        public GroupData[] data;
-    }
-
     void OnCollisionEnter(Collision col)
     {
+        if (string.IsNullOrEmpty(groupName))
+        {
+            Debug.LogWarning("Group name not yet retrieved. Collision data won't be sent yet.");
+            return;
+        }
+
         if (col.gameObject.CompareTag("LandingPadWorst") || col.gameObject.CompareTag("LandingPadMid") || col.gameObject.CompareTag("LandingPadBest"))
         {
             CollisionData collisionData = new CollisionData
@@ -73,7 +81,7 @@ public class SavingRocketData : MonoBehaviour
                 object1 = gameObject.name,
                 object2 = col.gameObject.tag,
                 timestamp = System.DateTime.Now.ToString(),
-                groupName = groupName // Store retrieved group name
+                groupName = groupName // Use retrieved group name
             };
 
             string json = JsonUtility.ToJson(collisionData);

@@ -6,18 +6,20 @@ public class CoverCraterUI : MonoBehaviour
 {
     public GameObject StartingUI;
     public GameObject[] CraterUI;
-    public GameObject RocketUI;
-    private UICloser uICloser;
+    public GameObject[] RocketUI;
+
+    public GameManager gameManager1;
+    public GameManager gameManager2;
+    public GameManager gameManager3;
+
     private bool suppliesPanelFound = false;
     private bool rocketUIShown = false;
     private bool startUiDestroyed = false;
 
     void Start()
     {
-        foreach (GameObject obj in CraterUI) {
-            obj.SetActive(false);
-        }
-        RocketUI.SetActive(false);
+        SetUIState(CraterUI, false);
+        SetUIState(RocketUI, false);
     }
 
     void Update()
@@ -26,36 +28,52 @@ public class CoverCraterUI : MonoBehaviour
         if (StartingUI == null && !startUiDestroyed)
         {
             Debug.Log("Starting UI has been destroyed!");
-            foreach (GameObject obj in CraterUI) {
-                obj.SetActive(true);
-            }
+            SetUIState(CraterUI, true);
             startUiDestroyed = true;
         }
 
-        // Find all active GameObjects
-        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
-
-        foreach (GameObject obj in allObjects)
+        // Check for SuppliesPanel only once
+        if (!suppliesPanelFound && GameObject.Find("SuppliesPanel") != null)
         {
-            // Check if SuppliesPanel appears in the hierarchy for the first time
-            if (!suppliesPanelFound && obj.name.Contains("SuppliesPanel"))
-            {
-                Debug.Log("Supplies Panel has been found for the first time!");
-                suppliesPanelFound = true; // Mark as found
-            }
+            Debug.Log("Supplies Panel has been found for the first time!");
+            suppliesPanelFound = true;
+        }
 
-            // Check if SuppliesPanel has been destroyed (and RocketUI hasn't been shown yet)
-            if (suppliesPanelFound && !rocketUIShown && GameObject.Find("SuppliesPanel") == null)
-            {
-                Debug.Log("Supplies Panel has been destroyed, showing RocketUI!");
-                RocketUI.SetActive(true); // Activate RocketUI
-                rocketUIShown = true;     // Prevent RocketUI from popping up again
-            }
+        // Check if SuppliesPanel has been destroyed
+        if (suppliesPanelFound && !rocketUIShown && GameObject.Find("SuppliesPanel") == null)
+        {
+            Debug.Log("Supplies Panel has been destroyed, showing RocketUI!");
+            SetUIState(RocketUI, true);
+            rocketUIShown = true;
+        }
+
+        // Check if any GameManager's resources drop below 10
+        if (!rocketUIShown && ShouldShowRocketUI())
+        {
+            Debug.Log("A GameManager's resources dropped below 10! Showing RocketUI.");
+            SetUIState(RocketUI, true);
+            rocketUIShown = true; // Prevent repeated activation
         }
     }
 
-    /*void OnButtonPressDetected() {
-        Debug.Log("The UI is closed");
-        RocketUI.SetActive(true);
-    }*/
+    bool ShouldShowRocketUI()
+    {
+        return IsResourceLow(gameManager1) || IsResourceLow(gameManager2) || IsResourceLow(gameManager3);
+    }
+
+    bool IsResourceLow(GameManager manager)
+    {
+        return manager != null &&
+               (manager.ironOre < 10 ||
+                manager.rocks < 10 ||
+                manager.water < 10);
+    }
+
+    void SetUIState(GameObject[] uiElements, bool state)
+    {
+        foreach (GameObject obj in uiElements)
+        {
+            obj.SetActive(state);
+        }
+    }
 }

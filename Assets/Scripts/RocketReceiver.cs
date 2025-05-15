@@ -21,22 +21,34 @@ public class RocketDataList
 
 public class RocketReceiver : MonoBehaviour
 {
-    public GameObject rocketObject; // Attach the GameObject in the Inspector
+    public GameObject rocketObject1; // Corresponds to gameManager1
+    public GameObject rocketObject2; // Corresponds to gameManager2
+    public GameObject rocketObject3; // Corresponds to gameManager3
+
     private string baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000/Rocket";
-    private bool dataLoaded = false;
-    public GameManager gameManager;
+    private string lastTimestamp1 = ""; // Store last timestamp for Group 1
+    private string lastTimestamp2 = ""; // Store last timestamp for Group 2
+    private string lastTimestamp3 = ""; // Store last timestamp for Group 3
+
+    private bool firstCheckDone = false; // Prevent activation on first database check
+
+    // Game Managers for each group
+    public GameManager gameManager1;
+    public GameManager gameManager2;
+    public GameManager gameManager3;
+
     public float checkInterval = 5f; // Time interval for checking (in seconds)
 
     void Start()
     {
-        // Start with the object inactive
-        if (rocketObject != null) rocketObject.SetActive(false);
+        // Ensure all rocket objects start inactive
+        SetRocketState(false);
         StartCoroutine(CheckForRocketData());
     }
 
     IEnumerator CheckForRocketData()
     {
-        while (!dataLoaded) // Continuously check until valid data is found
+        while (true) // Continuously check for updates
         {
             using (UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/Rocket"))
             {
@@ -48,66 +60,73 @@ public class RocketReceiver : MonoBehaviour
                 }
                 else
                 {
-                    string jsonResponse = "{\"rockets\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
-                    Debug.Log("Formatted JSON: " + jsonResponse);
-
-                    // Deserialize JSON
+                    string jsonResponse = "{\"rockets\":" + request.downloadHandler.text + "}";
                     RocketDataList rocketDataList = JsonUtility.FromJson<RocketDataList>(jsonResponse);
 
                     foreach (RocketData rocket in rocketDataList.rockets)
                     {
-                        if (rocket.groupName == "Group 1") // Check if groupName matches
+                        // Determine which GameManager this rocket belongs to
+                        if (rocket.groupName == "Group 1" && rocket.timestamp != lastTimestamp1)
                         {
-                            GameObject targetObject = GameObject.FindWithTag("gp1"); // Find GameObject with tag "gp1"
-                            if (targetObject != null)
-                            {
-                                targetObject.name = rocket.object2; // Assign object2 value
-                                gameManager.RocketLanded = rocket.object2;
-                                Debug.Log($"Assigned '{rocket.object2}' to GameObject with tag 'gp1'.");
-                            }
-                            else
-                            {
-                                Debug.LogWarning("No GameObject found with tag 'gp1'.");
-                            }
+                            lastTimestamp1 = rocket.timestamp;
+                            ActivateRocket(gameManager1, rocketObject1, rocket);
                         }
-
-                        if (rocket.object2 == "LandingPadMid")
+                        else if (rocket.groupName == "Group 2" && rocket.timestamp != lastTimestamp2)
                         {
-                            ActivateRocket(rocket, 10);
-                            break;
+                            lastTimestamp2 = rocket.timestamp;
+                            ActivateRocket(gameManager2, rocketObject2, rocket);
                         }
-                        else if (rocket.object2 == "LandingPadBest")
+                        else if (rocket.groupName == "Group 3" && rocket.timestamp != lastTimestamp3)
                         {
-                            ActivateRocket(rocket, 20);
-                            break;
-                        }
-                        else if (rocket.object2 == "LandingPadWorst")
-                        {
-                            ActivateRocket(rocket, 5);
-                            break;
+                            lastTimestamp3 = rocket.timestamp;
+                            ActivateRocket(gameManager3, rocketObject3, rocket);
                         }
                     }
 
-                    if (!dataLoaded)
+                    if (!firstCheckDone)
                     {
-                        Debug.LogWarning("No matching object2 found. Checking again...");
+                        Debug.Log("First database check complete, skipping activation.");
+                        firstCheckDone = true; // Prevent activation during the initial check
                     }
                 }
             }
 
-            yield return new WaitForSeconds(checkInterval); // Wait before rechecking
+            yield return new WaitForSeconds(checkInterval); // Keep checking
         }
     }
 
-    void ActivateRocket(RocketData rocket, int resourceAmount)
+    void ActivateRocket(GameManager targetManager, GameObject targetRocket, RocketData rocket)
     {
-        dataLoaded = true;
-        if (rocketObject != null) rocketObject.SetActive(true);
-        Debug.Log($"Matching object2 found: {rocket.object2}. Activating rocketObject.");
+        if (targetManager == null || targetRocket == null) return;
 
-        // Add resources based on landing quality
-        gameManager.AddCollectedIron(resourceAmount);
-        gameManager.AddCollectedRocks(resourceAmount);
-        gameManager.ChangeCollectedWater(resourceAmount);
+        if (firstCheckDone) // Ensure activation only happens on new database updates
+        {
+            targetRocket.SetActive(true);
+            Debug.Log($"New rocket data detected for {rocket.groupName}: {rocket.object2}. Activating corresponding rocket.");
+
+            // Add resources based on landing quality
+            int resourceAmount = GetResourceAmount(rocket.object2);
+            targetManager.AddCollectedIron(resourceAmount);
+            targetManager.AddCollectedRocks(resourceAmount);
+            targetManager.ChangeCollectedWater(resourceAmount);
+        }
+    }
+
+    int GetResourceAmount(string objectName)
+    {
+        switch (objectName)
+        {
+            case "LandingPadBest": return 20;
+            case "LandingPadMid": return 10;
+            case "LandingPadWorst": return 5;
+            default: return 0;
+        }
+    }
+
+    void SetRocketState(bool state)
+    {
+        if (rocketObject1 != null) rocketObject1.SetActive(state);
+        if (rocketObject2 != null) rocketObject2.SetActive(state);
+        if (rocketObject3 != null) rocketObject3.SetActive(state);
     }
 }

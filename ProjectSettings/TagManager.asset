@@ -25,6 +25,8 @@ TagManager:
   - LandingPadWorst
   - Ice
   - gp1
+  - gp2
+  - gp3
   layers:
   - Default
   - TransparentFX
