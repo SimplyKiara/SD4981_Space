@@ -47,33 +47,41 @@ public class ResourceReceiver : MonoBehaviour
                 }
                 else
                 {
+                    // Ensure the JSON response is not empty
+                    if (string.IsNullOrEmpty(request.downloadHandler.text))
+                    {
+                        Debug.LogWarning("Received empty response, checking again...");
+                        yield return new WaitForSeconds(checkInterval);
+                        continue;
+                    }
+
                     Debug.Log("Received JSON: " + request.downloadHandler.text);
 
-                    // Directly deserialize into TaskDataList
-                    TaskDataList taskDataList = JsonUtility.FromJson<TaskDataList>(request.downloadHandler.text);
+                    // Ensure JSON is properly structured before deserialization
+                    string jsonResponse = "{\"tdone\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
+                    TaskDataList taskDataList = JsonUtility.FromJson<TaskDataList>(jsonResponse);
 
                     if (taskDataList != null && taskDataList.tdone.Length > 0)
                     {
                         foreach (TaskDoneData taskDone in taskDataList.tdone)
                         {
                             string Name = taskDone.group;
+                            string gpName = "";
 
-                            if (Name == "Group 1")
+                            switch (Name)
                             {
-                                gpName = "Gp1";
-                            }
-                            else if (Name == "Group 2")
-                            {
-                                gpName = "Gp2";
-                            }
-                            else if (Name == "Group 3")
-                            {
-                                gpName = "Gp3";
-                            }
-                            else
-                            {
-                                Debug.LogError("Group name not obtainable!");
-                                break;
+                                case "Group 1":
+                                    gpName = "Gp1";
+                                    break;
+                                case "Group 2":
+                                    gpName = "Gp2";
+                                    break;
+                                case "Group 3":
+                                    gpName = "Gp3";
+                                    break;
+                                default:
+                                    Debug.LogError($"Group name '{Name}' not recognized!");
+                                    continue; // Skip to the next task
                             }
 
                             GameObject groupDrill = GameObject.Find(gpName + "_DrillStructure");
@@ -84,6 +92,7 @@ public class ResourceReceiver : MonoBehaviour
                                 {
                                     drillScript.ActivateDrill();
                                     dataLoaded = true;
+                                    Debug.Log($"Activated drill for {gpName}");
                                 }
                                 else
                                 {
@@ -92,7 +101,7 @@ public class ResourceReceiver : MonoBehaviour
                             }
                             else
                             {
-                                Debug.LogError($"Drill of {Name} not found!");
+                                Debug.LogError($"Drill structure for {gpName} not found!");
                             }
                             break;   // Exit loop once a match is found
                         }

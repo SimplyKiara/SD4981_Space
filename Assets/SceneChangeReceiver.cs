@@ -69,10 +69,18 @@ public class SceneChangeReceiver : MonoBehaviour
                 }
                 else
                 {
+                    // Ensure the JSON response is not empty
+                    if (string.IsNullOrEmpty(request.downloadHandler.text))
+                    {
+                        Debug.LogWarning("Received empty response, checking again...");
+                        yield return new WaitForSeconds(checkInterval);
+                        continue;
+                    }
+
                     Debug.Log("Received JSON: " + request.downloadHandler.text);
 
-                    // Directly deserialize into SceneMessageList
-                    SceneMessageList sceneMessageList = JsonUtility.FromJson<SceneMessageList>(request.downloadHandler.text);
+                    string jsonResponse = "{\"scMessage\":" + request.downloadHandler.text + "}"; // Correctly wrapping JSON
+                    SceneMessageList sceneMessageList = JsonUtility.FromJson<SceneMessageList>(jsonResponse);
 
                     if (sceneMessageList != null && sceneMessageList.scMessage.Length > 0)
                     {

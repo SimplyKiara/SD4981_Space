@@ -31,10 +31,15 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(request.downloadHandler.text))
+                    // Ensure the JSON response is not empty
+                    if (string.IsNullOrEmpty(request.downloadHandler.text))
                     {
-                        Debug.Log("Raw JSON Response: " + request.downloadHandler.text);
+                        Debug.LogWarning("Received empty response, checking again...");
+                        yield return new WaitForSeconds(checkInterval);
+                        continue;
                     }
+
+                    Debug.Log("Received JSON: " + request.downloadHandler.text);
 
                     // Ensure JSON is properly structured before deserialization
                     string jsonResponse = "{\"tdone\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
@@ -70,7 +75,6 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
             yield return new WaitForSeconds(checkInterval); // Wait before rechecking
         }
     }
-
 
     void CallGHouseHarvest()
     {
