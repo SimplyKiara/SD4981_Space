@@ -15,6 +15,7 @@ public class PlayerInfoManager : MonoBehaviour
     public GameObject startBtn;
     public GameObject endBtn;
     public GameObject reloadBtn;
+    public GameObject sceneBtn;
     public Button connectBtn;
     public GameObject endPanel; // ending panel that show result
     public Button backToMenuBtn; // navigate back to menu
@@ -123,6 +124,7 @@ public class PlayerInfoManager : MonoBehaviour
         else if (isGameStarted)
         {
             endBtn.SetActive(true);
+            sceneBtn.SetActive(true);
         }
     }
 
@@ -271,6 +273,14 @@ public class PlayerInfoManager : MonoBehaviour
         }
     }
 
+    // socket send scene changing
+    public void SendChatMessage(string content, string user)
+    {
+        var messageData = new { content, user };
+        socket.Emit("send_message", messageData);
+        Debug.Log($"Message sent: {content}");
+    }
+
     public void StartGame()
     {
         if (socket.Connected)
@@ -343,5 +353,4 @@ public class PlayerInfoManager : MonoBehaviour
         }
         BackToConnectionMenu();
     }
-
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
@@ -32,37 +33,46 @@ public class MapController : MonoBehaviour
 
                 if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Debug.LogError("Error retrieving ice mining data: " + request.error);
+                    Debug.LogError($"Error retrieving expedition data: {request.error}");
                 }
                 else
                 {
-                    string jsonResponse = "{\"tdone\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
-                    Debug.Log("Formatted JSON: " + jsonResponse);
+                    string jsonResponse = $"{{\"tdone\":{request.downloadHandler.text}}}"; // Wrap JSON in an object
+                    Debug.Log($"Formatted JSON: {jsonResponse}");
 
-                    // Directly deserialize into TaskDataList
-                    TaskDataList taskDataList = JsonUtility.FromJson<TaskDataList>(request.downloadHandler.text);
-
-                    if (taskDataList != null && taskDataList.tdone.Length > 0)
+                    try
                     {
-                        foreach (TaskDoneData taskDone in taskDataList.tdone)
+                        // Deserialize the formatted JSON correctly
+                        TaskDataList taskDataList = JsonUtility.FromJson<TaskDataList>(jsonResponse);
+
+                        if (taskDataList?.tdone?.Length > 0)
                         {
-                            if (taskDone.TaskID == "Expedition" && taskDone.group == clientConnection.name)
-                            dataLoaded = true;
-                            mapButton.SetActive(true);
-                            Debug.Log("Expedition done, showing map.");
-                            break;   // Exit loop once a match is found
+                            foreach (TaskDoneData taskDone in taskDataList.tdone)
+                            {
+                                if (taskDone.TaskID == "Expedition" && taskDone.group == clientConnection.groupName)
+                                {
+                                    dataLoaded = true;
+                                    mapButton.SetActive(true);
+                                    Debug.Log("Expedition done, showing map.");
+                                    break;   // Exit loop once a match is found
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogWarning("No matching expedition task found. Checking again...");
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Debug.LogWarning("No matching group found. Checking again...");
+                        Debug.LogError($"Error parsing JSON: {ex.Message}");
                     }
                 }
             }
-
             yield return new WaitForSeconds(checkInterval); // Wait before rechecking
         }
     }
+
 
     public void OpenMap()
     {

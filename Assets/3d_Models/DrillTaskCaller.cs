@@ -15,8 +15,8 @@ public class DrillTaskCaller : MonoBehaviour
     private Vector3[] directions =
     {
         new Vector3(3, 5, -3),
-        new Vector3(-5, 5, -3),
-        new Vector3(-3, 5, -6),
+        new Vector3(5, 5, -3),
+        new Vector3(3, 5, -6),
     };
     
     private void Start()

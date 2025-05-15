@@ -244,7 +244,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8969080830739358769, guid: 53527dcb75abe2b428f684867715ec96, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 41.62
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 8969080830739358769, guid: 53527dcb75abe2b428f684867715ec96, type: 3}
       propertyPath: m_LocalPosition.y
@@ -252,7 +252,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8969080830739358769, guid: 53527dcb75abe2b428f684867715ec96, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 89.5
+      value: 92.4
       objectReference: {fileID: 0}
     - target: {fileID: 8969080830739358769, guid: 53527dcb75abe2b428f684867715ec96, type: 3}
       propertyPath: m_LocalRotation.w
@@ -411,7 +411,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30.593506, y: -8.302795}
+  m_AnchoredPosition: {x: 30.59375, y: -8.302795}
   m_SizeDelta: {x: 52.27112, y: 16.60557}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &206500388 stripped
@@ -1546,7 +1546,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30.593506, y: -22.239014}
+  m_AnchoredPosition: {x: 30.59375, y: -22.239014}
   m_SizeDelta: {x: 29.6127, y: 11.26686}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &701370802
@@ -2795,7 +2795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 958880789539363445, guid: 000c909db7172e241b16618e7396b621, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.5
+      value: -12.1
       objectReference: {fileID: 0}
     - target: {fileID: 958880789539363445, guid: 000c909db7172e241b16618e7396b621, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3306,7 +3306,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30.593506, y: -22.239014}
+  m_AnchoredPosition: {x: 30.59375, y: -22.239014}
   m_SizeDelta: {x: 29.6127, y: 11.26686}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1341201599
@@ -3765,15 +3765,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 958880789539363445, guid: 000c909db7172e241b16618e7396b621, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 35.29
+      value: 39.7
       objectReference: {fileID: 0}
     - target: {fileID: 958880789539363445, guid: 000c909db7172e241b16618e7396b621, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -14.44
+      value: -15.4
       objectReference: {fileID: 0}
     - target: {fileID: 958880789539363445, guid: 000c909db7172e241b16618e7396b621, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 94.57
+      value: 87.9
       objectReference: {fileID: 0}
     - target: {fileID: 958880789539363445, guid: 000c909db7172e241b16618e7396b621, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4396,7 +4396,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30.593506, y: -8.302795}
+  m_AnchoredPosition: {x: 30.59375, y: -8.302795}
   m_SizeDelta: {x: 52.27112, y: 16.60557}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1647297422
@@ -4693,7 +4693,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30.593506, y: -8.302795}
+  m_AnchoredPosition: {x: 30.59375, y: -8.302795}
   m_SizeDelta: {x: 52.27112, y: 16.60557}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1859354409
@@ -5005,7 +5005,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30.593506, y: -22.239014}
+  m_AnchoredPosition: {x: 30.59375, y: -22.239014}
   m_SizeDelta: {x: 29.6127, y: 11.26686}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &4115490851589043290

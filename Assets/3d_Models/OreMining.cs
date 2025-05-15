@@ -111,7 +111,10 @@ public class OreMining : MonoBehaviour
                 {
                     manager.ChangeCollectedWater(0.5f);
                 }
-                Debug.Log("Ore collected");
+                else
+                {
+                    Debug.Log("Tag not recognised:" + gameObject.tag);
+                }
             }
             Destroy(gameObject);
         }

@@ -38,10 +38,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
             instance = this;
             DontDestroyOnLoad(gameObject); // Ensure persistence across scene changes
         }
-        else
-        {
-            Destroy(gameObject); // Prevent duplicate instances
-        }
     }
 
     private void Start()
