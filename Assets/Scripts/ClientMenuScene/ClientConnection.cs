@@ -19,7 +19,7 @@ public class ClientConnection : MonoBehaviour
     public GameObject winnerPopUp;
     public TMP_InputField urlField;
     public Text winner;
-    public string groupName;
+    public string groupName = "";
     public string progress;
     private SocketIOUnity socket;
     List<PlayerData> groupList = new List<PlayerData>();
@@ -57,6 +57,7 @@ public class ClientConnection : MonoBehaviour
         mapManager.SetActive(false);
         // connectBtn.onClick.AddListener(OnConnection);
         connectBtn.onClick.AddListener(OnConnectClicked);
+        groupName = "";
         winner.text = "";
         progress = "0";
         baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000";
@@ -181,6 +182,7 @@ public class ClientConnection : MonoBehaviour
         waitPanel.SetActive(false);
         selectPanel.SetActive(false);
         winnerPopUp.SetActive(false);
+        groupName = "";
         winner.text = "";
         progress = "0";
         urlField.text = "";
