@@ -17,12 +17,11 @@ public class MapController : MonoBehaviour
     public float checkInterval = 5f; // Time interval for checking (in seconds)
 
 
-    void Start()
+    void OnEnable()
     {
         clientConnection = GameObject.Find("Client Manager").GetComponent<ClientConnection>();
         StartCoroutine(CheckForExpedition());
     }
-
 
     IEnumerator CheckForExpedition()
     {

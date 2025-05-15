@@ -14,6 +14,7 @@ public class ClientConnection : MonoBehaviour
     public TMP_Text groupDisplay;
     public GameObject menuPanel;
     public GameObject waitPanel;
+    public GameObject mapManager;
     public GameObject selectPanel;
     public GameObject winnerPopUp;
     public TMP_InputField urlField;
@@ -53,6 +54,7 @@ public class ClientConnection : MonoBehaviour
         menuPanel.SetActive(true);
         waitPanel.SetActive(false);
         selectPanel.SetActive(false);
+        mapManager.SetActive(false);
         // connectBtn.onClick.AddListener(OnConnection);
         connectBtn.onClick.AddListener(OnConnectClicked);
         winner.text = "";
@@ -143,6 +145,7 @@ public class ClientConnection : MonoBehaviour
         {
             waitPanel.SetActive(false);
             selectPanel.SetActive(true);
+            mapManager.SetActive(true);
         }
 
         if (isConnected && winner.text != "" && !winnerPopUp.activeInHierarchy)

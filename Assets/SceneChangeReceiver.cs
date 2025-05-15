@@ -53,7 +53,7 @@ public class SceneChangeReceiver : MonoBehaviour
     {
         while (!dataLoaded) // Continuously check until valid data is found
         {
-            using (UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/Message"))
+            using (UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/messages"))
             {
                 yield return request.SendWebRequest();
 

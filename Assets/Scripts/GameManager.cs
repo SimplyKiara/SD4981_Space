@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void Start()
     {
-        string dataPath = Application.persistentDataPath;
+        string dataPath = "C:\\Users\\User\\AppData\\LocalLow\\DefaultCompany\\SD4981_Space";
         dataHandler = new FileDataHandler(dataPath, FileName, false); // Each manager has its own file
         LoadGame();
     }
