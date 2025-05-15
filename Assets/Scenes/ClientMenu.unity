@@ -823,7 +823,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &400698107
 Transform:
   m_ObjectHideFlags: 0
@@ -6547,6 +6547,7 @@ MonoBehaviour:
   groupDisplay: {fileID: 119037915}
   menuPanel: {fileID: 1173904601}
   waitPanel: {fileID: 1438516815}
+  mapManager: {fileID: 400698106}
   selectPanel: {fileID: 735932239}
   winnerPopUp: {fileID: 8006147100439811179}
   urlField: {fileID: 1779535390}
