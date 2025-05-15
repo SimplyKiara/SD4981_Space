@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using Unity.UI;
 using UnityEngine.UI;
 
 public class MapController : MonoBehaviour
