@@ -124,7 +124,44 @@ public class WallConnection : MonoBehaviour
         }
     }
 
-    
+    public void DeleteTask(string taskName, string group)
+    {
+        // TaskGenerator taskSelector = new TaskGenerator();
+        // string randomTask = taskSelector.GetRandomTask();
+
+        StartCoroutine(DeleteTaskRequest(baseUrl + "/tasks", taskName, group));
+    }
+
+    IEnumerator DeleteTaskRequest(string uri, string title, string group)
+    {
+        // Create a new UnityWebRequest for the DELETE method
+        UnityWebRequest request = new UnityWebRequest(uri, "DELETE");
+
+        // Create a JSON object with the title and group
+        string jsonData = JsonUtility.ToJson(new { title = title, group = group });
+
+        // Convert the JSON object to a byte array
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+        // Set the request body
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        // Set the request headers
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        // Send the request and wait for a response
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Task deleted successfully: " + request.downloadHandler.text);
+        }
+        else
+        {
+            Debug.LogError("Error deleting task: " + request.error);
+        }
+    }
 
     public void ChangeScene(string content, string user)
     {
