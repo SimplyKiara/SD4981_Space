@@ -57,8 +57,10 @@ public class PersistentInstance : MonoBehaviour
             }
             else
             { */
-            child.gameObject.SetActive(isActive);
-            // }
+            if (child.gameObject.name == "Canvas")
+            {
+                child.gameObject.SetActive(isActive);
+            }            // }
         }
     }
 }

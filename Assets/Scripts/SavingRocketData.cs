@@ -44,7 +44,9 @@ public class SavingRocketData : MonoBehaviour
     {
         if (groupName == "")
         {
-            groupName = "Group " + Random.Range(1, 4);
+            ClientConnection clientConnection = GameObject.Find("Client Manager").GetComponent<ClientConnection>();
+            groupName = clientConnection.groupName;
+            // groupName = "Group " + Random.Range(1, 4);
             /* GameObject groupNameObj = GameObject.Find("GroupName");
             if (groupNameObj != null)
             {

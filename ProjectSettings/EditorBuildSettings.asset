@@ -26,10 +26,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/RubyTesting.unity
     guid: b901ca7dc96780c4196c0cad24b36665
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TeacherMenu.unity
     guid: dfd00ea2b029cea4a91a355730813694
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/MainWallScene.unity
     guid: 0dfe411f85d6c7441847811bdb1e3252
   m_configObjects: {}

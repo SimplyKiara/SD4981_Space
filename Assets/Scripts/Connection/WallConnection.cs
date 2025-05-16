@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using SocketIOClient;
 using System;
+using UnityEngine.SceneManagement;
 
 public class WallConnection : MonoBehaviour
 {
@@ -78,6 +79,7 @@ public class WallConnection : MonoBehaviour
                 // Implement your logic for when the game starts
                 Debug.Log("Handling game end logic...");
                 isGameEnded = false;
+                Application.Quit();
             }
         }
     }
