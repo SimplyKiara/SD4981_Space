@@ -1,9 +1,10 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using SocketIOClient;
 using System.Linq;
-using System.Collections.Generic;
+using System.Collections;
+using System;
 
 [System.Serializable]
 public class RocketData
@@ -12,10 +13,9 @@ public class RocketData
     public string object1;
     public string object2;
     public string timestamp;
-    public string groupName; // Added groupName field
+    public string groupName;
 }
 
-// Wrapper class for deserializing an array
 [System.Serializable]
 public class RocketDataList
 {
@@ -24,64 +24,39 @@ public class RocketDataList
 
 public class RocketReceiver : MonoBehaviour
 {
-    public GameObject rocketObject1; // Corresponds to gameManager1
-    public GameObject rocketObject2; // Corresponds to gameManager2
-    public GameObject rocketObject3; // Corresponds to gameManager3
+    public GameObject rocketObject1;
+    public GameObject rocketObject2;
+    public GameObject rocketObject3;
     public GameObject reminder1;
     public GameObject reminder2;
     public GameObject reminder3;
 
-    private string baseUrl = "https://spaceexpeditionserver.onrender.com"; // "http://localhost:3000/Rocket";
-    private string lastTimestamp1 = ""; // Store last timestamp for Group 1
-    private string lastTimestamp2 = ""; // Store last timestamp for Group 2
-    private string lastTimestamp3 = ""; // Store last timestamp for Group 3
-
-    private bool firstCheckDone = false; // Prevent activation on first database check
-    bool isRocketUpdated = false;
-
-    // Game Managers for each group
+    private string baseUrl = "https://spaceexpeditionserver.onrender.com";
+    private Dictionary<string, string> lastTimestamps = new Dictionary<string, string>();
+    private List<RocketData> rocketDataList = new List<RocketData>();
+    private SocketIOUnity socket;
+    private bool isRocketUpdated = false;
     public GameManager gameManager1;
     public GameManager gameManager2;
     public GameManager gameManager3;
-    private SocketIOUnity socket;
-    public float checkInterval = 5f; // Time interval for checking (in seconds)
+    private DateTime latestTimestamp = DateTime.MinValue;
 
     void Start()
     {
-        // Ensure all rocket objects start inactive
+        lastTimestamps["Group 1"] = "";
+        lastTimestamps["Group 2"] = "";
+        lastTimestamps["Group 3"] = "";
         SetRocketState(false);
-        reminder1.SetActive(false);
-        reminder2.SetActive(false);
-        reminder3.SetActive(false);
-        // StartCoroutine(CheckForRocketData());
         OnStart();
     }
+
     async void OnStart()
     {
         var uri = new System.Uri(baseUrl);
         socket = new SocketIOUnity(uri, new SocketIOOptions
         {
-            Query = new Dictionary<string, string>
-            {
-                { "token", "UNITY" }
-            },
             Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
         });
-
-        socket.OnConnected += (sender, e) =>
-        {
-            Debug.Log("Connection open!");
-        };
-
-        socket.OnError += (sender, e) =>
-        {
-            Debug.LogError("Error! " + e);
-        };
-
-        socket.OnDisconnected += (sender, e) =>
-        {
-            Debug.Log("Connection closed!");
-        };
 
         socket.On("rocketUpdate", res =>
         {
@@ -90,68 +65,56 @@ public class RocketReceiver : MonoBehaviour
 
         await socket.ConnectAsync();
     }
+
     void Update()
     {
         if (isRocketUpdated)
         {
-            StartCoroutine(CheckForRocketData());
+            StartCoroutine(FetchRocketData());
             isRocketUpdated = false;
         }
     }
-    IEnumerator CheckForRocketData()
+
+    IEnumerator FetchRocketData()
     {
-        while (true) // Continuously check for updates
+        using (UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/Rocket"))
         {
-            using (UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/Rocket"))
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
-                yield return request.SendWebRequest();
+                Debug.LogError("Error retrieving rocket data: " + request.error);
+            }
+            else
+            {
+                string jsonResponse = "{\"rockets\":" + request.downloadHandler.text + "}";
+                RocketDataList newRocketDataList = JsonUtility.FromJson<RocketDataList>(jsonResponse);
 
-                if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+                if (newRocketDataList.rockets.Length > 0)
                 {
-                    Debug.LogError("Error retrieving rocket data: " + request.error);
-                }
-                else
-                {
-                    string jsonResponse = "{\"rockets\":" + request.downloadHandler.text + "}";
-                    RocketDataList rocketDataList = JsonUtility.FromJson<RocketDataList>(jsonResponse);
+                    rocketDataList.Clear();
+                    rocketDataList = newRocketDataList.rockets.ToList();
 
-                    foreach (RocketData rocket in rocketDataList.rockets)
-                    {
-                        Debug.Log($"group: {rocket.groupName}, time: {rocket.object2}");
-                        GameManager targetManager = GetGameManagerByGroupName(rocket.groupName);
-                        GameObject targetRocket = GetRocketObjectByGroupName(rocket.groupName);
-                        // Determine which GameManager this rocket belongs to
-                        if (rocket.groupName == "Group 1" && rocket.timestamp != lastTimestamp1)
-                        {
-                            lastTimestamp1 = rocket.timestamp;
-                            ActivateRocket(gameManager1, rocketObject1, rocket);
-                        }
-                        else if (rocket.groupName == "Group 2" && rocket.timestamp != lastTimestamp2)
-                        {
-                            lastTimestamp2 = rocket.timestamp;
-                            ActivateRocket(gameManager2, rocketObject2, rocket);
-                        }
-                        else if (rocket.groupName == "Group 3" && rocket.timestamp != lastTimestamp3)
-                        {
-                            lastTimestamp3 = rocket.timestamp;
-                            ActivateRocket(gameManager3, rocketObject3, rocket);
-                        }
-                    }
+                    RocketData latestRocket = rocketDataList.OrderByDescending(r => DateTime.Parse(r.timestamp)).FirstOrDefault();
 
-                    if (!firstCheckDone)
+                    if (latestRocket != null)
                     {
-                        Debug.Log("First database check complete, skipping activation.");
-                        firstCheckDone = true; // Prevent activation during the initial check
+                        DateTime latestTime = DateTime.Parse(latestRocket.timestamp);
+                        if (latestTime > latestTimestamp)
+                        {
+                            latestTimestamp = latestTime;
+                            lastTimestamps[latestRocket.groupName] = latestRocket.timestamp;
+                            ActivateRocket(GetGameManagerByGroupName(latestRocket.groupName), GetRocketObjectByGroupName(latestRocket.groupName), latestRocket);
+                        }
                     }
                 }
             }
-
-            //yield return new WaitForSeconds(checkInterval); // Keep checking
         }
     }
+
     GameManager GetGameManagerByGroupName(string groupName)
     {
-        switch (groupName.Trim()) // Trim to remove any spaces
+        switch (groupName.Trim())
         {
             case "Group 1": return gameManager1;
             case "Group 2": return gameManager2;
@@ -179,19 +142,13 @@ public class RocketReceiver : MonoBehaviour
     {
         if (targetManager == null || targetRocket == null) return;
 
-        if (firstCheckDone) // Ensure activation only happens on new database updates
-        {
-            targetRocket.SetActive(true);
-            Debug.Log($"New rocket data detected for {rocket.groupName}. Activating corresponding rocket.");
+        targetRocket.SetActive(true);
+        Debug.Log($"New rocket data detected for {rocket.groupName}. Activating corresponding rocket.");
 
-            // **Ensure resources are going to the correct group!**
-            Debug.Log($"Target Manager: {targetManager} assigned to {rocket.groupName}");
-
-            int resourceAmount = GetResourceAmount(rocket.object2);
-            targetManager.AddCollectedIron(resourceAmount);
-            targetManager.AddCollectedRocks(resourceAmount);
-            targetManager.ChangeCollectedWater(resourceAmount);
-        }
+        int resourceAmount = GetResourceAmount(rocket.object2);
+        targetManager.AddCollectedIron(resourceAmount);
+        targetManager.AddCollectedRocks(resourceAmount);
+        targetManager.ChangeCollectedWater(resourceAmount);
     }
 
     int GetResourceAmount(string objectName)
