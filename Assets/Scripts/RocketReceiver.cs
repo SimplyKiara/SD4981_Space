@@ -55,12 +55,32 @@ public class RocketReceiver : MonoBehaviour
         var uri = new System.Uri(baseUrl);
         socket = new SocketIOUnity(uri, new SocketIOOptions
         {
+            Query = new Dictionary<string, string>
+            {
+                { "token", "UNITY" }
+            },
             Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
         });
+
+        socket.OnConnected += (sender, e) =>
+        {
+            Debug.Log("Connection open!");
+        };
+
+        socket.OnError += (sender, e) =>
+        {
+            Debug.LogError("Error! " + e);
+        };
+
+        socket.OnDisconnected += (sender, e) =>
+        {
+            Debug.Log("Connection closed!");
+        };
 
         socket.On("rocketUpdate", res =>
         {
             isRocketUpdated = true;
+            Debug.Log("Rocket start update data");
         });
 
         await socket.ConnectAsync();
@@ -71,11 +91,63 @@ public class RocketReceiver : MonoBehaviour
         if (isRocketUpdated)
         {
             StartCoroutine(FetchRocketData());
+            foreach (RocketData rocketData in rocketDataList)
+            {
+                if (lastTimestamps[rocketData.groupName] != rocketData.timestamp)
+                {
+                    ActivateRocket(GetGameManagerByGroupName(rocketData.groupName), GetRocketObjectByGroupName(rocketData.groupName), rocketData);
+                    lastTimestamps[rocketData.groupName] = rocketData.timestamp;
+                }
+            }
             isRocketUpdated = false;
         }
     }
 
     IEnumerator FetchRocketData()
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/Rocket"))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error retrieving rocket data: " + request.error);
+            }
+            else
+            {
+                string jsonString = request.downloadHandler.text;
+                Debug.Log($"[rockets json]: {jsonString}");
+                if (jsonString != "[]")
+                {
+                    try
+                    {
+                        List<string> jsonObjects = jsonString.Split(new string[] { "},{" }, System.StringSplitOptions.None).Select(p => p.Trim('[', ']')).ToList();
+                        rocketDataList.Clear();
+                        foreach (string jsonObject in jsonObjects)
+                        {
+                            string formattedJson = "{" + jsonObject.Trim('{', '}') + "}";
+                            Debug.Log(formattedJson);
+                            RocketData newRocket = JsonUtility.FromJson<RocketData>(formattedJson);
+                            rocketDataList.Add(newRocket);
+                            Debug.Log($"[rocket data] {newRocket.groupName}, {newRocket.object1}, {newRocket.object2}, {newRocket.timestamp}, {newRocket.TaskID}");
+                        }
+                        // rocketDataList.Clear();
+                        // rocketDataList = newRocketDataList.rockets.ToList();
+                        /* foreach (RocketData newRocket in rocketDataList)
+                        {
+                            Debug.Log($"[rocket data] {newRocket.groupName}, {newRocket.object1}, {newRocket.object2}, {newRocket.timestamp}, {newRocket.TaskID}");
+                        } */
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError("JSON Parsing Error: " + e.Message);
+                    }
+                }
+            }
+        }
+    }
+
+    /* IEnumerator FetchRocketData()
     {
         using (UnityWebRequest request = UnityWebRequest.Get(baseUrl + "/Rocket"))
         {
@@ -110,7 +182,7 @@ public class RocketReceiver : MonoBehaviour
                 }
             }
         }
-    }
+    } */
 
     GameManager GetGameManagerByGroupName(string groupName)
     {

@@ -33,12 +33,24 @@ public class CollisionData
 public class SavingRocketData : MonoBehaviour
 {
     private string baseUrl = "https://spaceexpeditionserver.onrender.com"; // Adjust if needed
-    private string groupName = ""; // Store group name
+    public string groupName = ""; // Store group name
     private SocketIOUnity socket;
     void Start()
     {
-        StartCoroutine(GetLatestTaskData(baseUrl + "/tasks"));
+        // StartCoroutine(GetLatestTaskData(baseUrl + "/tasks"));
         OnStart();
+    }
+    void Update()
+    {
+        if (groupName == "")
+        {
+            GameObject groupNameObj = GameObject.Find("GroupName");
+            if (groupNameObj != null)
+            {
+                groupName = groupNameObj.GetComponent<TMP_Text>().text;
+            }
+
+        }
     }
     async void OnStart()
     {
@@ -68,8 +80,8 @@ public class SavingRocketData : MonoBehaviour
         };
 
         await socket.ConnectAsync();
-     }
-    IEnumerator GetLatestTaskData(string uri)
+    }
+    /* IEnumerator GetLatestTaskData(string uri)
     {
         using (UnityWebRequest request = UnityWebRequest.Get(uri))
         {
@@ -95,7 +107,7 @@ public class SavingRocketData : MonoBehaviour
                 }
             }
         }
-    }
+    } */
 
     void OnCollisionEnter(Collision col)
     {

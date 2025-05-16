@@ -44,7 +44,11 @@ public class PersistentInstance : MonoBehaviour
     {
         foreach (Transform child in parent.transform)
         {
-            child.gameObject.SetActive(isActive);
+            foreach (Transform child2 in child.transform)
+            {
+                if (child2.gameObject.name != "GroupName")
+                    child2.gameObject.SetActive(isActive);
+            }
         }
     }
 }
