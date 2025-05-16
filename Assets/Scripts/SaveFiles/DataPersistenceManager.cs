@@ -65,7 +65,7 @@ public class DataPersistenceManager : MonoBehaviour
         // Ensure gameData is initialized before attempting to save
         if (gameData == null)
         {
-            Debug.LogError("SaveGame failed: gameData is null! Initializing new GameData.");
+            Debug.LogWarning("SaveGame failed: gameData is null! Initializing new GameData.");
             gameData = new GameData(); // Prevents null errors
         }
 

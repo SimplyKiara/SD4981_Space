@@ -27,6 +27,7 @@ public class ResourceReceiver : MonoBehaviour
     public float checkInterval = 5f; // Time interval for checking (in seconds)
 
     private string gpName;
+    private HashSet<string> recordedTimestamps = new HashSet<string>(); // Store timestamps
 
     private void OnEnable()
     {
@@ -55,16 +56,26 @@ public class ResourceReceiver : MonoBehaviour
                         continue;
                     }
 
-                    Debug.Log("Received JSON: " + request.downloadHandler.text);
-
                     // Ensure JSON is properly structured before deserialization
                     string jsonResponse = "{\"tdone\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
                     TaskDataList taskDataList = JsonUtility.FromJson<TaskDataList>(jsonResponse);
 
                     if (taskDataList != null && taskDataList.tdone.Length > 0)
                     {
+                        Debug.Log("Received JSON: " + request.downloadHandler.text);
+
                         foreach (TaskDoneData taskDone in taskDataList.tdone)
                         {
+                            // Check if timestamp has already been recorded
+                            if (recordedTimestamps.Contains(taskDone.timestamp))
+                            {
+                                Debug.Log($"Timestamp {taskDone.timestamp} already processed. Skipping.");
+                                continue;
+                            }
+
+                            // Add timestamp to the set
+                            recordedTimestamps.Add(taskDone.timestamp);
+
                             string Name = taskDone.group;
                             string gpName = "";
 

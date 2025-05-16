@@ -21,46 +21,44 @@ public class FileDataHandler
     public GameData Load()
     {
         string fullPath = Path.Combine(dataDirPath, dataFileName);
-        GameData loadedData = null;
-
-        if (File.Exists(fullPath))
+        if (!File.Exists(fullPath))
         {
-            try
-            {
-                string jsonData = File.ReadAllText(fullPath);
-                loadedData = JsonUtility.FromJson<GameData>(jsonData);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error loading data: " + e.Message);
-            }
+            Debug.LogWarning($"Save file not found: {fullPath}. Returning default GameData.");
+            return new GameData();
         }
 
-        if (loadedData == null)
+        try
         {
-            Debug.LogError("Loaded data is null, initializing new GameData.");
-            loadedData = new GameData(); // Create default data if load fails
+            string jsonData = File.ReadAllText(fullPath);
+            Debug.Log($"Loaded JSON: {jsonData}");
+            return JsonUtility.FromJson<GameData>(jsonData);
         }
-
-        return loadedData;
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to load file: {e.Message}");
+            return new GameData();
+        }
     }
 
     // Save data
     public void Save(GameData data)
     {
-        string fullPath = Path.Combine(dataDirPath, dataFileName);
+        if (data == null)
+        {
+            Debug.LogError("Save failed: GameData is null!");
+            return;
+        }
 
+        string fullPath = Path.Combine(dataDirPath, dataFileName);
         try
         {
-            // Convert GameData into pure JSON format (without GAME_SAVE_FORMAT)
             string jsonData = JsonUtility.ToJson(data, true);
-
             File.WriteAllText(fullPath, jsonData);
-            Debug.Log($"Game Saved! File Path: {fullPath}");
+            Debug.Log($"Game Saved! {fullPath}");
         }
         catch (Exception e)
         {
-            Debug.LogError("Error saving data: " + e.Message);
+            Debug.LogError($"Error saving file: {e.Message}");
         }
     }
 

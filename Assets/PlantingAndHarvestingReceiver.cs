@@ -11,6 +11,7 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
     public float checkInterval = 5f; // Time interval for checking (in seconds)
 
     private GameObject greenHouse;
+    private HashSet<string> recordedTimestamps = new HashSet<string>(); // Store timestamps
 
     private void OnEnable()
     {
@@ -34,12 +35,10 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
                     // Ensure the JSON response is not empty
                     if (string.IsNullOrEmpty(request.downloadHandler.text))
                     {
-                        Debug.LogWarning("Received empty response, checking again...");
+                        Debug.Log("Received empty response, checking again...");
                         yield return new WaitForSeconds(checkInterval);
                         continue;
                     }
-
-                    Debug.Log("Received JSON: " + request.downloadHandler.text);
 
                     // Ensure JSON is properly structured before deserialization
                     string jsonResponse = "{\"tdone\":" + request.downloadHandler.text + "}"; // Wrap JSON in an object
@@ -47,8 +46,20 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
 
                     if (taskDataList != null && taskDataList.tdone.Length > 0)
                     {
+                        Debug.Log("Received JSON: " + request.downloadHandler.text);
+
                         foreach (TaskDoneData taskDone in taskDataList.tdone)
                         {
+                            // Check if timestamp has already been recorded
+                            if (recordedTimestamps.Contains(taskDone.timestamp))
+                            {
+                                Debug.Log($"Timestamp {taskDone.timestamp} already processed. Skipping.");
+                                continue;
+                            }
+
+                            // Add timestamp to the set
+                            recordedTimestamps.Add(taskDone.timestamp);
+
                             string Name = taskDone.group;
                             string gpName = Name.Substring(7, 1);
 
@@ -56,12 +67,11 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
                             if (greenHouse != null)
                             {
                                 Invoke("CallGHouseHarvest", 120f);
-                                dataLoaded = true; // Prevents continuous unnecessary checks
-                                break;   // Exit loop once a match is found
+                                //dataLoaded = true; // Prevents continuous unnecessary checks
                             }
                             else
                             {
-                                Debug.LogError($"Greenhouse for {Name} not found!");
+                                Debug.LogWarning($"Greenhouse for {Name} not found!");
                             }
                         }
                     }

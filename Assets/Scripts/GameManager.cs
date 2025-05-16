@@ -42,28 +42,47 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void Start()
     {
-        string dataPath = Application.persistentDataPath; // Use platform-independent path
-        dataHandler = new FileDataHandler(Application.persistentDataPath, FileName); // No encryption parameter needed
+        dataHandler = new FileDataHandler(Application.persistentDataPath, FileName);
         LoadGame();
+    }
+
+    public void LoadGame()
+    {
+        gameData = dataHandler.Load();
+        if (gameData == null)
+        {
+            gameData = new GameData();
+            Debug.Log("Initialized new GameData.");
+        }
+
+        LoadData(gameData);
+    }
+
+    public void SaveGame()
+    {
+        if (gameData == null)
+        {
+            Debug.LogWarning("SaveGame failed: gameData is null! Initializing new GameData.");
+            gameData = new GameData();
+        }
+
+        SaveData(ref gameData);
+        dataHandler.Save(gameData);
     }
 
     public void LoadData(GameData data)
     {
-        if (data != null)
+        if (data == null)
         {
-            gameData = data;
-            ironOre = data.ironOre;
-            rocks = data.rocks;
-            water = data.water;
-            waterCap = GameData.maxWater;
-            UpdateUI();
-            Debug.Log($"Loaded {FileName}: Iron = {ironOre}, Rocks = {rocks}, Water = {water}/{waterCap}");
+            Debug.LogWarning("LoadData error: data is null!");
+            return;
         }
-        else
-        {
-            Debug.Log($"No saved data found for {FileName}, initializing new game.");
-            gameData = new GameData();
-        }
+
+        ironOre = data.ironOre;
+        rocks = data.rocks;
+        water = data.water;
+        waterCap = GameData.maxWater;
+        UpdateUI();
     }
 
     public void SaveData(ref GameData data)
@@ -77,67 +96,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         data.ironOre = ironOre;
         data.rocks = rocks;
         data.water = water;
-        string fullPath = Path.Combine(Application.persistentDataPath, FileName);
-        Debug.Log($"Saved {FileName}, File Path = {fullPath}: Iron = {gameData.ironOre}, Rocks = {gameData.rocks}, Water = {gameData.water}/{waterCap}");
-    }
-
-    public void LoadGame()
-    {
-        string fullPath = Path.Combine(Application.persistentDataPath, FileName);
-
-        if (!File.Exists(fullPath))
-        {
-            Debug.Log($"Save file {FileName} not found. Creating new game data.");
-            gameData = new GameData();
-            dataHandler.Save(gameData);
-            return;
-        }
-
-        try
-        {
-            string rawJson = File.ReadAllText(fullPath);
-
-            if (rawJson.StartsWith("GAME_SAVE_FORMAT"))
-            {
-                rawJson = rawJson.Substring("GAME_SAVE_FORMAT".Length).Trim();
-            }
-
-            GameData loadedData = JsonUtility.FromJson<GameData>(rawJson);
-
-            if (loadedData != null)
-            {
-                gameData = loadedData;
-                LoadData(gameData);
-                Debug.Log($"Game Loaded ({FileName}): Iron = {gameData.ironOre}, Rocks = {gameData.rocks}, Water = {gameData.water}/{GameData.maxWater}");
-            }
-            else
-            {
-                Debug.LogWarning("Failed to parse JSON. Creating new game data.");
-                gameData = new GameData();
-                dataHandler.Save(gameData);
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error loading data from {FileName}: {e.Message}");
-            gameData = new GameData();
-            dataHandler.Save(gameData);
-        }
-    }
-
-
-    public void SaveGame()
-    {
-        if (gameData == null)
-        {
-            Debug.LogWarning($"SaveGame failed for {FileName}: gameData is null! Initializing new GameData.");
-            gameData = new GameData();
-        }
-
-        SaveData(ref gameData); // Ensure in-memory updates are applied
-        dataHandler.Save(gameData); // Save updated data
-
-        Debug.Log($"Game Saved! ({FileName})");
+        Debug.Log($"Saving: Iron = {data.ironOre}, Rocks = {data.rocks}, Water = {data.water}/{waterCap}");
     }
 
 
@@ -296,10 +255,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void UpdateUI()
     {
-        if ((ironOreText != null) && (rocksText != null) && (waterText != null))
+        if (ironOreText && rocksText && waterText)
         {
-            ironOreText.text = "Iron ore: " + ironOre;
-            rocksText.text = "Lunar rocks: " + rocks;
+            ironOreText.text = $"Iron ore: {ironOre}";
+            rocksText.text = $"Lunar rocks: {rocks}";
             waterText.text = $"Water: {water}/{waterCap}";
         }
 
