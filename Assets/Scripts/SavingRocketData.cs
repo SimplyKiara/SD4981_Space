@@ -44,11 +44,12 @@ public class SavingRocketData : MonoBehaviour
     {
         if (groupName == "")
         {
-            GameObject groupNameObj = GameObject.Find("GroupName");
+            groupName = "Group " + Random.Range(1, 4);
+            /* GameObject groupNameObj = GameObject.Find("GroupName");
             if (groupNameObj != null)
             {
                 groupName = groupNameObj.GetComponent<TMP_Text>().text;
-            }
+            } */
 
         }
     }
