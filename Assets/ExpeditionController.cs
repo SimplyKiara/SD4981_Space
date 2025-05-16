@@ -9,7 +9,7 @@ public class ExpeditionController : MonoBehaviour
 
     private bool triggered = false;
 
-    // Update is called once per frame
+    // Enable Expedition minigame for all groups when session officially starts
     void Update()
     {
         if (!triggered)

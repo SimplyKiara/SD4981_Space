@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// / Calling GameManager from UI to build structures
+/// </summary>
+
 public class SupplyBuilder : MonoBehaviour
 {
     public GameManager manager;

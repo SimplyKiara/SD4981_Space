@@ -46,16 +46,22 @@ public class PlantingAndHarvestingReceiver : MonoBehaviour
 
                     if (taskDataList != null && taskDataList.tdone.Length > 0)
                     {
-                        Debug.Log("Received JSON: " + request.downloadHandler.text);
-
                         foreach (TaskDoneData taskDone in taskDataList.tdone)
                         {
+                            // Only retrieve planting or harvesting
+                            if (taskDone.TaskID != "Planting" || taskDone.TaskID != "Harvesting")
+                            {
+                                continue;
+                            }
+
                             // Check if timestamp has already been recorded
                             if (recordedTimestamps.Contains(taskDone.timestamp))
                             {
-                                Debug.Log($"Timestamp {taskDone.timestamp} already processed. Skipping.");
+                                Debug.Log($"Greenhouse: Timestamp {taskDone.timestamp} already processed. Skipping.");
                                 continue;
                             }
+
+                            Debug.Log("Received JSON: " + request.downloadHandler.text);
 
                             // Add timestamp to the set
                             recordedTimestamps.Add(taskDone.timestamp);

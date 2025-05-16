@@ -21,6 +21,7 @@ public class DrillPanelController : MonoBehaviour
         confirm.SetActive(true);
         close.SetActive(false);
 
+        // Initialise group name
         if (gameObject.name.Substring(0,3) == "Gp1")
         {
             gpName = "Group 1";
@@ -40,6 +41,7 @@ public class DrillPanelController : MonoBehaviour
         wallConnection = GameObject.Find("ConnectionManager").GetComponent<WallConnection>();
     }
 
+    // Unlock Ice Mining minigame
     public void CallTask()
     {
         if (wallConnection != null)

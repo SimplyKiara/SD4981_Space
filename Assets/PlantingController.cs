@@ -28,6 +28,7 @@ public class PlantingController : MonoBehaviour
             Debug.LogError("SupplyPanel: Manager not assigned!");
         }
 
+        // Initialise group name
         if (groupManager.name == "Gp1_GameManager")
         {
             groupName = "Group 1";
@@ -46,6 +47,7 @@ public class PlantingController : MonoBehaviour
         }
     }
     
+    // Update UI
     void Update()
     {
         if (groupManager != null)
@@ -57,6 +59,7 @@ public class PlantingController : MonoBehaviour
         }
     }
 
+    // Unlock planting if enough resources
     public void callPlanting()
     {
         if ((currentWater >= 8) && (groupName != null))

@@ -17,7 +17,7 @@ public class GHouseController : MonoBehaviour
     private void Start()
     {
         popUpPanel.SetActive(false);
-        gpName = gameObject.name.Substring(12,1);
+        gpName = gameObject.name.Substring(12,1);  // Initialise group name
 
         // Find all child objects with LongPressGesture
         foreach (Transform child in transform)
@@ -56,6 +56,7 @@ public class GHouseController : MonoBehaviour
         Debug.Log("UI popup instantiated.");
     }
 
+    // Unlock harvesting and deleting
     public void CallHarvest()
     {
         wallConnection.TriggerTask("Harvesting", "Group " + gpName);

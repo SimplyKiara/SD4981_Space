@@ -6,7 +6,7 @@ using System.IO;
 
 public class FileDataHandler
 {
-    // Filepath: C:\Users\{YourUserName}\AppData\LocalLow\DefaultCompany\SD4981_Space
+    // Filepath: C:\Users\{YourUserName}\AppData\LocalLow\{Company name, usually DefaultCompany}\SD4981_Space
     private string dataDirPath;
     public string dataFileName;
 

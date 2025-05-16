@@ -13,6 +13,7 @@ public class BaseToSiteController : MonoBehaviour
         clientConnection = GameObject.Find("Client Manager").GetComponent<ClientConnection>();
     }
 
+    // Submitting request for changing from main base to resource site
     public void BaseToSite()
     {
         //wallConnection.ChangeScene("ResourcesScene", "Teacher");

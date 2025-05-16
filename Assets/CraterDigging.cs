@@ -13,6 +13,7 @@ public class CraterDigging : MonoBehaviour
 
     private void Update()
     {
+        //  Remove crater if 0 HP
         if (craterHP <= 0)
         {
             Destroy(gameObject);
@@ -48,6 +49,7 @@ public class CraterDigging : MonoBehaviour
         }
     }
 
+    // Decrement crater HP
     private void changeHP()
     {
         craterHP -= 10;

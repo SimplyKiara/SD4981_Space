@@ -144,6 +144,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
     }
 
+    /// <summary>
+    /// / Building base structures 
+    /// </summary>
     public void BuildSolarPanels()
     {
         if (solarPanels != null)
@@ -232,6 +235,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
     }
 
+    /// <summary>
+    /// / Changing number of resources + update UI
+    /// </summary>
     public void AddCollectedIron(int value)
     {
         ironOre += value;

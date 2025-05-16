@@ -6,7 +6,6 @@ using System.Linq;
 public class DataPersistenceManager : MonoBehaviour
 {
     [Header("File Storage Config")]
-    [SerializeField] private bool useEncryption;
 
     private GameData gameData;
     public static DataPersistenceManager instance { get; private set; }
@@ -28,12 +27,13 @@ public class DataPersistenceManager : MonoBehaviour
         }
     }
 
-
+    // Creating new save
     public void NewGame()
     {
         this.gameData = new GameData();
     }
 
+    // Loading previous data
     public void LoadGame()
     {
         if (dataHandler == null)
@@ -90,7 +90,7 @@ public class DataPersistenceManager : MonoBehaviour
     }
 
 
-
+    // Save once before quitting game
     private void OnApplicationQuit()
     {
         SaveGame();

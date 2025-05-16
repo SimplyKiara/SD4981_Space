@@ -8,6 +8,7 @@ public class SiteToBaseController : MonoBehaviour
     public WallConnection wallConnection;
     public Text descriptionText;
 
+    // Submitting request for changing from resource site to main base
     public void SiteToBase()
     {
         wallConnection.ChangeScene("MainWallScene", "Teacher");

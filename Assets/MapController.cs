@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class MapController : MonoBehaviour
 {
     public GameObject mapPanel;
-    public GameObject mapButton;
+    public GameObject mapButton;  // button for opening map
 
     private ClientConnection clientConnection;
     private string baseUrl = "https://spaceexpeditionserver.onrender.com"; //"http://localhost:3000/TaskDone";
@@ -49,8 +49,11 @@ public class MapController : MonoBehaviour
                         {
                             foreach (TaskDoneData taskDone in taskDataList.tdone)
                             {
+                                // Only retreive expedition of same group
                                 if (taskDone.TaskID == "Expedition" && taskDone.group == clientConnection.groupName)
                                 {
+                                    Debug.Log("Received JSON: " + request.downloadHandler.text);
+
                                     dataLoaded = true;
                                     mapButton.SetActive(true);
                                     Debug.Log("Expedition done, showing map.");
@@ -60,7 +63,7 @@ public class MapController : MonoBehaviour
                         }
                         else
                         {
-                            Debug.LogWarning("No matching expedition task found. Checking again...");
+                            Debug.Log("No matching expedition task found. Checking again...");
                         }
                     }
                     catch (Exception ex)

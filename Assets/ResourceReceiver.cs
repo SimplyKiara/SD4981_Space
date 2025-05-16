@@ -51,7 +51,7 @@ public class ResourceReceiver : MonoBehaviour
                     // Ensure the JSON response is not empty
                     if (string.IsNullOrEmpty(request.downloadHandler.text))
                     {
-                        Debug.LogWarning("Received empty response, checking again...");
+                        Debug.Log("Received empty response, checking again...");
                         yield return new WaitForSeconds(checkInterval);
                         continue;
                     }
@@ -62,16 +62,22 @@ public class ResourceReceiver : MonoBehaviour
 
                     if (taskDataList != null && taskDataList.tdone.Length > 0)
                     {
-                        Debug.Log("Received JSON: " + request.downloadHandler.text);
-
                         foreach (TaskDoneData taskDone in taskDataList.tdone)
                         {
+                            // Only retreive ice mining
+                            if (taskDone.TaskID != "Ice Mining")
+                            {
+                                continue;
+                            }
+
                             // Check if timestamp has already been recorded
                             if (recordedTimestamps.Contains(taskDone.timestamp))
                             {
-                                Debug.Log($"Timestamp {taskDone.timestamp} already processed. Skipping.");
+                                Debug.Log($"Ice mining: Timestamp {taskDone.timestamp} already processed. Skipping.");
                                 continue;
                             }
+
+                            Debug.Log("Received JSON: " + request.downloadHandler.text);
 
                             // Add timestamp to the set
                             recordedTimestamps.Add(taskDone.timestamp);

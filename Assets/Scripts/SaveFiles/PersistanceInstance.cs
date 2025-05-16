@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class PersistentInstance : MonoBehaviour
 {
+    // Load child under this manager when switching scenes
     private static PersistentInstance instance;
     private bool isChildActive;
     void Start()
@@ -22,6 +23,7 @@ public class PersistentInstance : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     void Update()
     {
         if ((SceneManager.GetActiveScene().name == "ClientMenu" || SceneManager.GetActiveScene().name == "MainWallScene" || SceneManager.GetActiveScene().name == "ResourcesScene") && !isChildActive)

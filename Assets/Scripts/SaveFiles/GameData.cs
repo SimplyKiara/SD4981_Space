@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// / Structure of saved data
+/// </summary>
 
 [System.Serializable]
 public class GameData
@@ -18,7 +21,6 @@ public class GameData
     public static float maxWater = 30f;
     public static float maxResources = 80f;
 
-    // Structure of saved data
     public GameData()
     {
         this.ironOre = 0;

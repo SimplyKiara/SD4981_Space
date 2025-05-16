@@ -36,6 +36,7 @@ public class SceneChangeReceiver : MonoBehaviour
         SceneChangingCanvas.SetActive(false);
         currentSceneName = SceneManager.GetActiveScene().name;
 
+        // Identify correct scene to be loaded
         if (currentSceneName == "MainWallScene")
         {
             nextSceneName = "ResourcesScene";
@@ -72,7 +73,7 @@ public class SceneChangeReceiver : MonoBehaviour
                     // Ensure the JSON response is not empty
                     if (string.IsNullOrEmpty(request.downloadHandler.text))
                     {
-                        Debug.LogWarning("Received empty response, checking again...");
+                        Debug.Log("Received empty response, checking again...");
                         yield return new WaitForSeconds(checkInterval);
                         continue;
                     }
@@ -104,7 +105,7 @@ public class SceneChangeReceiver : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("No matching group found. Checking again...");
+                        Debug.Log("Scene changing: No matching group found. Checking again...");
                     }
                 }
             }
